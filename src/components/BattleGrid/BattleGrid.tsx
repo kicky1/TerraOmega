@@ -193,7 +193,7 @@ export default function BattleGrid({...props}: Props) {
                   {headerGroups.map((headerGroup) => (
                   <tr key={headerGroup.id}>
                       {headerGroup.headers.map((column: any) => (
-                      <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                      <th key={column.id} {...column.getHeaderProps(column.getSortByToggleProps())}>
                           {column.render('Header')}
                           <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
                       </th>
@@ -210,8 +210,8 @@ export default function BattleGrid({...props}: Props) {
                       onClick={() => handleRowClick(row)}
                       style={{ cursor: 'pointer' }}
                     >
-                      {row.cells.map((cell) => (
-                          <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                      {row.cells.map((cell, id) => (
+                          <td key={id}>{cell.render('Cell')}</td>
                       ))}
                       </tr>
                   );
