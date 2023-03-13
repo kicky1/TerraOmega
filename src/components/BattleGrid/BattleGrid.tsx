@@ -192,7 +192,16 @@ export default function BattleGrid({...props}: Props) {
                     type="text" 
                     value={username} 
                     onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setUsername(e.target.value)} />
-                    <Button onClick={handleClick}>Calculate</Button>
+                    <Button 
+                      onClick={handleClick}
+                      styles={(theme) => ({
+                        root: {
+                          backgroundColor: '#0a3d47',
+                          '&:not([data-disabled])': theme.fn.hover({
+                            backgroundColor: theme.fn.darken('#072f37', 0.05),
+                          }),
+                        }})}>
+                        Calculate</Button>
                   </Group>
                 </Grid.Col>
             </Grid>
@@ -322,8 +331,10 @@ export default function BattleGrid({...props}: Props) {
                 withControls 
                 total={pageCount}
                 position="center"
-                sx={{paddingTop:50}}
-            />
+                pt={50}
+                color={'dark'}        
+              />
+
         </SimpleGrid>
             {/* <Button onClick={() => handleToggle()}>
             {isRunning ? "Stop Bot" : "Start Bot"}
