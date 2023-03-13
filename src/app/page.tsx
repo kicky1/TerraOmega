@@ -1,7 +1,7 @@
 "use client"
 import { getUserData, getUsersData } from '@/app/utils/actions/users';
 import BattleGrid from '@/components/BattleGrid/BattleGrid';
-import {Container, Center, Badge, Space} from '@mantine/core';
+import {Container, Center, Badge, Space, Skeleton} from '@mantine/core';
 import { useQuery } from 'react-query';
 
 export default function MainPage() {
@@ -23,7 +23,12 @@ export default function MainPage() {
               <Space h="sm"/>
               <Badge color="dark" size="xl" variant="outline" w={300}>Untouchable players: {oldUsers.length}</Badge>
             </>:
-            null
+            <>
+              <Space h="xl"/>
+              <Skeleton height={'xl'} width={300} radius="xl" />            
+              <Space h="sm"/>
+              <Skeleton height={'xl'} width={30} radius="xl" />      
+            </>      
           }
           <BattleGrid data={data} refetch={refetch} isLoading={isLoading}/>
         </Container>

@@ -3,14 +3,18 @@ import { createStyles } from '@mantine/styles'
 const useStyles = createStyles((theme) => ({
 
   footer: {
-      height: 50
-    },
+    position: 'fixed',
+    bottom: 0,
+    width: '100%'
+  },
+
   inner: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'column',
-    paddingTop: 10
+    paddingTop: 10,
+    paddingBottom: 20
   },
 }))
 

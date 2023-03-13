@@ -1,4 +1,5 @@
 import { Text, Center } from '@mantine/core';
+import { Suspense } from 'react';
 import useStyles from './style';
 
 export function Footer() {
@@ -6,12 +7,14 @@ export function Footer() {
 
 
   return (
-    <div className={classes.footer}>
-      <div className={classes.inner}>
-        <Center>
-          <Text color="dimmed">Copyright © 2023 KWSKICKY</Text>
-        </Center>
+      <div className={classes.footer}>
+        <div className={classes.inner}>
+          <Center>
+            <Suspense>
+              <Text color="dimmed">Copyright © 2023 KWSKICKY</Text>
+            </Suspense>
+          </Center>
+        </div>
       </div>
-    </div>
   );
 }

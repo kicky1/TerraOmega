@@ -22,11 +22,9 @@ export default function RootLayout({
         <MantineProvider withGlobalStyles withNormalizeCSS>
           <html lang="en">
             <body>
-              <Suspense>
                 <HeaderApp/>
                 {children}
                 <Footer/>
-              </Suspense>
             </body>
           </html>
         </MantineProvider>

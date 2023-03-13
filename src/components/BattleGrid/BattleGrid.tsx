@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import { useTable, useSortBy, Column, } from 'react-table';
 import { getUserData, getUsersData } from '@/app/utils/actions/users';
-import { Space, SimpleGrid, Table, Text, Pagination, Input, Grid, Button, Checkbox, Group, Modal, RingProgress, Select } from '@mantine/core';
+import { Space, SimpleGrid, Table, Text, Pagination, Input, Grid, Button, Checkbox, Group, Modal, RingProgress, Select, Skeleton } from '@mantine/core';
 import React, { useState, useMemo } from 'react';
 import {IconShieldCheckeredFilled} from  '@tabler/icons-react';
 
@@ -155,7 +155,16 @@ export default function BattleGrid({...props}: Props) {
   );
 
   if (props.isLoading) {
-    return <>Loading...</>;
+    return (
+    <>
+      <Space h="xl" />
+      <SimpleGrid cols={1} mt={0} spacing={0} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+        <Grid grow>
+          <Skeleton height={800} mt={6} width="100%" radius="xl" />
+        </Grid>
+      </SimpleGrid>
+
+    </>)
   }
 
   const pageCount = Math.ceil(rows.length / pageSize);

@@ -20,7 +20,6 @@ export function HeaderApp() {
   const tablet = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
   
   return (
-    <Suspense>
     <Container fluid className={classes.headerContainer} p={5} pb={35}>
       <Container size={'xl'}>
         <Header  height={'100%'} className={classes.header}>
@@ -45,6 +44,5 @@ export function HeaderApp() {
         </Header>
       </Container>
     </Container>
-    </Suspense>
   )
 }
