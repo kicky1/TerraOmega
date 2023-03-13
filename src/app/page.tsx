@@ -31,6 +31,8 @@ export default function MainPage() {
             </>      
           }
           <BattleGrid data={data} refetch={refetch} isLoading={isLoading}/>
+          <Space h="xl"/>
+          <Space h="xl"/>
         </Container>
       </Container>
     </>
