@@ -9,9 +9,9 @@ import {
   Image,
 } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import Link from 'next/link'
 import useStyles from './style'
 import logo from '../../assets/logo.png'
+import { Suspense } from 'react'
 
 
 export function HeaderApp() {
@@ -20,6 +20,7 @@ export function HeaderApp() {
   const tablet = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
   
   return (
+    <Suspense>
     <Container fluid className={classes.headerContainer} p={5} pb={35}>
       <Container size={'xl'}>
         <Header  height={'100%'} className={classes.header}>
@@ -31,14 +32,12 @@ export function HeaderApp() {
               </Center>
             </Grid.Col>
             <Grid.Col span={tablet ? 9 : 6}>
-              <Link href={''}> 
                 <Image
                     src={logo.src}
                     alt="Logo"
                     fit="contain"
                     height={125}
                     />
-              </Link>
             </Grid.Col>
             <Grid.Col span={3} pr={20} sx={{display:'flex', justifyContent:'right'}}>
             </Grid.Col>
@@ -46,5 +45,6 @@ export function HeaderApp() {
         </Header>
       </Container>
     </Container>
+    </Suspense>
   )
 }
