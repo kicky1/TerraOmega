@@ -1,4 +1,10 @@
-import './globals.css'
+"use client"
+
+import { Footer } from '@/components/Footer/Footer';
+import { HeaderApp } from '@/components/Header/HeaderApp';
+import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
+import { useState } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 export const metadata = {
   title: 'Create Next App',
@@ -10,9 +16,24 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
+  const [colorScheme, setColorScheme] = useState<ColorScheme>('dark')
+  const toggleColorScheme = (value?: ColorScheme) => setColorScheme(value || (colorScheme === 'light' ? 'light' : 'dark'))
+  const queryClient = new QueryClient()
+
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <QueryClientProvider client={queryClient}>
+      <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+        <MantineProvider withGlobalStyles withNormalizeCSS>
+          <html lang="en">
+            <body>
+              <HeaderApp/>
+              {children}
+              <Footer/>
+            </body>
+          </html>
+        </MantineProvider>
+      </ColorSchemeProvider>
+    </QueryClientProvider>
   )
 }
