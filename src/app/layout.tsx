@@ -1,5 +1,6 @@
 "use client"
 
+import { Analytics } from '@vercel/analytics/react';
 import { Footer } from '@/components/Footer/Footer';
 import { HeaderApp } from '@/components/Header/HeaderApp';
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
@@ -24,6 +25,7 @@ export default function RootLayout({
             <body>
                 <HeaderApp/>
                 {children}
+                <Analytics />
                 <Footer/>
             </body>
           </html>
