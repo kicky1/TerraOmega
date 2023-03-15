@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
 import { useTable, useSortBy, Column } from "react-table";
-import { getUserData, getUsersData } from "@/app/utils/actions/users";
+import { getUserBattlesData, getUserData} from "@/app/utils/actions/users";
 import { Space, SimpleGrid, Box, Table, Text, Pagination, Input, Grid, Button, Checkbox, Group, Modal, RingProgress, Select, Skeleton } from "@mantine/core";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { IconShieldCheckeredFilled } from "@tabler/icons-react";
 import { useMediaQuery } from '@mantine/hooks';
 
@@ -17,6 +17,14 @@ interface UserData {
   hiveEngineScrap: number;
   hiveEngineStake: number;
   minerate: number;
+}
+
+interface UserBattleData {
+  id: string,
+  username: string,
+  attacked: string,
+  scrap: number,
+  timestamp: number
 }
 
 interface Props {
@@ -34,6 +42,7 @@ export default function BattleGrid({ ...props }: Props) {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
   const isMobile = useMediaQuery('(max-width: 767px)');
+  const [battleUsername, setBattleUsername] = useState("");
 
   const handleClick = () => {
     props.refetch();
@@ -44,6 +53,8 @@ export default function BattleGrid({ ...props }: Props) {
   const handleRowClick = (row: { original: UserData }) => {
     props.refetch();
     setSelectedRow(row.original);
+    setBattleUsername(row.original.username);
+    // refetchBattles({ queryKey: ["userBattle", battleUsername] })
     setShowPopup(true);
   };
 
@@ -54,6 +65,21 @@ export default function BattleGrid({ ...props }: Props) {
   const { data: userData, refetch } = useQuery(["user", username], () => getUserData(username), {
     enabled: false,
   });
+
+  const { data: userBattlesData, refetch: refetchBattles } = useQuery(
+    ["userBattle", battleUsername],
+    () => getUserBattlesData(battleUsername),
+    {
+      enabled: false,
+    }
+  );
+
+  useEffect(() => {
+    console.log(battleUsername)
+    if (battleUsername) {
+      refetchBattles({ queryKey: ["userBattle", battleUsername] });
+    }
+  }, [battleUsername, refetchBattles]);
 
   const columns: readonly Column<UserData>[] = useMemo(
     () => [
@@ -124,15 +150,34 @@ export default function BattleGrid({ ...props }: Props) {
       return [];
     }
 
-    let filteredData = props.data.filter((user: any) => user.username.toLowerCase().includes(searchQuery.toLowerCase()));
+    let filteredData = props.data.filter((user: UserData) => user.username.toLowerCase().includes(searchQuery.toLowerCase()));
 
     if (userData) {
-      filteredData = filteredData.filter((user: any) => user.defense < userData.damage && user.favor < userData.favor);
+      filteredData = filteredData.filter((user: UserData) => user.defense < userData.damage && user.favor < userData.favor);
       filteredData = filteredData.sort((a: { scrap: number }, b: { scrap: number }) => b.scrap - a.scrap);
     }
 
     return filteredData;
   }, [props.data, userData, searchQuery]);
+
+  const userRobbingData = useMemo(() => {
+    if(!userBattlesData){
+      return [];
+    }
+    let filteredData = userBattlesData.filter((user: UserBattleData) => !user.attacked.includes(battleUsername));
+    return filteredData
+
+  }, [userBattlesData])
+
+  const userRobbedData = useMemo(() => {
+    if(!userBattlesData){
+      return [];
+    }
+    let filteredData = userBattlesData.filter((user: UserBattleData) => user.attacked.includes(battleUsername));
+    return filteredData
+  }, [userBattlesData])
+
+
 
   const tableData = useMemo(() => (filteredUsernameData ? filteredUsernameData : []), [filteredUsernameData]);
 
@@ -304,6 +349,32 @@ export default function BattleGrid({ ...props }: Props) {
                   ) : (
                     0
                   )}
+                </Text>
+                <Text fz={"lg"}>
+                  <Text span fw={500} inherit>
+                    Total scraped:{" "}
+                  </Text>
+                  <>
+                  {
+                    (() => {
+                      const totalScrap = userRobbingData.reduce((total: number, value: { scrap: number; }) => total + value.scrap, 0);
+                      return totalScrap.toFixed(2)
+                    })() 
+                  }
+                  </>
+                </Text>
+                <Text fz={"lg"}>
+                  <Text span fw={500} inherit>
+                    Total loss:{" "}
+                  </Text>
+                  <>
+                  {
+                    (() => {
+                      const totalScrap = userRobbedData.reduce((total: number, value: { scrap: number; }) => total + value.scrap, 0);
+                      return totalScrap.toFixed(2)
+                    })() 
+                  }
+                  </>
                 </Text>
               </Grid.Col>
               <Grid.Col span={6}>
