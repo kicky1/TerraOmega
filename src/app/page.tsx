@@ -1,8 +1,8 @@
 "use client"
-import { getUserData, getUsersData } from '@/app/utils/actions/users';
-import BattleGrid from '@/components/BattleGrid/BattleGrid';
 import {Container, Center, Text} from '@mantine/core';
-import { useQuery } from 'react-query';
+
+export const runtime = 'experimental-edge';
+
 
 export default function Maintance() {
   return (
