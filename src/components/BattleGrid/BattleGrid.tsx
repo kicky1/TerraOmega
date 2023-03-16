@@ -5,6 +5,7 @@ import { Space, SimpleGrid, Box, Table, Text, Pagination, Input, Grid, Button, C
 import React, { useState, useMemo, useEffect } from "react";
 import { IconShieldCheckeredFilled } from "@tabler/icons-react";
 import { useMediaQuery } from '@mantine/hooks';
+import UserModal from "./UserModal/UserModal";
 
 interface UserData {
   username: string;
@@ -19,13 +20,6 @@ interface UserData {
   minerate: number;
 }
 
-interface UserBattleData {
-  id: string,
-  username: string,
-  attacked: string,
-  scrap: number,
-  timestamp: number
-}
 
 interface Props {
   data: any;
@@ -66,7 +60,7 @@ export default function BattleGrid({ ...props }: Props) {
     enabled: false,
   });
 
-  const { data: userBattlesData, refetch: refetchBattles } = useQuery(
+  const { data: userBattlesData , refetch: refetchBattles } = useQuery(
     ["userBattle", battleUsername],
     () => getUserBattlesData(battleUsername),
     {
@@ -160,28 +154,13 @@ export default function BattleGrid({ ...props }: Props) {
     return filteredData;
   }, [props.data, userData, searchQuery]);
 
-  const userRobbingData = useMemo(() => {
-    if(!userBattlesData){
-      return [];
-    }
-    let filteredData = userBattlesData.filter((user: UserBattleData) => !user.attacked.includes(battleUsername));
-    return filteredData
 
-  }, [userBattlesData])
-
-  const userRobbedData = useMemo(() => {
-    if(!userBattlesData){
-      return [];
-    }
-    let filteredData = userBattlesData.filter((user: UserBattleData) => user.attacked.includes(battleUsername));
-    return filteredData
-  }, [userBattlesData])
 
 
 
   const tableData = useMemo(() => (filteredUsernameData ? filteredUsernameData : []), [filteredUsernameData]);
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
+  const { getTableProps, headerGroups, rows, prepareRow } = useTable(
     {
       columns,
       data: tableData,
@@ -265,144 +244,18 @@ export default function BattleGrid({ ...props }: Props) {
           </Table>
         </Box>
         {selectedRow && (
-          <Modal opened={showPopup} onClose={handlePopupClose} title={`User info: ${selectedRow.username}`} centered size="xl">
-            <Grid grow>
-              <Grid.Col span={6}>
-                <Text fz={"lg"}>
-                  <Text span fw={500} inherit>
-                    Scrap{" "}
-                  </Text>
-                  : {selectedRow.scrap ? selectedRow.scrap.toFixed(2) : 0} / {selectedRow.hiveEngineStake + 1 ? selectedRow.hiveEngineStake.toFixed(2) + 1 : 0}
-                </Text>
-                <Text fz={"lg"}>
-                  <Text span fw={500} inherit>
-                    HE Balance
-                  </Text>
-                  : {selectedRow.hiveEngineScrap ? selectedRow.hiveEngineScrap.toFixed(2) : 0}
-                </Text>
-                <Text fz={"lg"}>
-                  <Text span fw={500} inherit>
-                    Favor
-                  </Text>
-                  : {selectedRow.favor ? selectedRow.favor.toFixed(2) : 0}
-                </Text>
-                <Text fz={"lg"}>
-                  <Text span fw={500} inherit>
-                    Mining Rate
-                  </Text>
-                  : {selectedRow.minerate ? selectedRow.minerate : 0}
-                </Text>
-                <Grid grow>
-                  <Grid.Col span={6}>
-                    <Select
-                      clearable
-                      pt={5}
-                      pb={5}
-                      data={[
-                        { value: "1", label: "1h" },
-                        { value: "4", label: "4h" },
-                        { value: "8", label: "8h" },
-                        { value: "12", label: "12h" },
-                      ]}
-                      placeholder="Pick time"
-                      onChange={setSelectedValue}
-                      sx={{ zIndex: 100 }}
-                    />
-                  </Grid.Col>
-                  <Grid.Col span={6}></Grid.Col>
-                </Grid>
-                {selectedValue && (
-                  <>
-                    <Text fz={"lg"}>
-                      <Text span fw={500} inherit>
-                        Scrap from {selectedValue}h
-                      </Text>
-                      : {selectedRow.minerate && selectedValue ? (selectedRow.minerate * 3600 * parseInt(selectedValue)).toFixed(4) : 0}
-                    </Text>
-                  </>
-                )}
-                <Text fz={"lg"}>
-                  <Text span fw={500} inherit>
-                    Stash will be full in:{" "}
-                  </Text>
-                  {selectedRow.minerate ? (
-                    <>
-                      {(() => {
-                        const minutesRemaining = Math.floor((selectedRow.hiveEngineStake - selectedRow.scrap) / (selectedRow.minerate * 60));
-                        const hoursRemaining = Math.floor(minutesRemaining / 60);
-                        const minutesAfterHours = minutesRemaining % 60;
-                        const daysRemaining = Math.floor(hoursRemaining / 24);
-                        const hoursAfterDays = hoursRemaining % 24;
-                        const timeRemaining = [];
-                        if (daysRemaining > 0) {
-                          timeRemaining.push(`${daysRemaining} day${daysRemaining > 1 ? "s" : ""}`);
-                        }
-                        if (hoursAfterDays > 0) {
-                          timeRemaining.push(`${hoursAfterDays} hour${hoursAfterDays > 1 ? "s" : ""}`);
-                        }
-                        if (minutesAfterHours > 0) {
-                          timeRemaining.push(`${minutesAfterHours} minute${minutesAfterHours > 1 ? "s" : ""}`);
-                        }
-                        return timeRemaining.join(", ");
-                      })()}
-                    </>
-                  ) : (
-                    0
-                  )}
-                </Text>
-                <Text fz={"lg"}>
-                  <Text span fw={500} inherit>
-                    Total scraped:{" "}
-                  </Text>
-                  <>
-                  {
-                    (() => {
-                      const totalScrap = userRobbingData.reduce((total: number, value: { scrap: number; }) => total + value.scrap, 0);
-                      return totalScrap.toFixed(2)
-                    })() 
-                  }
-                  </>
-                </Text>
-                <Text fz={"lg"}>
-                  <Text span fw={500} inherit>
-                    Total loss:{" "}
-                  </Text>
-                  <>
-                  {
-                    (() => {
-                      const totalScrap = userRobbedData.reduce((total: number, value: { scrap: number; }) => total + value.scrap, 0);
-                      return totalScrap.toFixed(2)
-                    })() 
-                  }
-                  </>
-                </Text>
-              </Grid.Col>
-              <Grid.Col span={6}>
-                <Group position="center">
-                  <RingProgress
-                    size={250}
-                    thickness={24}
-                    label={
-                      <Text size="lg" align="center" px="md" sx={{ pointerEvents: "none" }}>
-                        Hover sections to see stats
-                      </Text>
-                    }
-                    sections={[
-                      { value: (selectedRow.damage / (selectedRow.damage + selectedRow.defense + selectedRow.engineering * 10)) * 100, color: "orange", tooltip: `Damage ${selectedRow.damage}` },
-                      { value: (selectedRow.defense / (selectedRow.damage + selectedRow.defense + selectedRow.engineering * 10)) * 100, color: "cyan", tooltip: `Defense ${selectedRow.defense}` },
-                      { value: ((selectedRow.engineering * 10) / (selectedRow.damage + selectedRow.defense + selectedRow.engineering * 10)) * 100, color: "green", tooltip: `Engineering ${selectedRow.engineering}` },
-                    ]}
-                  />
-                </Group>
-              </Grid.Col>
-            </Grid>
-          </Modal>
+            <UserModal 
+              showPopup={showPopup} 
+              handlePopupClose={handlePopupClose} 
+              selectedRow={selectedRow} 
+              userBattlesData={userBattlesData}
+              battleUsername ={battleUsername}
+              setSelectedValue={setSelectedValue}
+              selectedValue={selectedValue}
+              />
         )}
         <Pagination value={page} onChange={setPage} withControls total={pageCount} position="center" pt={50} color={"dark"} />
       </SimpleGrid>
-      {/* <Button onClick={() => handleToggle()}>
-            {isRunning ? "Stop Bot" : "Start Bot"}
-            </Button> */}
       <Space h="xl" />
     </>
   );
