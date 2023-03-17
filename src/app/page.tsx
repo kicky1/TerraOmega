@@ -27,7 +27,7 @@ export default function MainPage() {
       <Space h="xl"/>
       <Container fluid>
         <Container size="xl">
-        <Tabs color="dark" defaultValue="stats">
+        <Tabs color="dark" defaultValue="tab">
           <Tabs.List>
             <Tabs.Tab value="tab" icon={<IconTableOptions size="1rem" />}>Table</Tabs.Tab> 
             <Tabs.Tab value="stats" icon={<IconChartHistogram size="1rem" />}>Stats</Tabs.Tab>
