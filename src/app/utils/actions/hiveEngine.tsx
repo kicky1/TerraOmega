@@ -27,3 +27,16 @@ export async function getStatsEngineData() {
 
 
 
+// export async function getScrapStats() {
+//   try {
+//     const { data } = await apiHive.post("contracts", {
+//     id: 1679066086902,
+//     jsonrpc: "2.0",
+//     method: "find",
+//     params: {contract: "tokens", table: "tokens", query: {symbol: "SCRAP"}, offset: 0, limit: 1000}
+//     });
+//     return data;
+//   } catch {}
+// }
+
+

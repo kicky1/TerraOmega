@@ -3,9 +3,10 @@ import { useTable, useSortBy, Column } from "react-table";
 import { getUserBattlesData, getUserData} from "@/app/utils/actions/users";
 import { Space, SimpleGrid, Box, Table, Text, Pagination, Input, Grid, Button, Checkbox, Group, Modal, RingProgress, Select, Skeleton } from "@mantine/core";
 import React, { useState, useMemo, useEffect } from "react";
-import { IconShieldCheckeredFilled } from "@tabler/icons-react";
+import { IconHelpCircle, IconShieldCheckeredFilled } from "@tabler/icons-react";
 import { useMediaQuery } from '@mantine/hooks';
 import UserModal from "./UserModal/UserModal";
+import logo from '../../assets/logo.png'
 
 interface UserData {
   username: string;
@@ -18,6 +19,8 @@ interface UserData {
   hiveEngineScrap: number;
   hiveEngineStake: number;
   minerate: number;
+  attacks: number;
+  claims: number;
 }
 
 
@@ -128,8 +131,30 @@ export default function BattleGrid({ ...props }: Props) {
         ),
       },
       {
-        Header: "Mining rate",
+        Header: "Attacks",
+        accessor: "attacks" as const,
+      },
+      {
+        Header: "Claims",
+        accessor: "claims" as const,
+      },
+      {
+        Header: "Scrap/h",
         accessor: "minerate" as const,
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <> 
+          <Group>
+              <span>{(row.original.minerate*3600).toFixed(4)}
+              <img
+              src={logo.src}
+              alt="Logo"
+              height={15}
+              />
+              </span>
+          </Group>
+            
+          </>
+        ),
       },
     ],
     []

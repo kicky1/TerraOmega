@@ -11,11 +11,7 @@ import {
 import { useMediaQuery } from '@mantine/hooks'
 import useStyles from './style'
 import logo from '../../assets/logo.png'
-import { Suspense } from 'react'
 import StatsGrid from '../StatsGrid/StatsGrid'
-import { useQuery } from 'react-query'
-import { getUsersData } from '@/app/utils/actions/users'
-import PriceGrid from '../PriceGrid/PriceGrid'
 
 
 export function HeaderApp() {
@@ -40,7 +36,6 @@ export function HeaderApp() {
                     />
             </Grid.Col>
             <Grid.Col span={3}>
-              <PriceGrid/>
             </Grid.Col>
           </Grid>
         </Header>

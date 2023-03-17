@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    reactStrictMode: true,
+    reactStrictMode: false,
     appDir: true,
     allowMiddlewareResponseBody: true,
   },

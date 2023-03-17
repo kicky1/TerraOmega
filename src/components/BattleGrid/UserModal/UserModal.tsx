@@ -1,11 +1,9 @@
 import { useQuery } from "react-query";
-import { useTable, useSortBy, Column } from "react-table";
-import { getUserBattlesData, getUserData } from "@/app/utils/actions/users";
-import { Space, SimpleGrid, Box, Table, Text, Pagination, Input, Grid, Button, Checkbox, Group, Modal, RingProgress, Select, Skeleton, Avatar, Badge, Container, Image } from "@mantine/core";
+import { Space,  Text, Grid, Image, Group, Modal, Select, Avatar, Badge, Container, Skeleton } from "@mantine/core";
 import React, { useState, useMemo, useEffect } from "react";
-import { IconShieldCheckeredFilled, IconSword } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
 import { getUserDataProfile } from "@/app/utils/actions/hiveUsers";
+
 
 interface UserData {
   username: string;
@@ -18,6 +16,8 @@ interface UserData {
   hiveEngineScrap: number;
   hiveEngineStake: number;
   minerate: number;
+  attacks: number;
+  claims: number;
 }
 
 interface UserBattleData {
@@ -39,9 +39,6 @@ interface Props {
 }
 
 export default function UserModal({ ...props }: Props) {
-
- 
-
   const { data: userHiveData, isLoading, refetch, isFetching } = useQuery(
     ["userHive"], 
     () => getUserDataProfile(props.battleUsername), 
@@ -75,7 +72,17 @@ export default function UserModal({ ...props }: Props) {
 
 
   if (isLoading || isFetching || !userHiveData) {
-    return <>Loading...</>;
+    return(
+    <>
+      <Modal opened={props.showPopup} onClose={props.handlePopupClose} centered size="lg">
+        <Container>
+          <Grid grow>
+            <Skeleton height={600} mt={6} width="100%" radius="sm" />
+          </Grid>
+        </Container>
+      </Modal>
+    </>
+    )
   }
 
 
@@ -130,6 +137,16 @@ export default function UserModal({ ...props }: Props) {
                   : {props.selectedRow.engineering}
                 </Text>
               </Group>
+              <Space h="sm" />
+              <Group>
+                <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/9219/9219138.png"} />
+                <Text fz={"lg"}>
+                  <Text span fw={500} inherit>
+                    Attacks{" "}
+                  </Text>
+                  : {props.selectedRow.attacks}
+                </Text>
+              </Group>
             </Grid.Col>
             <Grid.Col span={6}>
               <Group>
@@ -138,7 +155,7 @@ export default function UserModal({ ...props }: Props) {
                   <Text span fw={500} inherit>
                     Scrap{" "}
                   </Text>
-                  : {props.selectedRow.scrap ? props.selectedRow.scrap.toFixed(2) : 0} / {props.selectedRow.hiveEngineStake + 1 ? props.selectedRow.hiveEngineStake.toFixed(2) + 1 : 0}
+                  : {props.selectedRow.scrap ? props.selectedRow.scrap.toFixed(2) : 0} / {props.selectedRow.hiveEngineStake? (props.selectedRow.hiveEngineStake + 1.0).toFixed(2): 0}
                 </Text>
               </Group>
               <Space h="sm" />
@@ -159,6 +176,16 @@ export default function UserModal({ ...props }: Props) {
                     Favor
                   </Text>
                   : {props.selectedRow.favor ? props.selectedRow.favor.toFixed(2) : 0}
+                </Text>
+              </Group>
+              <Space h="sm" />
+              <Group>
+                <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/2171/2171382.png"} />
+                <Text fz={"lg"}>
+                  <Text span fw={500} inherit>
+                    Claims{" "}
+                  </Text>
+                  : {props.selectedRow.claims}
                 </Text>
               </Group>
             </Grid.Col>
@@ -217,12 +244,17 @@ export default function UserModal({ ...props }: Props) {
               />
               {props.selectedValue && (
                 <>
-                  <Text fz={"lg"}>
+                <Space h="xs" />
+                <Group>
+                <Image maw={45} mah={45} fit="contain" src={'https://images.hive.blog/p/2bP4pJr4wVimqCWjYimXJe2cnCgnM7aPAGpC6PAd69t?format=match&mode=fit'} />
+                <Text fz={"lg"}>
                     <Text span fw={500} inherit>
                       Scrap from {props.selectedValue}h
                     </Text>
                     : {props.selectedRow.minerate && props.selectedValue ? (props.selectedRow.minerate * 3600 * parseInt(props.selectedValue)).toFixed(4) : 0}
                   </Text>
+                </Group>
+
                 </>
               )}
               <Space h="xl" />
