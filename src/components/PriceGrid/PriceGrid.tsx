@@ -13,8 +13,10 @@ import useStyles from "./style";
 
 
 export default function PriceGrid() {
-    const isMobile = useMediaQuery('(max-width: 767px)');
-    const { classes } = useStyles();
+
+    const { classes, theme } = useStyles();
+    const isTablet = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
+
     const { data: statsData, isLoading: isStatsDataLoading } = useQuery('statsHiveData', getStatsEngineData, {
         refetchInterval: 60000
       });
@@ -34,7 +36,7 @@ export default function PriceGrid() {
 
   return (
     <>
-        <Card withBorder p="xl" radius={10}  className={classes.card} mih={400} mah={400}>
+        <Card withBorder p="xl" radius={10}  className={classes.card} mih={400} mah={isTablet ? 400 : 800}>
             <Text size="xl" weight={500} mt="sm">
                 Hive Stock
             </Text>

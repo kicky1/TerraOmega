@@ -13,8 +13,10 @@ import useStyles from "./style";
 
 
 export default function TerraStatsGrid() {
-    const isMobile = useMediaQuery('(max-width: 767px)');
-    const { classes } = useStyles();
+    
+    const { classes, theme } = useStyles();
+    const isTablet = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
+
 
     const { data: statsScrapData, isLoading: isStatsScrapDataLoading } = useQuery('statsData', getStatsData, {
         refetchInterval: 60000
@@ -38,7 +40,7 @@ export default function TerraStatsGrid() {
 
   return (
     <>
-        <Card withBorder p="xl" radius={10}  className={classes.card} mih={400} mah={400}>
+        <Card withBorder p="xl" radius={10}  className={classes.card} mih={400} mah={isTablet ? 400 : 800}>
             <Text size="xl" weight={500} mt="sm">
                 TerraCore Info
             </Text>

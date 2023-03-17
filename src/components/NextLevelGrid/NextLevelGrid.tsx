@@ -15,7 +15,8 @@ import useStyles from "./style";
 export default function NextLevelGrid() {
     
     const { classes, theme } = useStyles();
-   
+    const isTablet = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
+
 
 
     const { data: statsScrapData, isLoading: isStatsScrapDataLoading } = useQuery('statsData', getStatsData, {
