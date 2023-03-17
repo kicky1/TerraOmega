@@ -1,15 +1,23 @@
 "use client"
 import { getUserData, getUsersData } from '@/app/utils/actions/users';
 import BattleGrid from '@/components/BattleGrid/BattleGrid';
+import StatsGrid from '@/components/StatsGrid/StatsGrid';
 import {Container, Center, Badge, Space, Skeleton} from '@mantine/core';
 import { useQuery } from 'react-query';
 
+export const runtime = 'experimental-edge';
+
+
 export default function MainPage() {
 
-  const { data, isLoading, refetch } = useQuery('usersData', getUsersData);
-  
-  const now = new Date().getTime(); 
-  const oldUsers = data ? data.filter((user: { registrationTime: number; }) => (now - user.registrationTime) / 3600000 <= 24) : [];
+  const { data, isLoading } = useQuery('usersData', getUsersData, {
+    refetchInterval: 60000
+  });
+
+  // const { data: usersBattles } = useQuery('usersBattles', getMoreUsersBattles, {
+  //   refetchInterval: 10000
+  // });
+
 
   return (
     <>      
@@ -18,10 +26,7 @@ export default function MainPage() {
           {
             !isLoading ?           
             <>
-              <Space h="xl"/>
-              <Badge color="dark" size="xl" variant="outline" w={300}>Number of all users: {data.length}</Badge>
-              <Space h="sm"/>
-              <Badge color="dark" size="xl" variant="outline" w={300}>Untouchable players: {oldUsers.length}</Badge>
+              <StatsGrid data={data} isLoading={isLoading}/>
             </>:
             <>
               <Space h="xl"/>
@@ -30,7 +35,7 @@ export default function MainPage() {
               <Skeleton height={'xl'} width={30} radius="xl" />      
             </>      
           }
-          <BattleGrid data={data} refetch={refetch} isLoading={isLoading}/>
+          <BattleGrid data={data} isLoading={isLoading}/>
           <Space h="xl"/>
           <Space h="xl"/>
         </Container>
@@ -38,3 +43,6 @@ export default function MainPage() {
     </>
   )
 }
+
+
+

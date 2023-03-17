@@ -12,6 +12,10 @@ import { useMediaQuery } from '@mantine/hooks'
 import useStyles from './style'
 import logo from '../../assets/logo.png'
 import { Suspense } from 'react'
+import StatsGrid from '../StatsGrid/StatsGrid'
+import { useQuery } from 'react-query'
+import { getUsersData } from '@/app/utils/actions/users'
+import PriceGrid from '../PriceGrid/PriceGrid'
 
 
 export function HeaderApp() {
@@ -20,15 +24,12 @@ export function HeaderApp() {
   const tablet = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
   
   return (
-    <Container fluid className={classes.headerContainer} p={5} pb={35}>
+    <Container fluid className={classes.headerContainer} p={5} pb={15}>
       <Container size={'xl'}>
         <Header  height={'100%'} className={classes.header}>
           <Grid justify="space-between" align="center"> 
-            <Grid.Col span={3} pl={20} sx={{display:'flex', justifyContent:'left'}}>
-              <Center>
-                <Group spacing={0} > 
-                </Group>
-              </Center>
+            <Grid.Col span={3}>
+              <StatsGrid/>
             </Grid.Col>
             <Grid.Col span={tablet ? 9 : 6}>
                 <Image
@@ -38,7 +39,8 @@ export function HeaderApp() {
                     height={125}
                     />
             </Grid.Col>
-            <Grid.Col span={3} pr={20} sx={{display:'flex', justifyContent:'right'}}>
+            <Grid.Col span={3}>
+              <PriceGrid/>
             </Grid.Col>
           </Grid>
         </Header>

@@ -11,13 +11,8 @@ export async function getUserBattlesData(username: string) {
     return data
 }
 
-
 export async function getUserData(username: string) {
     const { data } = await api.get(`player/${username}`,{})
     return data
 }
-
-
-
-
 

@@ -39,7 +39,16 @@ interface Props {
 }
 
 export default function UserModal({ ...props }: Props) {
-  const { data: userHiveData, isLoading } = useQuery(["userHive"], () => getUserDataProfile(props.battleUsername), {});
+
+ 
+
+  const { data: userHiveData, isLoading, refetch, isFetching } = useQuery(
+    ["userHive"], 
+    () => getUserDataProfile(props.battleUsername), 
+    {enabled: false});
+
+   
+
   const isMobile = useMediaQuery('(max-width: 767px)');
   const userRobbingData = useMemo(() => {
     if (!props.userBattlesData) {
@@ -57,11 +66,18 @@ export default function UserModal({ ...props }: Props) {
     return filteredData;
   }, [props.userBattlesData]);
 
-  if (isLoading) {
+
+  useEffect(() => {
+    if (props.battleUsername) {
+      refetch();
+    }
+  }, [props.battleUsername, refetch]);
+
+
+  if (isLoading || isFetching || !userHiveData) {
     return <>Loading...</>;
   }
 
-  console.log(userHiveData);
 
   return (
     <>
@@ -220,7 +236,7 @@ export default function UserModal({ ...props }: Props) {
                 <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/4828/4828069.png"} />
                 <Text fz={"lg"}>
                   <Text span fw={500} inherit>
-                    Total scraped:{" "}
+                    Total gain:{" "}
                   </Text>
                   <>
                     {(() => {

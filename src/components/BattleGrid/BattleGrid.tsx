@@ -24,7 +24,6 @@ interface UserData {
 interface Props {
   data: any;
   isLoading: boolean;
-  refetch: any;
 }
 
 export default function BattleGrid({ ...props }: Props) {
@@ -39,16 +38,13 @@ export default function BattleGrid({ ...props }: Props) {
   const [battleUsername, setBattleUsername] = useState("");
 
   const handleClick = () => {
-    props.refetch();
     setUsername(username);
     refetch();
   };
 
   const handleRowClick = (row: { original: UserData }) => {
-    props.refetch();
     setSelectedRow(row.original);
     setBattleUsername(row.original.username);
-    // refetchBattles({ queryKey: ["userBattle", battleUsername] })
     setShowPopup(true);
   };
 
@@ -186,14 +182,15 @@ export default function BattleGrid({ ...props }: Props) {
 
   return (
     <>
-      <Space h="xl" />
+      <Space h="xl"/>
+      <Space h="xl"/>
       <SimpleGrid cols={1} mt={0} spacing={0} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
         <Grid grow>
-          <Grid.Col span={isMobile ? 6 : 2}>
-            <Input pb={10} placeholder="Filter by username" value={searchQuery} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setSearchQuery(e.target.value)} />
+          <Grid.Col span={isMobile ? 12 : 4}>
+            <Input pb={10} placeholder="Search username" value={searchQuery} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setSearchQuery(e.target.value)} />
           </Grid.Col>
-          <Grid.Col span={isMobile ? 6 : 4}></Grid.Col>
-          <Grid.Col span={6}>
+          <Grid.Col span={isMobile ? 12 : 4}></Grid.Col>
+          <Grid.Col span={isMobile ? 12 : 4}>
             <Group position={isMobile ? "left" : "right"}>
               <Input placeholder="Username" type="text" value={username} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setUsername(e.target.value)} />
               <Button
