@@ -3,7 +3,6 @@ import { getUserData, getUsersData } from '@/app/utils/actions/users';
 import BattleGrid from '@/components/BattleGrid/BattleGrid';
 import PriceGrid from '@/components/PriceGrid/PriceGrid';
 import StatisticGrid from '@/components/StatisticGrid/StatistisGrid';
-import StatsGrid from '@/components/StatsGrid/StatsGrid';
 import {Container, Center, Badge, Space, Skeleton, Tabs} from '@mantine/core';
 import { IconChartHistogram, IconSettings, IconTableOptions } from '@tabler/icons-react';
 import { useQuery } from 'react-query';
@@ -43,7 +42,6 @@ export default function MainPage() {
             Settings tab content
           </Tabs.Panel>
         </Tabs>
-          
           <Space h="xl"/>
           <Space h="xl"/>
         </Container>

@@ -34,7 +34,7 @@ export default function PriceGrid() {
 
   return (
     <>
-        <Card withBorder p="xl" radius={10}  className={classes.card}>
+        <Card withBorder p="xl" radius={10}  className={classes.card} mih={400} mah={400}>
             <Text size="xl" weight={500} mt="sm">
                 Hive Stock
             </Text>

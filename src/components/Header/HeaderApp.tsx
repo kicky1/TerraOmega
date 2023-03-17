@@ -11,7 +11,6 @@ import {
 import { useMediaQuery } from '@mantine/hooks'
 import useStyles from './style'
 import logo from '../../assets/logo.png'
-import StatsGrid from '../StatsGrid/StatsGrid'
 
 
 export function HeaderApp() {
@@ -25,7 +24,6 @@ export function HeaderApp() {
         <Header  height={'100%'} className={classes.header}>
           <Grid justify="space-between" align="center"> 
             <Grid.Col span={3}>
-              <StatsGrid/>
             </Grid.Col>
             <Grid.Col span={tablet ? 9 : 6}>
                 <Image

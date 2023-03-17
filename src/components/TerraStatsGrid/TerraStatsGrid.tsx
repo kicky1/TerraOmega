@@ -12,20 +12,24 @@ import useStyles from "./style";
 
 
 
-export default function PriceGrid() {
+export default function TerraStatsGrid() {
     const isMobile = useMediaQuery('(max-width: 767px)');
     const { classes } = useStyles();
-    const { data: statsData, isLoading: isStatsDataLoading } = useQuery('statsHiveData', getStatsEngineData, {
-        refetchInterval: 60000
-      });
 
     const { data: statsScrapData, isLoading: isStatsScrapDataLoading } = useQuery('statsData', getStatsData, {
         refetchInterval: 60000
       });
 
+      const { data: userData, isLoading: isUserLoading } = useQuery('usersData', getUsersData, {
+        refetchInterval: 60000
+      });
 
+    const now = new Date().getTime(); 
+    const oldUsers = userData ? userData.filter((user: { registrationTime: number; }) => (now - user.registrationTime) / 3600000 <= 24) : [];
+   
+    console.log(statsScrapData)
  
-  if (isStatsDataLoading || isStatsScrapDataLoading) {
+  if (isStatsScrapDataLoading || isUserLoading) {
     return (
       <>
       </>
@@ -34,56 +38,54 @@ export default function PriceGrid() {
 
   return (
     <>
-        <Card withBorder p="xl" radius={10}  className={classes.card}>
+        <Card withBorder p="xl" radius={10}  className={classes.card} mih={400} mah={400}>
             <Text size="xl" weight={500} mt="sm">
-                Hive Stock
+                TerraCore Info
             </Text>
             <Text size="lg"  color="dimmed" mb="lg">
-                Key data related to the game currency
+                Key data related to the game storage
             </Text>
             <Group>
-            <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/2162/2162183.png"} />
-                <Text fz={"lg"} >
-                    <Text span fw={500} inherit>
-                    Bid{" "}
-                    </Text>
-                    : {parseFloat(statsData.result.highestBid).toFixed(2)} Hive
-                </Text>   
-            </Group>
-            <Space h="xl" />
-            <Group>
-            <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/8991/8991273.png"} />
-                <Text fz={"lg"} >
-                    <Text span fw={500} inherit>
-                    Ask{" "}
-                    </Text>
-                    : {parseFloat(statsData.result.lowestAsk).toFixed(2)} Hive
-                </Text>   
-            </Group>
-            <Space h="xl"/>
-            <Group>
-            <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/3190/3190615.png"} />
-                {
-                    <Text fz={"lg"} >
-                        <Text span fw={500} inherit>
-                        Volume{" "}
-                        </Text>
-                        : {parseFloat(statsData.result.volume).toFixed(2)} Hive
-                    </Text>   
-                }
-            </Group>
-            <Space h="xl"/>
-            <Group>
-            <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/7314/7314483.png"} />
-                {
-                    <Text fz={"lg"} >
-                        <Text span fw={500} inherit>
-                        Price change{" "}
-                        </Text>
-                        : {statsData.result.priceChangePercent}
-                    </Text>   
-                }
-            </Group>
+        <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/1452/1452913.png"} />
+            <Text fz={"lg"}>
+                <Text span fw={500} inherit>
+                Players{" "}
+                </Text>
+                : {userData.length}
+            </Text>    
+        </Group>
+        <Space h="xl"/>
+        <Group>
+        <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/8040/8040933.png"} />
+            <Text fz={"lg"}>
+                <Text span fw={500} inherit>
+                New players{" "}
+                </Text>
+                : {oldUsers.length}
+            </Text>   
+        </Group>
+        <Space h="xl"/>
+        <Group>
+        <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/2489/2489669.png"} />
+            <Text fz={"lg"}>
+                <Text span fw={500} inherit>
+                Stacked Scrap{" "}
+                </Text>
+                : {(statsScrapData.totalScrap).toFixed(2)}
+            </Text>   
+            <Image maw={25} mah={25} fit="contain" src={'https://images.hive.blog/p/2bP4pJr4wVimqCWjYimXJe2cnCgnM7aPAGpC6PAd69t?format=match&mode=fit'} />
+        </Group>
+        <Space h="xl"/>
+        <Group>
+        <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/9413/9413241.png"} />
+            <Text fz={"lg"}>
+                <Text span fw={500} inherit>
+                Unstacked Scrap{" "}
+                </Text>
+                : {(statsScrapData.totalStaked).toFixed(2)}
+            </Text> 
+            <Image maw={25} mah={25} fit="contain" src={'https://images.hive.blog/p/2bP4pJr4wVimqCWjYimXJe2cnCgnM7aPAGpC6PAd69t?format=match&mode=fit'} />
+        </Group>
         </Card>
 
 
