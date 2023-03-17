@@ -69,7 +69,7 @@ export default function TerraStatsGrid() {
         <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/2489/2489669.png"} />
             <Text fz={"lg"}>
                 <Text span fw={500} inherit>
-                Stacked Scrap{" "}
+                Stacked{" "}
                 </Text>
                 : {(statsScrapData.totalScrap).toFixed(2)}
             </Text>   
@@ -80,7 +80,7 @@ export default function TerraStatsGrid() {
         <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/9413/9413241.png"} />
             <Text fz={"lg"}>
                 <Text span fw={500} inherit>
-                Unstacked Scrap{" "}
+                Unstacked{" "}
                 </Text>
                 : {(statsScrapData.totalStaked).toFixed(2)}
             </Text> 
