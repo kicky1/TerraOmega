@@ -23,6 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/supabase/supabase.js", "src/supabase/supabase.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/supabase/supabase.ts", "src/supabase/supabase.ts"],
   "exclude": ["node_modules"]
 }
