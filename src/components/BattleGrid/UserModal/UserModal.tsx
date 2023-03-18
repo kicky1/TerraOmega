@@ -97,7 +97,7 @@ export default function UserModal({ ...props }: Props) {
                 <div style={{ flex: 1 }}>
                   <Text size="lg" weight={500}>
                     {userHiveData.result.name}{" "}
-                    <Badge size="lg" sx={(theme) => ({ padding: 5 })} ml={5} radius="sm" color="gray" variant="outline">
+                    <Badge size="lg" sx={(theme: any) => ({ padding: 5 })} ml={5} radius="sm" color="gray" variant="outline">
                       {userHiveData.result.reputation.toFixed()}
                     </Badge>
                   </Text>
@@ -240,7 +240,6 @@ export default function UserModal({ ...props }: Props) {
                 ]}
                 placeholder="Pick time"
                 onChange={props.setSelectedValue}
-                sx={{ zIndex: 100 }}
               />
               {props.selectedValue && (
                 <>
@@ -260,7 +259,7 @@ export default function UserModal({ ...props }: Props) {
               <Space h="xl" />
               <Text fz={"lg"}>
                 <Text span fw={500}>
-                  Info from last 20 space battles
+                  Data from last 100 space battles
                 </Text>
               </Text>
               <Space h="xs" />

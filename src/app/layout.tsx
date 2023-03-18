@@ -5,6 +5,7 @@ import { Footer } from '@/components/Footer/Footer';
 import { HeaderApp } from '@/components/Header/HeaderApp';
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 
 
 export default function RootLayout({
@@ -12,10 +13,22 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: 'mantine-color-scheme',
+    defaultValue: 'light',
+    getInitialValueInEffect: true,
+  });
+
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+
+  useHotkeys([['mod+J', () => toggleColorScheme()]]);
+
   const queryClient = new QueryClient()
   return (
     <QueryClientProvider client={queryClient}>
-        <MantineProvider withGlobalStyles withNormalizeCSS>
+      <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+      <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
           <html lang="en">
             <body>
                 <HeaderApp/>
@@ -25,6 +38,7 @@ export default function RootLayout({
             </body>
           </html>
         </MantineProvider>
+        </ColorSchemeProvider>
     </QueryClientProvider>
   )
 }

@@ -29,7 +29,7 @@ export default function TerraStatsGrid() {
     const now = new Date().getTime(); 
     const oldUsers = userData ? userData.filter((user: { registrationTime: number; }) => (now - user.registrationTime) / 3600000 <= 24) : [];
    
-    console.log(statsScrapData)
+
  
   if (isStatsScrapDataLoading || isUserLoading) {
     return (

@@ -44,7 +44,7 @@ export default function NextLevelGrid() {
         sections={[{ value:((statsScrapData.currentFavor/statsScrapData.totalFavor)*100), color: theme.colors.green[8] }]} 
         size={270}
         label={
-          <Text color={'black'} weight={700} align="center" size="xl">
+          <Text weight={700} align="center" size="xl">
             {((statsScrapData.currentFavor/statsScrapData.totalFavor)*100).toFixed(2)}%
           </Text>
         }

@@ -1,6 +1,7 @@
 "use client"
 import { getUserData, getUsersData } from '@/app/utils/actions/users';
 import BattleGrid from '@/components/BattleGrid/BattleGrid';
+import MultiAccountsGrid from '@/components/MultiAccountsGrid/MultiAccountsGrid';
 import PriceGrid from '@/components/PriceGrid/PriceGrid';
 import StatisticGrid from '@/components/StatisticGrid/StatistisGrid';
 import {Container, Center, Badge, Space, Skeleton, Tabs} from '@mantine/core';
@@ -16,10 +17,6 @@ export default function MainPage() {
     refetchInterval: 60000
   });
 
-  // const { data: usersBattles } = useQuery('usersBattles', getMoreUsersBattles, {
-  //   refetchInterval: 10000
-  // });
-
   return (
     <>
       <Space h="xl"/>
@@ -30,7 +27,7 @@ export default function MainPage() {
           <Tabs.List>
             <Tabs.Tab value="tab" icon={<IconTableOptions size="1rem" />}>Table</Tabs.Tab> 
             <Tabs.Tab value="stats" icon={<IconChartHistogram size="1rem" />}>Stats</Tabs.Tab>
-            <Tabs.Tab value="settings" disabled icon={<IconSettings size="1rem" /> }>Settings</Tabs.Tab>
+            <Tabs.Tab value="settings" icon={<IconSettings size="1rem" /> } disabled>Settings</Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="tab" pt="xs">
             <BattleGrid data={data} isLoading={isLoading}/>
@@ -39,7 +36,7 @@ export default function MainPage() {
             <StatisticGrid/>
           </Tabs.Panel>
           <Tabs.Panel value="settings" pt="xs">
-            Settings tab content
+            <MultiAccountsGrid/>
           </Tabs.Panel>
         </Tabs>
           <Space h="xl"/>

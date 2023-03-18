@@ -68,7 +68,6 @@ export default function BattleGrid({ ...props }: Props) {
   );
 
   useEffect(() => {
-    console.log(battleUsername)
     if (battleUsername) {
       refetchBattles({ queryKey: ["userBattle", battleUsername] });
     }
@@ -113,11 +112,11 @@ export default function BattleGrid({ ...props }: Props) {
         accessor: "engineering",
       },
       {
-        Header: "Scrap",
-        accessor: "scrap" as const,
+        Header: "Stash size",
+        accessor: "hiveEngineStake" as const,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span>{row.original.scrap ? row.original.scrap.toFixed(2) : 0}</span>
+            <span>{row.original.hiveEngineStake ? row.original.hiveEngineStake.toFixed(2) : 0}</span>
           </>
         ),
       },
@@ -127,6 +126,15 @@ export default function BattleGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <span>{row.original.favor ? row.original.favor.toFixed(2) : 0}</span>
+          </>
+        ),
+      },
+      {
+        Header: "Scrap",
+        accessor: "scrap" as const,
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span>{row.original.scrap ? row.original.scrap.toFixed(2) : 0}</span>
           </>
         ),
       },
@@ -144,15 +152,14 @@ export default function BattleGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <> 
           <Group>
-              <span>{(row.original.minerate*3600).toFixed(4)}
+              <span>{(row.original.minerate*3600).toFixed(4) }
               <img
-              src={logo.src}
-              alt="Logo"
+              src={'https://images.hive.blog/p/2bP4pJr4wVimqCWjYimXJe2cnCgnM7aPAGpC6PAd69t?format=match&mode=fit'}
+              alt="Scrap"
               height={15}
               />
               </span>
           </Group>
-            
           </>
         ),
       },
@@ -220,7 +227,7 @@ export default function BattleGrid({ ...props }: Props) {
               <Input placeholder="Username" type="text" value={username} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setUsername(e.target.value)} />
               <Button
                 onClick={handleClick}
-                styles={(theme) => ({
+                styles={(theme : any) => ({
                   root: {
                     backgroundColor: "#0a3d47",
                     "&:not([data-disabled])": theme.fn.hover({
