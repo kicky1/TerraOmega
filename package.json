@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@mantine/core": "^6.0.1",
+    "@supabase/supabase-js": "^2.11.0",
     "@tabler/icons-react": "^2.10.0",
     "@types/node": "18.15.0",
     "@types/node-cron": "^3.0.7",
