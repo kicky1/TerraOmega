@@ -112,15 +112,6 @@ export default function BattleGrid({ ...props }: Props) {
         accessor: "engineering",
       },
       {
-        Header: "Stash size",
-        accessor: "hiveEngineStake" as const,
-        Cell: ({ row }: { row: { original: UserData } }) => (
-          <>
-            <span>{row.original.hiveEngineStake ? row.original.hiveEngineStake.toFixed(2) : 0}</span>
-          </>
-        ),
-      },
-      {
         Header: "Favor",
         accessor: "favor" as const,
         Cell: ({ row }: { row: { original: UserData } }) => (
@@ -135,6 +126,15 @@ export default function BattleGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <span>{row.original.scrap ? row.original.scrap.toFixed(2) : 0}</span>
+          </>
+        ),
+      },
+      {
+        Header: "Stash size",
+        accessor: "hiveEngineStake" as const,
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span>{row.original.hiveEngineStake ? (row.original.hiveEngineStake + 1.0).toFixed(2) : 0}</span>
           </>
         ),
       },
