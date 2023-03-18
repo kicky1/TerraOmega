@@ -8,10 +8,10 @@ import {Container, Center, Badge, Space, Skeleton, Tabs} from '@mantine/core';
 import { IconChartHistogram, IconSettings, IconTableOptions } from '@tabler/icons-react';
 import { useQuery } from 'react-query';
 
+
+
 export const runtime = 'experimental-edge';
-
-
-export default function MainPage() {
+export default function Home() {
 
   const { data, isLoading } = useQuery('usersData', getUsersData, {
     refetchInterval: 60000

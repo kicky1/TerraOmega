@@ -14,9 +14,10 @@ import { useMediaQuery } from '@mantine/hooks'
 import useStyles from './style'
 import logo from '../../assets/logo.png'
 import { IconMoonStars, IconSun } from '@tabler/icons-react'
+import { Suspense } from 'react'
 
 
-export function HeaderApp() {
+export default function HeaderApp() {
   const { classes, theme } = useStyles()
 
   const tablet = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
@@ -25,7 +26,8 @@ export function HeaderApp() {
   const dark = colorScheme === 'dark';
   
   return (
-    <Container fluid className={classes.header} p={5} pb={15}>
+
+<Container fluid className={classes.header} p={5} pb={15}>
       <Container size={'xl'}>
         <Header  height={'100%'} className={classes.header}>
           <Grid justify="space-between" align="center"> 
@@ -57,5 +59,6 @@ export function HeaderApp() {
         </Header>
       </Container>
     </Container>
+    
   )
 }

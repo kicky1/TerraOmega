@@ -2,7 +2,7 @@ import { Text, Center } from '@mantine/core';
 import { Suspense } from 'react';
 import useStyles from './style';
 
-export function Footer() {
+export default function Footer() {
   const { classes } = useStyles();
 
 

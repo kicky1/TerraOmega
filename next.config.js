@@ -4,6 +4,7 @@ const nextConfig = {
     reactStrictMode: false,
     appDir: true,
     allowMiddlewareResponseBody: true,
+    reactMode: 'concurrent',
   },
   // serverMiddleware: [
   //   { path: '/', handler: '~/middleware/maintenance.ts' },

@@ -1,11 +1,15 @@
 "use client"
 
 import { Analytics } from '@vercel/analytics/react';
-import { Footer } from '@/components/Footer/Footer';
-import { HeaderApp } from '@/components/Header/HeaderApp';
+
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useHotkeys, useLocalStorage } from '@mantine/hooks';
+import { Suspense } from 'react';
+import HeaderApp from '@/components/Header/HeaderApp';
+import Footer from '@/components/Footer/Footer';
+import Loading from '@/loading';
+
 
 
 export default function RootLayout({
@@ -24,6 +28,8 @@ export default function RootLayout({
 
   useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
+
+  
   const queryClient = new QueryClient()
   return (
     <QueryClientProvider client={queryClient}>
@@ -31,10 +37,14 @@ export default function RootLayout({
       <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
           <html lang="en">
             <body>
-                <HeaderApp/>
+              
+              <HeaderApp/>
+              <Suspense fallback={<Loading/>}>
                 {children}
+                </Suspense> 
                 <Analytics />
                 <Footer/>
+              
             </body>
           </html>
         </MantineProvider>
@@ -42,3 +52,6 @@ export default function RootLayout({
     </QueryClientProvider>
   )
 }
+
+
+
