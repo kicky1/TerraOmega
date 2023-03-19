@@ -27,6 +27,7 @@
     "eslint-config-next": "13.2.4",
     "events": "^3.3.0",
     "hive-tx": "^4.2.2",
+    "immer": "^9.0.19",
     "next": "^13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",

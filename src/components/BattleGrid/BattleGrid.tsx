@@ -1,11 +1,13 @@
 import { useQuery } from "react-query";
 import { useTable, useSortBy, Column } from "react-table";
 import { attackOponent, getUserBattlesData, getUserData} from "@/app/utils/actions/users";
-import { Space, SimpleGrid, Box, Table, Text, Pagination, Input, Grid, Button, Group, Skeleton, Tooltip } from "@mantine/core";
+import { Space, SimpleGrid, Box, Table, Notification, Pagination, Input, Grid, Button, Group, Skeleton, Tooltip, TextInput, Transition } from "@mantine/core";
 import React, { useState, useMemo, useEffect } from "react";
-import { IconShieldCheckeredFilled } from "@tabler/icons-react";
+import { IconShieldCheckeredFilled, IconX } from "@tabler/icons-react";
 import { useMediaQuery } from '@mantine/hooks';
 import UserModal from "./UserModal/UserModal";
+import { setBattleError, useErrorsStore } from "@/zustand/stores/useErrorsStore";
+import useStyles from "./style";
 
 
 interface UserData {
@@ -39,8 +41,29 @@ export default function BattleGrid({ ...props }: Props) {
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
   const isMobile = useMediaQuery('(max-width: 767px)');
   const [battleUsername, setBattleUsername] = useState("");
-  const [usernameAttack, setUsernameAttack] = useState("");
+  const { classes, theme } = useStyles();
 
+  const [showNotification, setShowNotification] = useState(false);
+
+  const handleNotificationClose = () => {
+    setShowNotification(false);
+  };
+
+  const handleNotificationOpen = () => {
+    setShowNotification(true);
+  };
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    if (showNotification) {
+      timeoutId = setTimeout(() => {
+        setShowNotification(false);
+      }, 4000);
+    }
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [showNotification]);
 
   const [victimUsername, setVictimUsername] = useState("");
 
@@ -258,11 +281,23 @@ export default function BattleGrid({ ...props }: Props) {
           <Grid.Col span={12}>
           <Box w={325} pb={25}>
             <Group>
-              <Input placeholder="Username" type="text" value={victimUsername} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setVictimUsername(e.target.value)} />
+              <TextInput 
+                placeholder="Username" 
+                type="text" 
+                value={victimUsername} 
+                onChange={(e: { target: { value: React.SetStateAction<string> } }) => setVictimUsername(e.target.value)} />
               <Box w={120}>
               <Button
                 fullWidth
-                onClick={() => {attackOponent(victimUsername)}}
+                onClick={() => {
+                  const usernameExists = props.data.some((user: UserData) => user.username.toLowerCase() === victimUsername);
+                  if(usernameExists){
+                    attackOponent(victimUsername)
+                    setUsername('')
+                  }else{
+                    handleNotificationOpen()
+                  }
+                }}
                 styles={(theme : any) => ({
                   root: {
                     backgroundColor: "#0a3d47",
@@ -329,6 +364,31 @@ export default function BattleGrid({ ...props }: Props) {
         <Pagination value={page} onChange={setPage} withControls total={pageCount} position="center" pt={50} color={"dark"} />
       </SimpleGrid>
       <Space h="xl" />
+      <div>
+      <Transition
+        mounted={showNotification}
+        transition="fade"
+        duration={300}
+        timingFunction="ease"
+        onExited={handleNotificationClose}
+      >
+        {(transitionStyles) => (
+          <div style={transitionStyles}>
+            <div className={classes.notificationContainer}>
+            <Notification
+              title="Attack error"
+              color="red"
+              onClose={handleNotificationClose}
+            >
+              You can't attack a player who doesn't exist!
+            </Notification>
+            </div>
+          </div>
+        )}
+      </Transition>
+    </div>
+      
+      
     </>
   );
 }

@@ -6,7 +6,6 @@ import React, { useState, useMemo, useEffect } from "react";
 import { IconAdjustments, IconCheck, IconHelpCircle, IconShieldCheckeredFilled } from "@tabler/icons-react";
 import { useMediaQuery } from '@mantine/hooks';
 import UserModal from "../BattleGrid/UserModal/UserModal"
-import useStyles from "./style";
 
 interface UserData {
   username: string;
@@ -30,13 +29,13 @@ interface Props {
   isLoading: boolean;
 }
 
-export default function MultiAccountsGrid({ ...props }: Props) {
+export default function MultiAccountsGridFinnal({ ...props }: Props) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [username, setUsername] = useState("");
   const [usernameData, setUsernameData] = useState("");
   const isMobile = useMediaQuery('(max-width: 767px)');
-  const { classes, theme } = useStyles()
+
   const handleClick = () => {
     setUsernameData(username);
     setUsername('')
@@ -138,7 +137,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         accessor: "claim",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <> 
-            <ActionIcon variant="outline" onClick={() => claimScrap(row.original.scrap, row.original.username)}>
+            <ActionIcon color="dark" variant="outline" onClick={() => claimScrap(row.original.scrap, row.original.username)}>
               <IconCheck size="1.125rem" />
             </ActionIcon>
           </>
