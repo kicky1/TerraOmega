@@ -1,4 +1,3 @@
-import { logoutUser } from '@/zustand/stores/useAuthorizationStore';
 import Axios from 'axios';
 
 const apiWeb = Axios.create({
