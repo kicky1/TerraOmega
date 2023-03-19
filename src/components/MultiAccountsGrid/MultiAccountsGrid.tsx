@@ -20,6 +20,7 @@ interface UserData {
   minerate: number;
   attacks: number;
   claims: number;
+  claim: string
 }
 
 
@@ -81,7 +82,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
       },
       {
         Header: "Favor",
-        accessor: "favor" as const,
+        accessor: "favor",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <span>{row.original.favor ? row.original.favor.toFixed(2) : 0}</span>
@@ -90,7 +91,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
       },
       {
         Header: "Scrap",
-        accessor: "scrap" as const,
+        accessor: "scrap",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <span>{row.original.scrap ? row.original.scrap.toFixed(2) : 0}</span>
@@ -99,7 +100,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
       },
       {
         Header: "Stash size",
-        accessor: "hiveEngineStake" as const,
+        accessor: "hiveEngineStake",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <span>{row.original.hiveEngineStake ? (row.original.hiveEngineStake + 1.0).toFixed(2) : 0}</span>
@@ -108,15 +109,15 @@ export default function MultiAccountsGrid({ ...props }: Props) {
       },
       {
         Header: "Attacks",
-        accessor: "attacks" as const,
+        accessor: "attacks",
       },
       {
         Header: "Claims",
-        accessor: "claims" as const,
+        accessor: "claims"
       },
       {
         Header: "Scrap/h",
-        accessor: "minerate" as const,
+        accessor: "minerate",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <> 
           <Group>

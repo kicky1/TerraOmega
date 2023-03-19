@@ -69,7 +69,7 @@ export async function claimScrap(amount: number, username: string) {
             });
       
           }else{
-            console.log("You have to install keychain")
+            alert('You have to install keychain!')
           }
         })
       })
@@ -119,7 +119,7 @@ export async function attackOponent(target: string) {
           });
     
         }else{
-          console.log("You have to install keychain")
+          alert('You have to install keychain!')
         }
       })
     })
