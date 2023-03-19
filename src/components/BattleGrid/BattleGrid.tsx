@@ -6,7 +6,6 @@ import React, { useState, useMemo, useEffect } from "react";
 import { IconShieldCheckeredFilled, IconX } from "@tabler/icons-react";
 import { useMediaQuery } from '@mantine/hooks';
 import UserModal from "./UserModal/UserModal";
-import { setBattleError, useErrorsStore } from "@/zustand/stores/useErrorsStore";
 import useStyles from "./style";
 
 
@@ -365,28 +364,28 @@ export default function BattleGrid({ ...props }: Props) {
       </SimpleGrid>
       <Space h="xl" />
       <div>
-      <Transition
-        mounted={showNotification}
-        transition="fade"
-        duration={300}
-        timingFunction="ease"
-        onExited={handleNotificationClose}
-      >
-        {(transitionStyles) => (
-          <div style={transitionStyles}>
-            <div className={classes.notificationContainer}>
-            <Notification
-              title="Attack error"
-              color="red"
-              onClose={handleNotificationClose}
-            >
-              You can't attack a player who doesn't exist!
-            </Notification>
+        <Transition
+          mounted={showNotification}
+          transition="fade"
+          duration={300}
+          timingFunction="ease"
+          onExited={handleNotificationClose}
+        >
+          {(transitionStyles) => (
+            <div style={transitionStyles}>
+              <div className={classes.notificationContainer}>
+              <Notification
+                title="Attack error"
+                color="red"
+                onClose={handleNotificationClose}
+              >
+                You can not attack a player who does not exist!
+              </Notification>
+              </div>
             </div>
-          </div>
-        )}
-      </Transition>
-    </div>
+          )}
+        </Transition>
+      </div>
       
       
     </>
