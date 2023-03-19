@@ -1,12 +1,12 @@
 import { useQuery } from "react-query";
 import { useTable, useSortBy, Column } from "react-table";
-import { getUserBattlesData, getUserData} from "@/app/utils/actions/users";
-import { Space, SimpleGrid, Box, Table, Text, Pagination, Input, Grid, Button, Checkbox, Group, Modal, RingProgress, Select, Skeleton } from "@mantine/core";
+import { attackOponent, getUserBattlesData, getUserData} from "@/app/utils/actions/users";
+import { Space, SimpleGrid, Box, Table, Text, Pagination, Input, Grid, Button, Group, Skeleton, Tooltip } from "@mantine/core";
 import React, { useState, useMemo, useEffect } from "react";
-import { IconHelpCircle, IconShieldCheckeredFilled } from "@tabler/icons-react";
+import { IconShieldCheckeredFilled } from "@tabler/icons-react";
 import { useMediaQuery } from '@mantine/hooks';
 import UserModal from "./UserModal/UserModal";
-import logo from '../../assets/logo.png'
+
 
 interface UserData {
   username: string;
@@ -39,6 +39,10 @@ export default function BattleGrid({ ...props }: Props) {
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
   const isMobile = useMediaQuery('(max-width: 767px)');
   const [battleUsername, setBattleUsername] = useState("");
+  const [usernameAttack, setUsernameAttack] = useState("");
+
+
+  const [victimUsername, setVictimUsername] = useState("");
 
   const handleClick = () => {
     setUsername(username);
@@ -216,17 +220,49 @@ export default function BattleGrid({ ...props }: Props) {
     <>
       <Space h="xl"/>
       <Space h="xl"/>
-      <SimpleGrid cols={1} mt={0} spacing={0} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
+      <SimpleGrid cols={1} mt={0} spacing={0}>
         <Grid grow>
-          <Grid.Col span={isMobile ? 12 : 4}>
-            <Input pb={10} placeholder="Search username" value={searchQuery} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setSearchQuery(e.target.value)} />
-          </Grid.Col>
-          <Grid.Col span={isMobile ? 12 : 4}></Grid.Col>
-          <Grid.Col span={isMobile ? 12 : 4}>
-            <Group position={isMobile ? "left" : "right"}>
+          <Grid.Col span={12}>
+          <Box w={325} pb={5}>
+            <Group>
               <Input placeholder="Username" type="text" value={username} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setUsername(e.target.value)} />
+              <Box w={120}>
+              <Tooltip 
+              label="Filter for the best opponent to scrap"
+              color="dark"
+              withArrow
+              arrowPosition="center"
+              offset={10}
+              >
+                <Button
+                  onClick={handleClick}
+                  fullWidth 
+                  styles={(theme : any) => ({
+                    root: {
+                      
+                      backgroundColor: "#0a3d47",
+                      "&:not([data-disabled])": theme.fn.hover({
+                        backgroundColor: theme.fn.darken("#072f37", 0.05),
+                      }),
+                    },
+                  })}
+                >
+                Calculate
+              </Button>
+              </Tooltip>
+              </Box>
+             
+            </Group>
+            </Box>
+          </Grid.Col>
+          <Grid.Col span={12}>
+          <Box w={325} pb={25}>
+            <Group>
+              <Input placeholder="Username" type="text" value={victimUsername} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setVictimUsername(e.target.value)} />
+              <Box w={120}>
               <Button
-                onClick={handleClick}
+                fullWidth
+                onClick={() => {attackOponent(victimUsername)}}
                 styles={(theme : any) => ({
                   root: {
                     backgroundColor: "#0a3d47",
@@ -236,9 +272,16 @@ export default function BattleGrid({ ...props }: Props) {
                   },
                 })}
               >
-                Calculate
+                Attack
               </Button>
+              </Box>
             </Group>
+            </Box>
+          </Grid.Col>
+          <Grid.Col span={12}>
+            <Box w={325}>
+              <Input  placeholder="Search username" value={searchQuery} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setSearchQuery(e.target.value)} />
+            </Box>
           </Grid.Col>
         </Grid>
         <Box   sx={{
