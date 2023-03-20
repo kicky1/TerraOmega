@@ -10,6 +10,7 @@ import useStyles from "./style";
 
 
 interface UserData {
+  id: string,
   username: string;
   damage: number;
   defense: number;
@@ -103,6 +104,43 @@ export default function BattleGrid({ ...props }: Props) {
   const columns: readonly Column<UserData>[] = useMemo(
     () => [
       {
+        Header: "",
+        accessor: "id",
+        Cell: ({ row }: { row: { original: UserData } }) => {
+          const registrationTime = row.original.registrationTime;
+          if (registrationTime) {
+            const now = new Date();
+            const registrationDate = new Date(registrationTime);
+            const timeDiff = now.getTime() - registrationDate.getTime();
+            const hoursDiff = timeDiff / (1000 * 3600);
+            if (hoursDiff <= 24) {
+              return (
+                <span style={{ color: "red", cursor: "pointer" }} onClick={() => handleRowClick(row)} >
+
+                    <Avatar radius="lg" size="sm" src={`https://images.hive.blog/u/${row.original.username}/avatar`}/>
+
+                </span>
+              );
+            } else {
+              return (
+              <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>
+          
+                  <Avatar radius="lg" size="sm" src={`https://images.hive.blog/u/${row.original.username}/avatar`}/>
+
+              </span>)
+            }
+          } else {
+            return (
+              <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>
+
+                  <Avatar radius="lg" size="sm" src={`https://images.hive.blog/u/${row.original.username}/avatar`}/>
+
+              </span>)
+            
+          }
+        },
+      },
+      {
         Header: "Username",
         accessor: "username",
         Cell: ({ row }: { row: { original: UserData } }) => {
@@ -116,7 +154,6 @@ export default function BattleGrid({ ...props }: Props) {
               return (
                 <span style={{ color: "red", cursor: "pointer" }} onClick={() => handleRowClick(row)} >
                   <Group>
-                    <Avatar radius="lg" size="sm" src={`https://images.hive.blog/u/${row.original.username}/avatar`}/>
                       {row.original.username}
                       <IconShieldCheckeredFilled size={15} />
                   </Group> 
@@ -126,7 +163,6 @@ export default function BattleGrid({ ...props }: Props) {
               return (
               <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>
                 <Group>
-                  <Avatar radius="lg" size="sm" src={`https://images.hive.blog/u/${row.original.username}/avatar`}/>
                   {row.original.username}
                   </Group>
               </span>)
@@ -135,7 +171,6 @@ export default function BattleGrid({ ...props }: Props) {
             return (
               <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>
                 <Group>
-                  <Avatar radius="lg" size="sm" src={`https://images.hive.blog/u/${row.original.username}/avatar`}/>
                   {row.original.username}
                   </Group>
               </span>)
