@@ -1,9 +1,9 @@
 import { useQuery } from "react-query";
 import { useTable, useSortBy, Column } from "react-table";
 import { attackOponent, getUserBattlesData, getUserData} from "@/app/utils/actions/users";
-import { Space, SimpleGrid, Box, Table, Notification, Pagination, Input, Grid, Button, Group, Skeleton, Tooltip, TextInput, Transition } from "@mantine/core";
+import { Space, SimpleGrid, Box, Table, Notification, Pagination, Input, Grid, Button, Group, Skeleton, Tooltip, TextInput, Transition, Avatar, ActionIcon, Center } from "@mantine/core";
 import React, { useState, useMemo, useEffect } from "react";
-import { IconShieldCheckeredFilled, IconX } from "@tabler/icons-react";
+import { IconShieldCheckeredFilled, IconSword, IconSwordOff, IconX } from "@tabler/icons-react";
 import { useMediaQuery } from '@mantine/hooks';
 import UserModal from "./UserModal/UserModal";
 import useStyles from "./style";
@@ -22,6 +22,7 @@ interface UserData {
   minerate: number;
   attacks: number;
   claims: number;
+  battle: string;
 }
 
 
@@ -113,36 +114,106 @@ export default function BattleGrid({ ...props }: Props) {
             const hoursDiff = timeDiff / (1000 * 3600);
             if (hoursDiff <= 24) {
               return (
-                <span style={{ color: "red" }}>
-                  {row.original.username} <IconShieldCheckeredFilled size={15} />
+                <span style={{ color: "red", cursor: "pointer" }} onClick={() => handleRowClick(row)} >
+                  <Group>
+                    <Avatar radius="lg" size="sm" src={`https://images.hive.blog/u/${row.original.username}/avatar`}/>
+                      {row.original.username}
+                      <IconShieldCheckeredFilled size={15} />
+                  </Group> 
                 </span>
               );
             } else {
-              return <span>{row.original.username}</span>;
+              return (
+              <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>
+                <Group>
+                  <Avatar radius="lg" size="sm" src={`https://images.hive.blog/u/${row.original.username}/avatar`}/>
+                  {row.original.username}
+                  </Group>
+              </span>)
             }
           } else {
-            return <span>{row.original.username}</span>;
+            return (
+              <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>
+                <Group>
+                  <Avatar radius="lg" size="sm" src={`https://images.hive.blog/u/${row.original.username}/avatar`}/>
+                  {row.original.username}
+                  </Group>
+              </span>)
+            
+          }
+        },
+      },
+      {
+        Header: "Attack",
+        accessor: "battle",
+        Cell: ({ row }: { row: { original: UserData } }) => {
+          const registrationTime = row.original.registrationTime;
+          if (registrationTime) {
+            const now = new Date();
+            const registrationDate = new Date(registrationTime);
+            const timeDiff = now.getTime() - registrationDate.getTime();
+            const hoursDiff = timeDiff / (1000 * 3600);
+            if (hoursDiff <= 24) {
+              return (
+                <span >
+                  <ActionIcon variant="outline" disabled>
+                    <IconSwordOff/>
+                  </ActionIcon>
+                </span>
+              );
+            } else {
+              return (
+                <span >
+                    <ActionIcon variant="outline" onClick={() => attackOponent(row.original.username)}>
+                      <IconSword/>
+                    </ActionIcon>
+                </span>
+              )
+            }
+          } else {
+            return (
+              <span >
+                  <ActionIcon variant="outline" onClick={() => attackOponent(row.original.username)}>
+                    <IconSword/>
+                  </ActionIcon>
+              </span>
+              )
           }
         },
       },
       {
         Header: "Damage",
         accessor: "damage",
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.damage}</span>
+          </>
+        ),
       },
       {
         Header: "Defense",
         accessor: "defense",
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.defense}</span>
+          </>
+        ),
       },
       {
         Header: "Engineering",
         accessor: "engineering",
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.engineering}</span>
+          </>
+        ),
       },
       {
         Header: "Favor",
         accessor: "favor" as const,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span>{row.original.favor ? row.original.favor.toFixed(2) : 0}</span>
+            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.favor ? row.original.favor.toFixed(2) : 0}</span>
           </>
         ),
       },
@@ -151,7 +222,7 @@ export default function BattleGrid({ ...props }: Props) {
         accessor: "scrap" as const,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span>{row.original.scrap ? row.original.scrap.toFixed(2) : 0}</span>
+            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.scrap ? row.original.scrap.toFixed(2) : 0}</span>
           </>
         ),
       },
@@ -160,17 +231,27 @@ export default function BattleGrid({ ...props }: Props) {
         accessor: "hiveEngineStake" as const,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span>{row.original.hiveEngineStake ? (row.original.hiveEngineStake + 1.0).toFixed(2) : 0}</span>
+            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.hiveEngineStake ? (row.original.hiveEngineStake + 1.0).toFixed(2) : 0}</span>
           </>
         ),
       },
       {
         Header: "Attacks",
         accessor: "attacks" as const,
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.attacks}</span>
+          </>
+        ),
       },
       {
         Header: "Claims",
         accessor: "claims" as const,
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.claims}</span>
+          </>
+        ),
       },
       {
         Header: "Scrap/h",
@@ -178,7 +259,7 @@ export default function BattleGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <> 
           <Group>
-              <span>{(row.original.minerate*3600).toFixed(4) }
+              <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{(row.original.minerate*3600).toFixed(4) }
               <img
               src={'https://images.hive.blog/p/2bP4pJr4wVimqCWjYimXJe2cnCgnM7aPAGpC6PAd69t?format=match&mode=fit'}
               alt="Scrap"
@@ -245,17 +326,19 @@ export default function BattleGrid({ ...props }: Props) {
       <SimpleGrid cols={1} mt={0} spacing={0}>
         <Grid grow>
           <Grid.Col span={12}>
-          <Box w={325} pb={5}>
+          <Box w={300} pb={5} pr={0}>
             <Group>
-              <Input placeholder="Username" type="text" value={username} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setUsername(e.target.value)} />
-              <Box w={120}>
+              <Box w={178}>
+                <Input placeholder="Username" type="text" value={username} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setUsername(e.target.value)} />
+              </Box>
+              <Box w={105}>
               <Tooltip 
-              label="Filter for the best opponent to scrap"
-              color="dark"
-              withArrow
-              arrowPosition="center"
-              offset={10}
-              >
+                  label="Filter for the best opponent to scrap"
+                  color="dark"
+                  withArrow
+                  arrowPosition="center"
+                  offset={10}
+                >
                 <Button
                   onClick={handleClick}
                   fullWidth 
@@ -273,11 +356,10 @@ export default function BattleGrid({ ...props }: Props) {
               </Button>
               </Tooltip>
               </Box>
-             
             </Group>
             </Box>
           </Grid.Col>
-          <Grid.Col span={12}>
+          {/* <Grid.Col span={12}>
           <Box w={325} pb={25}>
             <Group>
               <TextInput 
@@ -311,9 +393,9 @@ export default function BattleGrid({ ...props }: Props) {
               </Box>
             </Group>
             </Box>
-          </Grid.Col>
+          </Grid.Col> */}
           <Grid.Col span={12}>
-            <Box w={325}>
+            <Box w={300}>
               <Input  placeholder="Search username" value={searchQuery} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setSearchQuery(e.target.value)} />
             </Box>
           </Grid.Col>
@@ -339,7 +421,7 @@ export default function BattleGrid({ ...props }: Props) {
               {pageData.map((row) => {
                 prepareRow(row);
                 return (
-                  <tr key={row.id} onClick={() => handleRowClick(row)} style={{ cursor: "pointer" }}>
+                  <tr key={row.id}>
                     {row.cells.map((cell, id) => (
                       <td key={id}>{cell.render("Cell")}</td>
                     ))}

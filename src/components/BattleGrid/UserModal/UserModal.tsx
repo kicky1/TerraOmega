@@ -93,7 +93,7 @@ export default function UserModal({ ...props }: Props) {
           <Grid grow>
             <Grid.Col span={6}>
               <Group>
-                <Avatar radius="lg" size="xl" src={userHiveData.result.metadata.profile.profile_image} />
+                <Avatar radius="lg" size="xl" src={`https://images.hive.blog/u/${props.selectedRow.username}/avatar`} />
                 <div style={{ flex: 1 }}>
                   <Text size="lg" weight={500}>
                     {userHiveData.result.name}{" "}
