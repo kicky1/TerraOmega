@@ -8,7 +8,6 @@ import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 import { Suspense } from 'react';
 import HeaderApp from '@/components/Header/HeaderApp';
 import Footer from '@/components/Footer/Footer';
-import Loading from '@/loading';
 
 
 
@@ -39,9 +38,9 @@ export default function RootLayout({
             <body>
               
               <HeaderApp/>
-              <Suspense fallback={<Loading/>}>
+       
                 {children}
-                </Suspense> 
+             
                 <Analytics />
                 <Footer/>
               

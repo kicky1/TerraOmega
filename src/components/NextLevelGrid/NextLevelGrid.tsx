@@ -1,12 +1,8 @@
 import { useQuery } from "react-query";
-import { useTable, useSortBy, Column } from "react-table";
-import { getUserBattlesData, getUserData, getUsersData} from "@/app/utils/actions/users";
-import { Space, SimpleGrid, Box, Table, Text, Pagination, Input, Grid, Button, Checkbox, Group, Modal, RingProgress, Select, Skeleton, Badge, Image, Card } from "@mantine/core";
-import React, { useState, useMemo, useEffect } from "react";
-import { IconShieldCheckeredFilled } from "@tabler/icons-react";
+import { Text, Group, RingProgress, Card } from "@mantine/core";
+import React from "react";
 import { useMediaQuery } from '@mantine/hooks';
 import { getStatsData } from "@/app/utils/actions/stats";
-import { getStatsEngineData } from "@/app/utils/actions/hiveEngine";
 import useStyles from "./style";
 
 
@@ -15,9 +11,6 @@ import useStyles from "./style";
 export default function NextLevelGrid() {
     
     const { classes, theme } = useStyles();
-    const isTablet = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
-
-
 
     const { data: statsScrapData, isLoading: isStatsScrapDataLoading } = useQuery('statsData', getStatsData, {
         refetchInterval: 60000
@@ -41,19 +34,16 @@ export default function NextLevelGrid() {
             </Text>
             <Group position="center">
             <RingProgress
-        sections={[{ value:((statsScrapData.currentFavor/statsScrapData.totalFavor)*100), color: theme.colors.green[8] }]} 
-        size={270}
-        label={
-          <Text weight={700} align="center" size="xl">
-            {((statsScrapData.currentFavor/statsScrapData.totalFavor)*100).toFixed(2)}%
-          </Text>
-        }
-      />
+              sections={[{ value:((statsScrapData.currentFavor/statsScrapData.totalFavor)*100), color: theme.colors.green[8] }]} 
+              size={270}
+              label={
+                <Text weight={700} align="center" size="xl">
+                  {((statsScrapData.currentFavor/statsScrapData.totalFavor)*100).toFixed(2)}%
+                </Text>
+              }
+            />
             </Group>
-
         </Card>
-
-
     </>
   );
 }

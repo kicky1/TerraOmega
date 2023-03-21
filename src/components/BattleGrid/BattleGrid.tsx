@@ -7,6 +7,7 @@ import { IconShieldCheckeredFilled, IconSword, IconSwordOff, IconX } from "@tabl
 import { useMediaQuery } from '@mantine/hooks';
 import UserModal from "./UserModal/UserModal";
 import useStyles from "./style";
+import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
 
 
 interface UserData {
@@ -45,6 +46,8 @@ export default function BattleGrid({ ...props }: Props) {
   const { classes, theme } = useStyles();
 
   const [showNotification, setShowNotification] = useState(false);
+  const isSubscriber = useAuthorizationStore((state: { isSubscriber: boolean; }) => state.isSubscriber)
+
 
   const handleNotificationClose = () => {
     setShowNotification(false);
@@ -66,8 +69,6 @@ export default function BattleGrid({ ...props }: Props) {
     };
   }, [showNotification]);
 
-  const [victimUsername, setVictimUsername] = useState("");
-
   const handleClick = () => {
     setUsername(username);
     refetch();
@@ -87,19 +88,19 @@ export default function BattleGrid({ ...props }: Props) {
     enabled: false,
   });
 
-  const { data: userBattlesData , refetch: refetchBattles } = useQuery(
-    ["userBattle", battleUsername],
-    () => getUserBattlesData(battleUsername),
-    {
-      enabled: false,
-    }
-  );
+  // const { data: userBattlesData , refetch: refetchBattles } = useQuery(
+  //   ["userBattle", battleUsername],
+  //   () => getUserBattlesData(battleUsername),
+  //   {
+  //     enabled: false,
+  //   }
+  // );
 
-  useEffect(() => {
-    if (battleUsername) {
-      refetchBattles({ queryKey: ["userBattle", battleUsername] });
-    }
-  }, [battleUsername, refetchBattles]);
+  // useEffect(() => {
+  //   if (battleUsername) {
+  //     refetchBattles({ queryKey: ["userBattle", battleUsername] });
+  //   }
+  // }, [battleUsername, refetchBattles]);
 
   const columns: readonly Column<UserData>[] = useMemo(
     () => [
@@ -199,7 +200,8 @@ export default function BattleGrid({ ...props }: Props) {
             } else {
               return (
                 <span >
-                    <ActionIcon variant="outline" onClick={() => attackOponent(row.original.username)}>
+                    <ActionIcon variant="outline" onClick={() => {
+                        attackOponent(row.original.username)}}>
                       <IconSword/>
                     </ActionIcon>
                 </span>
@@ -338,7 +340,7 @@ export default function BattleGrid({ ...props }: Props) {
     useSortBy
   );
 
-  if (props.isLoading) {
+  if (props.isLoading ) {
     return (
       <>
         <Space h="xl" />
@@ -376,6 +378,7 @@ export default function BattleGrid({ ...props }: Props) {
                 >
                 <Button
                   onClick={handleClick}
+                  disabled={!isSubscriber}
                   fullWidth 
                   styles={(theme : any) => ({
                     root: {
@@ -394,41 +397,6 @@ export default function BattleGrid({ ...props }: Props) {
             </Group>
             </Box>
           </Grid.Col>
-          {/* <Grid.Col span={12}>
-          <Box w={325} pb={25}>
-            <Group>
-              <TextInput 
-                placeholder="Username" 
-                type="text" 
-                value={victimUsername} 
-                onChange={(e: { target: { value: React.SetStateAction<string> } }) => setVictimUsername(e.target.value)} />
-              <Box w={120}>
-              <Button
-                fullWidth
-                onClick={() => {
-                  const usernameExists = props.data.some((user: UserData) => user.username.toLowerCase() === victimUsername);
-                  if(usernameExists){
-                    attackOponent(victimUsername)
-                    setUsername('')
-                  }else{
-                    handleNotificationOpen()
-                  }
-                }}
-                styles={(theme : any) => ({
-                  root: {
-                    backgroundColor: "#0a3d47",
-                    "&:not([data-disabled])": theme.fn.hover({
-                      backgroundColor: theme.fn.darken("#072f37", 0.05),
-                    }),
-                  },
-                })}
-              >
-                Attack
-              </Button>
-              </Box>
-            </Group>
-            </Box>
-          </Grid.Col> */}
           <Grid.Col span={12}>
             <Box w={300}>
               <Input  placeholder="Search username" value={searchQuery} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setSearchQuery(e.target.value)} />
@@ -439,7 +407,7 @@ export default function BattleGrid({ ...props }: Props) {
           overflowX: "auto",
           "-webkit-overflow-scrolling": "touch",
           }}>
-          <Table highlightOnHover {...getTableProps()} mt={35}>
+          <Table highlightOnHover {...getTableProps()}  mt={35}>
             <thead>
               {headerGroups.map((headerGroup) => (
                 <tr key={headerGroup.id}>
@@ -471,7 +439,7 @@ export default function BattleGrid({ ...props }: Props) {
               showPopup={showPopup} 
               handlePopupClose={handlePopupClose} 
               selectedRow={selectedRow} 
-              userBattlesData={userBattlesData}
+              // userBattlesData={userBattlesData}
               battleUsername ={battleUsername}
               setSelectedValue={setSelectedValue}
               selectedValue={selectedValue}

@@ -1,12 +1,13 @@
 import { useQuery } from "react-query";
 import { useTable, useSortBy, Column } from "react-table";
-import { claimScrap, getUserBattlesData, getUserData} from "@/app/utils/actions/users";
+import { claimScrap, getUserData} from "@/app/utils/actions/users";
 import { Space, SimpleGrid, Box, Table, Text, Pagination, Input, Grid, Button, Checkbox, Group, Modal, RingProgress, Select, Skeleton, ActionIcon, Tooltip } from "@mantine/core";
 import React, { useState, useMemo, useEffect } from "react";
 import { IconAdjustments, IconCheck, IconHelpCircle, IconShieldCheckeredFilled } from "@tabler/icons-react";
 import { useMediaQuery } from '@mantine/hooks';
 import UserModal from "../BattleGrid/UserModal/UserModal"
 import useStyles from "./style";
+import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
 
 interface UserData {
   username: string;
@@ -32,6 +33,7 @@ interface Props {
 
 export default function MultiAccountsGrid({ ...props }: Props) {
   const [page, setPage] = useState(1);
+  const isSubscriber = useAuthorizationStore((state: { isSubscriber: boolean; }) => state.isSubscriber)
   const [pageSize, setPageSize] = useState(10);
   const [username, setUsername] = useState("");
   const [usernameData, setUsernameData] = useState("");
@@ -193,10 +195,12 @@ export default function MultiAccountsGrid({ ...props }: Props) {
       <SimpleGrid cols={1} mt={0} spacing={0} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
         <Grid grow>
           <Grid.Col span={12}>
-          <Box w={325} pb={5}>
+          <Box w={300} pb={5}>
             <Group>
-              <Input placeholder="Usernames" type="text" value={username} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setUsername(e.target.value)} />
-              <Box w={120}>
+            <Box w={178}>
+              <Input disabled={!isSubscriber} placeholder="Usernames" type="text" value={username} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setUsername(e.target.value)} />
+              </Box>
+              <Box w={105}>
               <Tooltip 
               label="Use comma to separate names"
               color="dark"
@@ -207,6 +211,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                 <Button
                   fullWidth
                   onClick={handleClick}
+                  disabled={!isSubscriber}
                   styles={(theme : any) => ({
                     root: {
                       backgroundColor: "#0a3d47",

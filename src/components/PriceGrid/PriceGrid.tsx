@@ -1,9 +1,7 @@
 import { useQuery } from "react-query";
 import { useTable, useSortBy, Column } from "react-table";
-import { getUserBattlesData, getUserData, getUsersData} from "@/app/utils/actions/users";
-import { Space, SimpleGrid, Box, Table, Text, Pagination, Input, Grid, Button, Checkbox, Group, Modal, RingProgress, Select, Skeleton, Badge, Image, Card } from "@mantine/core";
-import React, { useState, useMemo, useEffect } from "react";
-import { IconShieldCheckeredFilled } from "@tabler/icons-react";
+import { Space, SimpleGrid, Box, Table, Text, Pagination, Input, Grid, Button, Checkbox, Group, Modal, RingProgress, Select, Skeleton, Badge, Image, Card, Anchor } from "@mantine/core";
+import React, from "react";
 import { useMediaQuery } from '@mantine/hooks';
 import { getStatsData } from "@/app/utils/actions/stats";
 import { getStatsEngineData } from "@/app/utils/actions/hiveEngine";
@@ -37,9 +35,11 @@ export default function PriceGrid() {
   return (
     <>
         <Card withBorder p="xl" radius={10}  className={classes.card} mih={400} mah={isTablet ? 400 : 800}>
+        <Anchor href="https://tribaldex.com/trade/SCRAP" sx={{color: "black"}} target="_blank">
             <Text size="xl" weight={500} mt="sm">
-                Hive Stock
+                $SCRAP market data
             </Text>
+            </Anchor>
             <Text size="lg"  color="dimmed" mb="lg">
                 Key data related to the game currency
             </Text>
@@ -49,7 +49,7 @@ export default function PriceGrid() {
                     <Text span fw={500} inherit>
                     Bid{" "}
                     </Text>
-                    : {parseFloat(statsData.result.highestBid).toFixed(2)} Hive
+                    : {parseFloat(statsData.result.highestBid).toFixed(2)} SWAP.HIVE
                 </Text>   
             </Group>
             <Space h="xl" />
@@ -59,7 +59,7 @@ export default function PriceGrid() {
                     <Text span fw={500} inherit>
                     Ask{" "}
                     </Text>
-                    : {parseFloat(statsData.result.lowestAsk).toFixed(2)} Hive
+                    : {parseFloat(statsData.result.lowestAsk).toFixed(2)} SWAP.HIVE
                 </Text>   
             </Group>
             <Space h="xl"/>
@@ -70,7 +70,7 @@ export default function PriceGrid() {
                         <Text span fw={500} inherit>
                         Volume{" "}
                         </Text>
-                        : {parseFloat(statsData.result.volume).toFixed(2)} Hive
+                        : {parseFloat(statsData.result.volume).toFixed(2)} SWAP.HIVE
                     </Text>   
                 }
             </Group>
