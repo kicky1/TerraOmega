@@ -4,7 +4,7 @@ import loginKeychain from "@/app/utils/actions/login";
 import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
 import { Button, Dialog, Group, rem, Text, TextInput } from "@mantine/core";
 import { IconBrandTwitter } from "@tabler/icons-react";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import useStyles from "./style";
 
 declare global {
@@ -78,7 +78,7 @@ function LoginButton() {
             placeholder="username"
             value={value}
             style={{ flex: 1 }}
-            onChange={(event) => setValue(event.currentTarget.value)}
+            onChange={(event: { currentTarget: { value: SetStateAction<string>; }; }) => setValue(event.currentTarget.value)}
           />
           <Button
             styles={(theme) => ({

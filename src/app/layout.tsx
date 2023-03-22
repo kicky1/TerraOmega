@@ -13,6 +13,8 @@ import { Suspense } from "react";
 import HeaderApp from "@/components/Header/HeaderApp";
 import Footer from "@/components/Footer/Footer";
 
+import Head from "next/head";
+
 export default function RootLayout({
   children,
 }: {
@@ -42,11 +44,12 @@ export default function RootLayout({
           withNormalizeCSS
         >
           <html lang="en">
+            <Head>
+              <title>terraomega</title>
+            </Head>
             <body>
               <HeaderApp />
-
               {children}
-
               <Analytics />
               <Footer />
             </body>

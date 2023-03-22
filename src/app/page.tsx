@@ -8,7 +8,8 @@ import MultiAccountsGrid from "@/components/MultiAccountsGrid/MultiAccountsGrid"
 import PaymentGrid from "@/components/PaymentGrid/PaymentGrid";
 import StatisticGrid from "@/components/StatisticGrid/StatistisGrid";
 import SubscriptionGrid from "@/components/SubscriptionGrid/SubscriptionGrid";
-import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
+import { getAccounts } from "@/supabase/actions/users";
+import { setIsSubscriber, useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
 import { Container, Space, Skeleton, Tabs, Button } from "@mantine/core";
 import {
   IconChartHistogram,
@@ -18,6 +19,7 @@ import {
   IconTableOptions,
   IconUsers,
 } from "@tabler/icons-react";
+import { useEffect } from "react";
 import { useQuery } from "react-query";
 
 export const runtime = "experimental-edge";
@@ -27,9 +29,26 @@ export default function Home() {
     refetchInterval: 30000,
   });
 
+
   const isSubscriber = useAuthorizationStore(
     (state: { isSubscriber: boolean }) => state.isSubscriber
+  )
+
+  const { data: accounts, isLoading: isLoadingAccounts, refetch: refetchAccounts } = useQuery(
+    "accountsData",
+    getAccounts,
+    {
+      refetchOnWindowFocus: false, // Disable automatic refetching on window focus
+      refetchOnMount: false // Disable automatic refetching on mount
+    }
   );
+  
+  // Call refetchAccounts when the isSubscriber value changes
+  useEffect(() => {
+      refetchAccounts();
+  }, [isSubscriber, refetchAccounts]);
+
+  
 
   return (
     <>
@@ -69,7 +88,13 @@ export default function Home() {
               )}
             </Tabs.Panel>
             <Tabs.Panel value="accounts" pt="xs">
-              <MultiAccountsGrid data={data} isLoading={isLoading} />
+              <MultiAccountsGrid 
+                data={data} 
+                isLoading={isLoading} 
+                accounts={accounts} 
+                isLoadingAccounts={isLoadingAccounts}
+                refetchAccounts={refetchAccounts}
+                />
             </Tabs.Panel>
             <Tabs.Panel value="stats" pt="xs">
               <StatisticGrid />

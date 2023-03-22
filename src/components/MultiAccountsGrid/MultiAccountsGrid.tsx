@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useTable, useSortBy, Column } from "react-table";
 import { claimScrap, getUserData } from "@/app/utils/actions/users";
 import {
@@ -31,6 +31,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import UserModal from "../BattleGrid/UserModal/UserModal";
 import useStyles from "./style";
 import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
+import { addUser, getAccounts } from "@/supabase/actions/users";
 
 interface UserData {
   username: string;
@@ -50,7 +51,10 @@ interface UserData {
 
 interface Props {
   data: any;
+  accounts: any;
   isLoading: boolean;
+  isLoadingAccounts: boolean;
+  refetchAccounts: any;
 }
 
 export default function MultiAccountsGrid({ ...props }: Props) {
@@ -60,14 +64,22 @@ export default function MultiAccountsGrid({ ...props }: Props) {
   );
   const [pageSize, setPageSize] = useState(10);
   const [username, setUsername] = useState("");
-  const [usernameData, setUsernameData] = useState("");
-  const isMobile = useMediaQuery("(max-width: 767px)");
-  const { classes, theme } = useStyles();
-  const handleClick = () => {
-    setUsernameData(username);
-    setUsername("");
+
+  const { mutate } = useMutation(addUser, {
+    onSuccess: () => {
+      setUsername("");
+      props.refetchAccounts();
+    },
+  });
+
+
+
+  const handleSubmit = (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+    mutate(username);
   };
 
+  
   const columns: readonly Column<UserData>[] = useMemo(
     () => [
       {
@@ -191,19 +203,22 @@ export default function MultiAccountsGrid({ ...props }: Props) {
   );
 
   const filteredUsernameData = useMemo(() => {
-    if (!props.data || !usernameData) {
+
+    if (!props.data || !props.accounts) {
       return [];
     }
 
-    const usernames = usernameData
-      .split(",")
-      .map((username) => username.trim());
     let filteredData = props.data.filter((user: UserData) =>
-      usernames.includes(user.username.toLowerCase())
+      props.accounts.includes(user.username.toLowerCase())
     );
 
+    console.log(props.accounts)
+    console.log(filteredData)
+
     return filteredData;
-  }, [props.data, usernameData]);
+  }, [props.data, props.accounts]);
+
+
 
   const tableData = useMemo(
     () => (filteredUsernameData ? filteredUsernameData : []),
@@ -218,7 +233,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     useSortBy
   );
 
-  if (props.isLoading) {
+  if (props.isLoading || props.isLoadingAccounts) {
     return (
       <>
         <Space h="xl" />
@@ -250,7 +265,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         breakpoints={[{ maxWidth: "sm", cols: 1 }]}
       >
         <Grid grow>
-          <Grid.Col span={12}>
+          {/* <Grid.Col span={12}>
             <Box w={300} pb={5}>
               <Group>
                 <Box w={178}>
@@ -286,6 +301,48 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                       })}
                     >
                       Load data
+                    </Button>
+                  </Tooltip>
+                </Box>
+              </Group>
+            </Box>
+          </Grid.Col> */}
+          <Grid.Col span={12}>
+            <Box w={310} pb={5}>
+              <Group>
+                <Box w={168}>
+                  <Input
+                    disabled={!isSubscriber}
+                    placeholder="Usernames"
+                    type="text"
+                    value={username}
+                    onChange={(e: {
+                      target: { value: React.SetStateAction<string> };
+                    }) => setUsername(e.target.value)}
+                  />
+                </Box>
+                <Box w={125}>
+                  <Tooltip
+                    label="Use comma to separate names"
+                    color="dark"
+                    withArrow
+                    arrowPosition="center"
+                    offset={10}
+                  >
+                    <Button
+                      fullWidth
+                      onClick={handleSubmit}
+                      disabled={!isSubscriber}
+                      styles={(theme: any) => ({
+                        root: {
+                          backgroundColor: "#0a3d47",
+                          "&:not([data-disabled])": theme.fn.hover({
+                            backgroundColor: theme.fn.darken("#072f37", 0.05),
+                          }),
+                        },
+                      })}
+                    >
+                      Add account
                     </Button>
                   </Tooltip>
                 </Box>
