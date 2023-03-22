@@ -1,11 +1,34 @@
 import { useQuery } from "react-query";
 import { useTable, useSortBy, Column } from "react-table";
-import { claimScrap, getUserData} from "@/app/utils/actions/users";
-import { Space, SimpleGrid, Box, Table, Text, Pagination, Input, Grid, Button, Checkbox, Group, Modal, RingProgress, Select, Skeleton, ActionIcon, Tooltip } from "@mantine/core";
+import { claimScrap, getUserData } from "@/app/utils/actions/users";
+import {
+  Space,
+  SimpleGrid,
+  Box,
+  Table,
+  Text,
+  Pagination,
+  Input,
+  Grid,
+  Button,
+  Checkbox,
+  Group,
+  Modal,
+  RingProgress,
+  Select,
+  Skeleton,
+  ActionIcon,
+  Tooltip,
+} from "@mantine/core";
 import React, { useState, useMemo, useEffect } from "react";
-import { IconAdjustments, IconCheck, IconHelpCircle, IconShieldCheckeredFilled } from "@tabler/icons-react";
-import { useMediaQuery } from '@mantine/hooks';
-import UserModal from "../BattleGrid/UserModal/UserModal"
+import {
+  IconAdjustments,
+  IconCheck,
+  IconHelpCircle,
+  IconShieldCheckeredFilled,
+} from "@tabler/icons-react";
+import { useMediaQuery } from "@mantine/hooks";
+import UserModal from "../BattleGrid/UserModal/UserModal";
 import useStyles from "./style";
 import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
 
@@ -22,9 +45,8 @@ interface UserData {
   minerate: number;
   attacks: number;
   claims: number;
-  claim: string
+  claim: string;
 }
-
 
 interface Props {
   data: any;
@@ -33,17 +55,18 @@ interface Props {
 
 export default function MultiAccountsGrid({ ...props }: Props) {
   const [page, setPage] = useState(1);
-  const isSubscriber = useAuthorizationStore((state: { isSubscriber: boolean; }) => state.isSubscriber)
+  const isSubscriber = useAuthorizationStore(
+    (state: { isSubscriber: boolean }) => state.isSubscriber
+  );
   const [pageSize, setPageSize] = useState(10);
   const [username, setUsername] = useState("");
   const [usernameData, setUsernameData] = useState("");
-  const isMobile = useMediaQuery('(max-width: 767px)');
-  const { classes, theme } = useStyles()
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  const { classes, theme } = useStyles();
   const handleClick = () => {
     setUsernameData(username);
-    setUsername('')
+    setUsername("");
   };
-
 
   const columns: readonly Column<UserData>[] = useMemo(
     () => [
@@ -60,7 +83,8 @@ export default function MultiAccountsGrid({ ...props }: Props) {
             if (hoursDiff <= 24) {
               return (
                 <span style={{ color: "red" }}>
-                  {row.original.username} <IconShieldCheckeredFilled size={15} />
+                  {row.original.username}{" "}
+                  <IconShieldCheckeredFilled size={15} />
                 </span>
               );
             } else {
@@ -88,7 +112,9 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         accessor: "favor",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span>{row.original.favor ? row.original.favor.toFixed(2) : 0}</span>
+            <span>
+              {row.original.favor ? row.original.favor.toFixed(2) : 0}
+            </span>
           </>
         ),
       },
@@ -97,7 +123,9 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         accessor: "scrap",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span>{row.original.scrap ? row.original.scrap.toFixed(2) : 0}</span>
+            <span>
+              {row.original.scrap ? row.original.scrap.toFixed(2) : 0}
+            </span>
           </>
         ),
       },
@@ -106,7 +134,11 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         accessor: "hiveEngineStake",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span>{row.original.hiveEngineStake ? (row.original.hiveEngineStake + 1.0).toFixed(2) : 0}</span>
+            <span>
+              {row.original.hiveEngineStake
+                ? (row.original.hiveEngineStake + 1.0).toFixed(2)
+                : 0}
+            </span>
           </>
         ),
       },
@@ -116,22 +148,25 @@ export default function MultiAccountsGrid({ ...props }: Props) {
       },
       {
         Header: "Claims",
-        accessor: "claims"
+        accessor: "claims",
       },
       {
         Header: "Scrap/h",
         accessor: "minerate",
         Cell: ({ row }: { row: { original: UserData } }) => (
-          <> 
-          <Group>
-              <span>{(row.original.minerate*3600).toFixed(4) }
-              <img
-              src={'https://images.hive.blog/p/2bP4pJr4wVimqCWjYimXJe2cnCgnM7aPAGpC6PAd69t?format=match&mode=fit'}
-              alt="Scrap"
-              height={15}
-              />
+          <>
+            <Group>
+              <span>
+                {(row.original.minerate * 3600).toFixed(4)}
+                <img
+                  src={
+                    "https://images.hive.blog/p/2bP4pJr4wVimqCWjYimXJe2cnCgnM7aPAGpC6PAd69t?format=match&mode=fit"
+                  }
+                  alt="Scrap"
+                  height={15}
+                />
               </span>
-          </Group>
+            </Group>
           </>
         ),
       },
@@ -139,8 +174,13 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Header: "Claim Scrap",
         accessor: "claim",
         Cell: ({ row }: { row: { original: UserData } }) => (
-          <> 
-            <ActionIcon variant="outline" onClick={() => claimScrap(row.original.scrap, row.original.username)}>
+          <>
+            <ActionIcon
+              variant="outline"
+              onClick={() =>
+                claimScrap(row.original.scrap, row.original.username)
+              }
+            >
               <IconCheck size="1.125rem" />
             </ActionIcon>
           </>
@@ -155,14 +195,20 @@ export default function MultiAccountsGrid({ ...props }: Props) {
       return [];
     }
 
-    const usernames = usernameData.split(',').map(username => username.trim());
-    let filteredData = props.data.filter((user: UserData) => usernames.includes(user.username.toLowerCase()));
+    const usernames = usernameData
+      .split(",")
+      .map((username) => username.trim());
+    let filteredData = props.data.filter((user: UserData) =>
+      usernames.includes(user.username.toLowerCase())
+    );
 
     return filteredData;
   }, [props.data, usernameData]);
 
-
-  const tableData = useMemo(() => (filteredUsernameData ? filteredUsernameData : []), [filteredUsernameData]);
+  const tableData = useMemo(
+    () => (filteredUsernameData ? filteredUsernameData : []),
+    [filteredUsernameData]
+  );
 
   const { getTableProps, headerGroups, rows, prepareRow } = useTable(
     {
@@ -176,7 +222,12 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     return (
       <>
         <Space h="xl" />
-        <SimpleGrid cols={1} mt={0} spacing={0} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
+        <SimpleGrid
+          cols={1}
+          mt={0}
+          spacing={0}
+          breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+        >
           <Grid grow>
             <Skeleton height={800} mt={6} width="100%" radius="xl" />
           </Grid>
@@ -190,57 +241,81 @@ export default function MultiAccountsGrid({ ...props }: Props) {
 
   return (
     <>
-      <Space h="xl"/>
-      <Space h="xl"/>
-      <SimpleGrid cols={1} mt={0} spacing={0} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
+      <Space h="xl" />
+      <Space h="xl" />
+      <SimpleGrid
+        cols={1}
+        mt={0}
+        spacing={0}
+        breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+      >
         <Grid grow>
           <Grid.Col span={12}>
-          <Box w={300} pb={5}>
-            <Group>
-            <Box w={178}>
-              <Input disabled={!isSubscriber} placeholder="Usernames" type="text" value={username} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setUsername(e.target.value)} />
-              </Box>
-              <Box w={105}>
-              <Tooltip 
-              label="Use comma to separate names"
-              color="dark"
-              withArrow
-              arrowPosition="center"
-              offset={10}
-              >
-                <Button
-                  fullWidth
-                  onClick={handleClick}
-                  disabled={!isSubscriber}
-                  styles={(theme : any) => ({
-                    root: {
-                      backgroundColor: "#0a3d47",
-                      "&:not([data-disabled])": theme.fn.hover({
-                        backgroundColor: theme.fn.darken("#072f37", 0.05),
-                      }),
-                    },
-                  })}
-                >
-                Load data
-                </Button>
-                </Tooltip>
-              </Box>        
-            </Group>
+            <Box w={300} pb={5}>
+              <Group>
+                <Box w={178}>
+                  <Input
+                    disabled={!isSubscriber}
+                    placeholder="Usernames"
+                    type="text"
+                    value={username}
+                    onChange={(e: {
+                      target: { value: React.SetStateAction<string> };
+                    }) => setUsername(e.target.value)}
+                  />
+                </Box>
+                <Box w={105}>
+                  <Tooltip
+                    label="Use comma to separate names"
+                    color="dark"
+                    withArrow
+                    arrowPosition="center"
+                    offset={10}
+                  >
+                    <Button
+                      fullWidth
+                      onClick={handleClick}
+                      disabled={!isSubscriber}
+                      styles={(theme: any) => ({
+                        root: {
+                          backgroundColor: "#0a3d47",
+                          "&:not([data-disabled])": theme.fn.hover({
+                            backgroundColor: theme.fn.darken("#072f37", 0.05),
+                          }),
+                        },
+                      })}
+                    >
+                      Load data
+                    </Button>
+                  </Tooltip>
+                </Box>
+              </Group>
             </Box>
           </Grid.Col>
         </Grid>
-        <Box   sx={{
-          overflowX: "auto",
-          "-webkit-overflow-scrolling": "touch",
-          }}>
+        <Box
+          sx={{
+            overflowX: "auto",
+            "-webkit-overflow-scrolling": "touch",
+          }}
+        >
           <Table highlightOnHover {...getTableProps()} mt={35}>
             <thead>
               {headerGroups.map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((column: any) => (
-                    <th key={column.id} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    <th
+                      key={column.id}
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                    >
                       {column.render("Header")}
-                      <span>{column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""}</span>
+                      <span>
+                        {column.isSorted
+                          ? column.isSortedDesc
+                            ? " 🔽"
+                            : " 🔼"
+                          : ""}
+                      </span>
                     </th>
                   ))}
                 </tr>
@@ -260,7 +335,15 @@ export default function MultiAccountsGrid({ ...props }: Props) {
             </tbody>
           </Table>
         </Box>
-        <Pagination value={page} onChange={setPage} withControls total={pageCount} position="center" pt={50} color={"dark"} />
+        <Pagination
+          value={page}
+          onChange={setPage}
+          withControls
+          total={pageCount}
+          position="center"
+          pt={50}
+          color={"dark"}
+        />
       </SimpleGrid>
       <Space h="xl" />
     </>

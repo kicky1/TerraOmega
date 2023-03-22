@@ -4,15 +4,15 @@ const nextConfig = {
     reactStrictMode: false,
     appDir: true,
     allowMiddlewareResponseBody: true,
-    reactMode: 'concurrent',
+    reactMode: "concurrent",
   },
   // serverMiddleware: [
   //   { path: '/', handler: '~/middleware/maintenance.ts' },
 
   // ],
   api: {
-    bodyParser: true
+    bodyParser: true,
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

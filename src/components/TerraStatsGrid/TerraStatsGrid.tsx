@@ -1,7 +1,5 @@
 import { useQuery } from "react-query";
-import {
-  getUsersData,
-} from "@/app/utils/actions/users";
+import { getUsersData } from "@/app/utils/actions/users";
 import { Space, Text, Group, Image, Card } from "@mantine/core";
 import React from "react";
 import { useMediaQuery } from "@mantine/hooks";

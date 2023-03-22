@@ -23,6 +23,15 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/supabase/supabase.ts", "src/supabase/supabase.ts", "src/app/utils/actions/table.js", "src/app/utils/actions/table.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/supabase/supabase.ts",
+    "src/supabase/supabase.ts",
+    "src/app/utils/actions/table.js",
+    "src/app/utils/actions/table.js"
+  ],
   "exclude": ["node_modules"]
 }

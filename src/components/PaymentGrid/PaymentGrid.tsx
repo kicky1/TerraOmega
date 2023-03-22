@@ -49,7 +49,7 @@ export default function PaymentGrid() {
   return (
     <>
       <Space h="xl" />
-      <Space h="xl"/>
+      <Space h="xl" />
       <Center>
         <Container size={"xs"}>
           <Card withBorder p="xl" radius={10} className={classes.card}>
@@ -58,16 +58,15 @@ export default function PaymentGrid() {
             </Text>
             <Text size="lg" color="dimmed" mb="xs">
               In order to activate your subscription, you need to provide your
-              username and choose a subscription period. 
-            </Text>  
+              username and choose a subscription period.
+            </Text>
             <Text size="lg" color="dimmed" mb="lg">
-              Once you have done
-              that, we will verify that your payment is accurate and then
-              proceed to activate your account.
+              Once you have done that, we will verify that your payment is
+              accurate and then proceed to activate your account.
             </Text>
             <Container pt={10}>
               <TextInput
-              label="Hive username"
+                label="Hive username"
                 placeholder="Username"
                 value={username}
                 onChange={(event) => setUsername(event.currentTarget.value)}

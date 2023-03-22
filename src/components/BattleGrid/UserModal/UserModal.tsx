@@ -13,7 +13,7 @@ import {
   Skeleton,
   Divider,
 } from "@mantine/core";
-import React,{ useEffect } from "react";
+import React, { useEffect } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { getUserDataProfile } from "@/app/utils/actions/hiveUsers";
 

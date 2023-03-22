@@ -1,14 +1,10 @@
-import {
-  Space,
-  SimpleGrid,
-} from "@mantine/core";
+import { Space, SimpleGrid } from "@mantine/core";
 import React from "react";
 import PriceGrid from "../PriceGrid/PriceGrid";
 import TerraStatsGrid from "../TerraStatsGrid/TerraStatsGrid";
 import NextLevelGrid from "../NextLevelGrid/NextLevelGrid";
 
 export default function StatisticGrid() {
-  
   return (
     <>
       <Space h="xl" />

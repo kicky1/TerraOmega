@@ -1,17 +1,43 @@
 import { useQuery } from "react-query";
 import { useTable, useSortBy, Column } from "react-table";
-import { attackOponent, getUserBattlesData, getUserData} from "@/app/utils/actions/users";
-import { Space, SimpleGrid, Box, Table, Notification, Pagination, Input, Grid, Button, Group, Skeleton, Tooltip, TextInput, Transition, Avatar, ActionIcon, Center } from "@mantine/core";
+import {
+  attackOponent,
+  getUserBattlesData,
+  getUserData,
+} from "@/app/utils/actions/users";
+import {
+  Space,
+  SimpleGrid,
+  Box,
+  Table,
+  Notification,
+  Pagination,
+  Input,
+  Grid,
+  Button,
+  Group,
+  Skeleton,
+  Tooltip,
+  TextInput,
+  Transition,
+  Avatar,
+  ActionIcon,
+  Center,
+} from "@mantine/core";
 import React, { useState, useMemo, useEffect } from "react";
-import { IconShieldCheckeredFilled, IconSword, IconSwordOff, IconX } from "@tabler/icons-react";
-import { useMediaQuery } from '@mantine/hooks';
+import {
+  IconShieldCheckeredFilled,
+  IconSword,
+  IconSwordOff,
+  IconX,
+} from "@tabler/icons-react";
+import { useMediaQuery } from "@mantine/hooks";
 import UserModal from "./UserModal/UserModal";
 import useStyles from "./style";
 import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
 
-
 interface UserData {
-  id: string,
+  id: string;
   username: string;
   damage: number;
   defense: number;
@@ -27,7 +53,6 @@ interface UserData {
   battle: string;
 }
 
-
 interface Props {
   data: any;
   isLoading: boolean;
@@ -41,13 +66,14 @@ export default function BattleGrid({ ...props }: Props) {
   const [selectedRow, setSelectedRow] = useState<UserData | null>(null);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
-  const isMobile = useMediaQuery('(max-width: 767px)');
+  const isMobile = useMediaQuery("(max-width: 767px)");
   const [battleUsername, setBattleUsername] = useState("");
   const { classes, theme } = useStyles();
 
   const [showNotification, setShowNotification] = useState(false);
-  const isSubscriber = useAuthorizationStore((state: { isSubscriber: boolean; }) => state.isSubscriber)
-
+  const isSubscriber = useAuthorizationStore(
+    (state: { isSubscriber: boolean }) => state.isSubscriber
+  );
 
   const handleNotificationClose = () => {
     setShowNotification(false);
@@ -84,9 +110,13 @@ export default function BattleGrid({ ...props }: Props) {
     setShowPopup(false);
   };
 
-  const { data: userData, refetch } = useQuery(["user", username], () => getUserData(username), {
-    enabled: false,
-  });
+  const { data: userData, refetch } = useQuery(
+    ["user", username],
+    () => getUserData(username),
+    {
+      enabled: false,
+    }
+  );
 
   // const { data: userBattlesData , refetch: refetchBattles } = useQuery(
   //   ["userBattle", battleUsername],
@@ -116,28 +146,44 @@ export default function BattleGrid({ ...props }: Props) {
             const hoursDiff = timeDiff / (1000 * 3600);
             if (hoursDiff <= 24) {
               return (
-                <span style={{ color: "red", cursor: "pointer" }} onClick={() => handleRowClick(row)} >
-
-                    <Avatar radius="lg" size="sm" src={`https://images.hive.blog/u/${row.original.username}/avatar`}/>
-
+                <span
+                  style={{ color: "red", cursor: "pointer" }}
+                  onClick={() => handleRowClick(row)}
+                >
+                  <Avatar
+                    radius="lg"
+                    size="sm"
+                    src={`https://images.hive.blog/u/${row.original.username}/avatar`}
+                  />
                 </span>
               );
             } else {
               return (
-              <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>
-          
-                  <Avatar radius="lg" size="sm" src={`https://images.hive.blog/u/${row.original.username}/avatar`}/>
-
-              </span>)
+                <span
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleRowClick(row)}
+                >
+                  <Avatar
+                    radius="lg"
+                    size="sm"
+                    src={`https://images.hive.blog/u/${row.original.username}/avatar`}
+                  />
+                </span>
+              );
             }
           } else {
             return (
-              <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>
-
-                  <Avatar radius="lg" size="sm" src={`https://images.hive.blog/u/${row.original.username}/avatar`}/>
-
-              </span>)
-            
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => handleRowClick(row)}
+              >
+                <Avatar
+                  radius="lg"
+                  size="sm"
+                  src={`https://images.hive.blog/u/${row.original.username}/avatar`}
+                />
+              </span>
+            );
           }
         },
       },
@@ -153,29 +199,35 @@ export default function BattleGrid({ ...props }: Props) {
             const hoursDiff = timeDiff / (1000 * 3600);
             if (hoursDiff <= 24) {
               return (
-                <span style={{ color: "red", cursor: "pointer" }} onClick={() => handleRowClick(row)} >
+                <span
+                  style={{ color: "red", cursor: "pointer" }}
+                  onClick={() => handleRowClick(row)}
+                >
                   <Group>
-                      {row.original.username}
-                      <IconShieldCheckeredFilled size={15} />
-                  </Group> 
+                    {row.original.username}
+                    <IconShieldCheckeredFilled size={15} />
+                  </Group>
                 </span>
               );
             } else {
               return (
-              <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>
-                <Group>
-                  {row.original.username}
-                  </Group>
-              </span>)
+                <span
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleRowClick(row)}
+                >
+                  <Group>{row.original.username}</Group>
+                </span>
+              );
             }
           } else {
             return (
-              <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>
-                <Group>
-                  {row.original.username}
-                  </Group>
-              </span>)
-            
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => handleRowClick(row)}
+              >
+                <Group>{row.original.username}</Group>
+              </span>
+            );
           }
         },
       },
@@ -191,30 +243,37 @@ export default function BattleGrid({ ...props }: Props) {
             const hoursDiff = timeDiff / (1000 * 3600);
             if (hoursDiff <= 24) {
               return (
-                <span >
+                <span>
                   <ActionIcon variant="outline" disabled>
-                    <IconSwordOff/>
+                    <IconSwordOff />
                   </ActionIcon>
                 </span>
               );
             } else {
               return (
-                <span >
-                    <ActionIcon variant="outline" onClick={() => {
-                        attackOponent(row.original.username)}}>
-                      <IconSword/>
-                    </ActionIcon>
+                <span>
+                  <ActionIcon
+                    variant="outline"
+                    onClick={() => {
+                      attackOponent(row.original.username);
+                    }}
+                  >
+                    <IconSword />
+                  </ActionIcon>
                 </span>
-              )
+              );
             }
           } else {
             return (
-              <span >
-                  <ActionIcon variant="outline" onClick={() => attackOponent(row.original.username)}>
-                    <IconSword/>
-                  </ActionIcon>
+              <span>
+                <ActionIcon
+                  variant="outline"
+                  onClick={() => attackOponent(row.original.username)}
+                >
+                  <IconSword />
+                </ActionIcon>
               </span>
-              )
+            );
           }
         },
       },
@@ -223,7 +282,12 @@ export default function BattleGrid({ ...props }: Props) {
         accessor: "damage",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.damage}</span>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.damage}
+            </span>
           </>
         ),
       },
@@ -232,7 +296,12 @@ export default function BattleGrid({ ...props }: Props) {
         accessor: "defense",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.defense}</span>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.defense}
+            </span>
           </>
         ),
       },
@@ -241,7 +310,12 @@ export default function BattleGrid({ ...props }: Props) {
         accessor: "engineering",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.engineering}</span>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.engineering}
+            </span>
           </>
         ),
       },
@@ -250,7 +324,12 @@ export default function BattleGrid({ ...props }: Props) {
         accessor: "favor" as const,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.favor ? row.original.favor.toFixed(2) : 0}</span>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.favor ? row.original.favor.toFixed(2) : 0}
+            </span>
           </>
         ),
       },
@@ -259,7 +338,12 @@ export default function BattleGrid({ ...props }: Props) {
         accessor: "scrap" as const,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.scrap ? row.original.scrap.toFixed(2) : 0}</span>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.scrap ? row.original.scrap.toFixed(2) : 0}
+            </span>
           </>
         ),
       },
@@ -268,7 +352,14 @@ export default function BattleGrid({ ...props }: Props) {
         accessor: "hiveEngineStake" as const,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.hiveEngineStake ? (row.original.hiveEngineStake + 1.0).toFixed(2) : 0}</span>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.hiveEngineStake
+                ? (row.original.hiveEngineStake + 1.0).toFixed(2)
+                : 0}
+            </span>
           </>
         ),
       },
@@ -277,7 +368,12 @@ export default function BattleGrid({ ...props }: Props) {
         accessor: "attacks" as const,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.attacks}</span>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.attacks}
+            </span>
           </>
         ),
       },
@@ -286,7 +382,12 @@ export default function BattleGrid({ ...props }: Props) {
         accessor: "claims" as const,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{row.original.claims}</span>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.claims}
+            </span>
           </>
         ),
       },
@@ -294,16 +395,22 @@ export default function BattleGrid({ ...props }: Props) {
         Header: "Scrap/h",
         accessor: "minerate" as const,
         Cell: ({ row }: { row: { original: UserData } }) => (
-          <> 
-          <Group>
-              <span style={{ cursor: "pointer" }} onClick={() => handleRowClick(row)}>{(row.original.minerate*3600).toFixed(4) }
-              <img
-              src={'https://images.hive.blog/p/2bP4pJr4wVimqCWjYimXJe2cnCgnM7aPAGpC6PAd69t?format=match&mode=fit'}
-              alt="Scrap"
-              height={15}
-              />
+          <>
+            <Group>
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => handleRowClick(row)}
+              >
+                {(row.original.minerate * 3600).toFixed(4)}
+                <img
+                  src={
+                    "https://images.hive.blog/p/2bP4pJr4wVimqCWjYimXJe2cnCgnM7aPAGpC6PAd69t?format=match&mode=fit"
+                  }
+                  alt="Scrap"
+                  height={15}
+                />
               </span>
-          </Group>
+            </Group>
           </>
         ),
       },
@@ -316,21 +423,27 @@ export default function BattleGrid({ ...props }: Props) {
       return [];
     }
 
-    let filteredData = props.data.filter((user: UserData) => user.username.toLowerCase().includes(searchQuery.toLowerCase()));
+    let filteredData = props.data.filter((user: UserData) =>
+      user.username.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     if (userData) {
-      filteredData = filteredData.filter((user: UserData) => user.defense < userData.damage && user.favor < userData.favor);
-      filteredData = filteredData.sort((a: { scrap: number }, b: { scrap: number }) => b.scrap - a.scrap);
+      filteredData = filteredData.filter(
+        (user: UserData) =>
+          user.defense < userData.damage && user.favor < userData.favor
+      );
+      filteredData = filteredData.sort(
+        (a: { scrap: number }, b: { scrap: number }) => b.scrap - a.scrap
+      );
     }
 
     return filteredData;
   }, [props.data, userData, searchQuery]);
 
-
-
-
-
-  const tableData = useMemo(() => (filteredUsernameData ? filteredUsernameData : []), [filteredUsernameData]);
+  const tableData = useMemo(
+    () => (filteredUsernameData ? filteredUsernameData : []),
+    [filteredUsernameData]
+  );
 
   const { getTableProps, headerGroups, rows, prepareRow } = useTable(
     {
@@ -340,11 +453,16 @@ export default function BattleGrid({ ...props }: Props) {
     useSortBy
   );
 
-  if (props.isLoading ) {
+  if (props.isLoading) {
     return (
       <>
         <Space h="xl" />
-        <SimpleGrid cols={1} mt={0} spacing={0} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
+        <SimpleGrid
+          cols={1}
+          mt={0}
+          spacing={0}
+          breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+        >
           <Grid grow>
             <Skeleton height={800} mt={6} width="100%" radius="xl" />
           </Grid>
@@ -358,63 +476,86 @@ export default function BattleGrid({ ...props }: Props) {
 
   return (
     <>
-      <Space h="xl"/>
-      <Space h="xl"/>
+      <Space h="xl" />
+      <Space h="xl" />
       <SimpleGrid cols={1} mt={0} spacing={0}>
         <Grid grow>
           <Grid.Col span={12}>
-          <Box w={300} pb={5} pr={0}>
-            <Group>
-              <Box w={178}>
-                <Input placeholder="Username" type="text" value={username} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setUsername(e.target.value)} />
-              </Box>
-              <Box w={105}>
-              <Tooltip 
-                  label="Filter for the best opponent to scrap"
-                  color="dark"
-                  withArrow
-                  arrowPosition="center"
-                  offset={10}
-                >
-                <Button
-                  onClick={handleClick}
-                  disabled={!isSubscriber}
-                  fullWidth 
-                  styles={(theme : any) => ({
-                    root: {
-                      
-                      backgroundColor: "#0a3d47",
-                      "&:not([data-disabled])": theme.fn.hover({
-                        backgroundColor: theme.fn.darken("#072f37", 0.05),
-                      }),
-                    },
-                  })}
-                >
-                Calculate
-              </Button>
-              </Tooltip>
-              </Box>
-            </Group>
+            <Box w={300} pb={5} pr={0}>
+              <Group>
+                <Box w={178}>
+                  <Input
+                    placeholder="Username"
+                    type="text"
+                    value={username}
+                    onChange={(e: {
+                      target: { value: React.SetStateAction<string> };
+                    }) => setUsername(e.target.value)}
+                  />
+                </Box>
+                <Box w={105}>
+                  <Tooltip
+                    label="Filter for the best opponent to scrap"
+                    color="dark"
+                    withArrow
+                    arrowPosition="center"
+                    offset={10}
+                  >
+                    <Button
+                      onClick={handleClick}
+                      disabled={!isSubscriber}
+                      fullWidth
+                      styles={(theme: any) => ({
+                        root: {
+                          backgroundColor: "#0a3d47",
+                          "&:not([data-disabled])": theme.fn.hover({
+                            backgroundColor: theme.fn.darken("#072f37", 0.05),
+                          }),
+                        },
+                      })}
+                    >
+                      Calculate
+                    </Button>
+                  </Tooltip>
+                </Box>
+              </Group>
             </Box>
           </Grid.Col>
           <Grid.Col span={12}>
             <Box w={300}>
-              <Input  placeholder="Search username" value={searchQuery} onChange={(e: { target: { value: React.SetStateAction<string> } }) => setSearchQuery(e.target.value)} />
+              <Input
+                placeholder="Search username"
+                value={searchQuery}
+                onChange={(e: {
+                  target: { value: React.SetStateAction<string> };
+                }) => setSearchQuery(e.target.value)}
+              />
             </Box>
           </Grid.Col>
         </Grid>
-        <Box   sx={{
-          overflowX: "auto",
-          "-webkit-overflow-scrolling": "touch",
-          }}>
-          <Table highlightOnHover {...getTableProps()}  mt={35}>
+        <Box
+          sx={{
+            overflowX: "auto",
+            "-webkit-overflow-scrolling": "touch",
+          }}
+        >
+          <Table highlightOnHover {...getTableProps()} mt={35}>
             <thead>
               {headerGroups.map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((column: any) => (
-                    <th key={column.id} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    <th
+                      key={column.id}
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                    >
                       {column.render("Header")}
-                      <span>{column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""}</span>
+                      <span>
+                        {column.isSorted
+                          ? column.isSortedDesc
+                            ? " 🔽"
+                            : " 🔼"
+                          : ""}
+                      </span>
                     </th>
                   ))}
                 </tr>
@@ -435,17 +576,25 @@ export default function BattleGrid({ ...props }: Props) {
           </Table>
         </Box>
         {selectedRow && (
-            <UserModal 
-              showPopup={showPopup} 
-              handlePopupClose={handlePopupClose} 
-              selectedRow={selectedRow} 
-              // userBattlesData={userBattlesData}
-              battleUsername ={battleUsername}
-              setSelectedValue={setSelectedValue}
-              selectedValue={selectedValue}
-              />
+          <UserModal
+            showPopup={showPopup}
+            handlePopupClose={handlePopupClose}
+            selectedRow={selectedRow}
+            // userBattlesData={userBattlesData}
+            battleUsername={battleUsername}
+            setSelectedValue={setSelectedValue}
+            selectedValue={selectedValue}
+          />
         )}
-        <Pagination value={page} onChange={setPage} withControls total={pageCount} position="center" pt={50} color={"dark"} />
+        <Pagination
+          value={page}
+          onChange={setPage}
+          withControls
+          total={pageCount}
+          position="center"
+          pt={50}
+          color={"dark"}
+        />
       </SimpleGrid>
       <Space h="xl" />
       <div>
@@ -459,20 +608,18 @@ export default function BattleGrid({ ...props }: Props) {
           {(transitionStyles) => (
             <div style={transitionStyles}>
               <div className={classes.notificationContainer}>
-              <Notification
-                title="Attack error"
-                color="red"
-                onClose={handleNotificationClose}
-              >
-                You can not attack a player who does not exist!
-              </Notification>
+                <Notification
+                  title="Attack error"
+                  color="red"
+                  onClose={handleNotificationClose}
+                >
+                  You can not attack a player who does not exist!
+                </Notification>
               </div>
             </div>
           )}
         </Transition>
       </div>
-      
-      
     </>
   );
 }

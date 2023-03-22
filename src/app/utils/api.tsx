@@ -1,11 +1,10 @@
-import Axios from 'axios';
-
+import Axios from "axios";
 
 const api = Axios.create({
   baseURL: "https://terracore.herokuapp.com/",
   headers: {
-    'Content-Type': 'application/json',
-    accept: 'application/json',
+    "Content-Type": "application/json",
+    accept: "application/json",
   },
 });
 
@@ -15,7 +14,7 @@ api.interceptors.response.use(
   },
 
   function (error) {
-    console.error('Error', error);
+    console.error("Error", error);
     switch (error.response.status) {
       default:
         break;

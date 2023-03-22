@@ -1,10 +1,10 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 const apiWeb = Axios.create({
   baseURL: "http://localhost:3000/api",
   headers: {
-    'Content-Type': 'application/json',
-    accept: 'application/json',
+    "Content-Type": "application/json",
+    accept: "application/json",
   },
 });
 
