@@ -14,7 +14,7 @@ const isKeychain = () => {
 };
 
 export async function payForSubscription({ ...props }: PaymentData) {
-  console.log(props);
+ 
   if (isKeychain()) {
     window.hive_keychain.requestSendToken(
       props.username,
@@ -23,7 +23,7 @@ export async function payForSubscription({ ...props }: PaymentData) {
       `Request of subscription for: ${props.username}`,
       "SWAP.HBD",
       (response: any) => {
-        console.log(response);
+        
       }
     );
   } else {

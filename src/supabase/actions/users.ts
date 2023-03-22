@@ -11,7 +11,7 @@ export async function isSubscriber(username: string) {
     return;
   }
 
-  console.log(data);
+
 
   const isExist = data && data.length > 0 ? true : false;
   return isExist;

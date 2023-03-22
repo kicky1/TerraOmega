@@ -71,7 +71,7 @@ export async function claimScrap(amount: number, username: string) {
           JSON.stringify(claimData),
           "Claim tokens",
           (response: any) => {
-            console.log(response);
+            
           }
         );
       } else {
@@ -123,7 +123,7 @@ export async function attackOponent(target: string) {
           JSON.stringify(battleData),
           `Attack ${target}`,
           (response: any) => {
-            console.log(response);
+           
           }
         );
       } else {
