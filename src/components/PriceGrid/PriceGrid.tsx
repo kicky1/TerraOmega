@@ -63,7 +63,9 @@ export default function PriceGrid() {
       >
         <Anchor
           href="https://tribaldex.com/trade/SCRAP"
-          sx={{ color: "black" }}
+          color={
+            theme.colorScheme === "dark" ? "#C1C2C5" : "black"
+          }
           target="_blank"
         >
           <Text size="xl" weight={500} mt="sm">
