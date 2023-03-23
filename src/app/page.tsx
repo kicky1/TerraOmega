@@ -40,10 +40,7 @@ export default function Home() {
     data: accounts,
     isLoading: isLoadingAccounts,
     refetch: refetchAccounts,
-  } = useQuery("accountsData", getAccounts, {
-    refetchOnWindowFocus: false, // Disable automatic refetching on window focus
-    refetchOnMount: false, // Disable automatic refetching on mount
-  });
+  } = useQuery("accountsData", getAccounts);
 
   // Call refetchAccounts when the isSubscriber value changes
   useEffect(() => {
