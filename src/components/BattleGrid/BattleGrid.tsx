@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { useTable, useSortBy, Column } from "react-table";
+import { useTable, useSortBy, Column, TableState } from "react-table";
 import {
   attackOponent,
   getUserBattlesData,
@@ -132,11 +132,14 @@ export default function BattleGrid({ ...props }: Props) {
   //   }
   // }, [battleUsername, refetchBattles]);
 
+  const defaultSort = useMemo(() => [{ id: "damage", desc: true }], []);
+
   const columns: readonly Column<UserData>[] = useMemo(
     () => [
       {
         Header: "",
         accessor: "id",
+        defaultCanSort: false,
         Cell: ({ row }: { row: { original: UserData } }) => {
           const registrationTime = row.original.registrationTime;
           if (registrationTime) {
@@ -190,6 +193,7 @@ export default function BattleGrid({ ...props }: Props) {
       {
         Header: "Username",
         accessor: "username",
+        defaultCanSort: false,
         Cell: ({ row }: { row: { original: UserData } }) => {
           const registrationTime = row.original.registrationTime;
           if (registrationTime) {
@@ -234,6 +238,7 @@ export default function BattleGrid({ ...props }: Props) {
       {
         Header: "Attack",
         accessor: "battle",
+        defaultCanSort: false,
         Cell: ({ row }: { row: { original: UserData } }) => {
           const registrationTime = row.original.registrationTime;
           if (registrationTime) {
@@ -280,6 +285,7 @@ export default function BattleGrid({ ...props }: Props) {
       {
         Header: "Damage",
         accessor: "damage",
+        defaultCanSort: true,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <span
@@ -294,6 +300,7 @@ export default function BattleGrid({ ...props }: Props) {
       {
         Header: "Defense",
         accessor: "defense",
+        defaultCanSort: false,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <span
@@ -308,6 +315,7 @@ export default function BattleGrid({ ...props }: Props) {
       {
         Header: "Engineering",
         accessor: "engineering",
+        defaultCanSort: false,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <span
@@ -322,6 +330,7 @@ export default function BattleGrid({ ...props }: Props) {
       {
         Header: "Favor",
         accessor: "favor" as const,
+        defaultCanSort: false,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <span
@@ -336,6 +345,7 @@ export default function BattleGrid({ ...props }: Props) {
       {
         Header: "Scrap",
         accessor: "scrap" as const,
+        defaultCanSort: false,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <span
@@ -350,6 +360,7 @@ export default function BattleGrid({ ...props }: Props) {
       {
         Header: "Stash size",
         accessor: "hiveEngineStake" as const,
+        defaultCanSort: false,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <span
@@ -366,6 +377,7 @@ export default function BattleGrid({ ...props }: Props) {
       {
         Header: "Attacks",
         accessor: "attacks" as const,
+        defaultCanSort: false,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <span
@@ -380,6 +392,7 @@ export default function BattleGrid({ ...props }: Props) {
       {
         Header: "Claims",
         accessor: "claims" as const,
+        defaultCanSort: false,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <span
@@ -394,6 +407,7 @@ export default function BattleGrid({ ...props }: Props) {
       {
         Header: "Scrap/h",
         accessor: "minerate" as const,
+        defaultCanSort: false,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Group>
@@ -449,6 +463,9 @@ export default function BattleGrid({ ...props }: Props) {
     {
       columns,
       data: tableData,
+      initialState: { sortBy: [{ id: "scrap", desc: true }] } as Partial<
+        TableState<UserData>
+      >,
     },
     useSortBy
   );

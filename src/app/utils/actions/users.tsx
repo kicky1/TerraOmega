@@ -70,9 +70,7 @@ export async function claimScrap(amount: number, username: string) {
           "Active",
           JSON.stringify(claimData),
           "Claim tokens",
-          (response: any) => {
-            
-          }
+          (response: any) => {}
         );
       } else {
         alert("You have to install keychain!");
@@ -122,9 +120,7 @@ export async function attackOponent(target: string) {
           "Active",
           JSON.stringify(battleData),
           `Attack ${target}`,
-          (response: any) => {
-           
-          }
+          (response: any) => {}
         );
       } else {
         alert("You have to install keychain!");

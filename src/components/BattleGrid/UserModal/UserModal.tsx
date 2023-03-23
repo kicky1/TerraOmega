@@ -242,7 +242,7 @@ export default function UserModal({ ...props }: Props) {
                 />
                 <Text fz={"lg"}>
                   <Text span fw={500} inherit>
-                    HE Balance
+                    Claimed Scrap
                   </Text>
                   :{" "}
                   {props.selectedRow.hiveEngineScrap

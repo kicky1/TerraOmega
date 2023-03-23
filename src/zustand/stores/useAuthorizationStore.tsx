@@ -22,8 +22,7 @@ export const useAuthorizationStore = create<AuthorizationStoreState>()(
         state.isSubscriber = false;
       });
       localStorage.removeItem("username");
-      location.reload()
-
+      location.reload();
     },
     setAuthorized: (flag) => {
       set((state) => {

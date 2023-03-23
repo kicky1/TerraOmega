@@ -27,27 +27,28 @@ import { getStatsData } from "@/app/utils/actions/stats";
 import { getStatsEngineData } from "@/app/utils/actions/hiveEngine";
 import useStyles from "./style";
 
-export default function PriceGrid() {
+interface Props {
+  accounts: any;
+  totalScrap: number;
+  totalHiveEngineScrap: number;
+  statsData: any;
+  isStatsDataLoading: boolean;
+  loadingPrice: boolean;
+  hivePrice: any;
+}
+
+export default function AccountsPanel({ ...props }: Props) {
   const { classes, theme } = useStyles();
   const isTablet = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
 
-  const { data: statsData, isLoading: isStatsDataLoading } = useQuery(
-    "statsHiveData",
-    getStatsEngineData,
-    {
-      refetchInterval: 60000,
-    }
-  );
+  const toHive = () => {
+    return (
+      (props.totalScrap + props.totalHiveEngineScrap) *
+      props.statsData.result.highestBid
+    );
+  };
 
-  const { data: statsScrapData, isLoading: isStatsScrapDataLoading } = useQuery(
-    "statsData",
-    getStatsData,
-    {
-      refetchInterval: 60000,
-    }
-  );
-
-  if (isStatsDataLoading || isStatsScrapDataLoading) {
+  if (!props.accounts || props.loadingPrice || props.isStatsDataLoading) {
     return <></>;
   }
 
@@ -56,35 +57,34 @@ export default function PriceGrid() {
       <Card
         withBorder
         p="xl"
+        m={25}
         radius={10}
         className={classes.card}
-        mih={400}
-        mah={isTablet ? 400 : 800}
+        mih={420}
+        mah={420}
       >
-        <Anchor
-          href="https://tribaldex.com/trade/SCRAP"
-          color={theme.colorScheme === "dark" ? "#C1C2C5" : "black"}
-          target="_blank"
-        >
-          <Text size="xl" weight={500} mt="sm">
-            $SCRAP market data
-          </Text>
-        </Anchor>
-        <Text size="lg" color="dimmed" mb="lg">
-          Key data related to the game currency
+        <Text size="xl" weight={500}>
+          Summary panel
         </Text>
-        <Group>
+        <Text size="lg" color="dimmed" mb="lg">
+          Summary data from <span className={classes.highlight}>all</span>{" "}
+          accounts in one place
+        </Text>
+
+        <Group pt="sm">
           <Image
             maw={45}
             mah={45}
             fit="contain"
-            src={"https://cdn-icons-png.flaticon.com/512/2162/2162183.png"}
+            src={
+              "https://images.hive.blog/p/2bP4pJr4wVimqCWjYimXJe2cnCgnM7aPAGpC6PAd69t?format=match&mode=fit"
+            }
           />
           <Text fz={"lg"}>
             <Text span fw={500} inherit>
-              Bid{" "}
+              $SCRAP{" "}
             </Text>
-            : {parseFloat(statsData.result.highestBid).toFixed(2)} SWAP.HIVE
+            : {props.totalScrap ? props.totalScrap.toFixed(2) : "0.00"}
           </Text>
         </Group>
         <Space h="xl" />
@@ -93,14 +93,39 @@ export default function PriceGrid() {
             maw={45}
             mah={45}
             fit="contain"
-            src={"https://cdn-icons-png.flaticon.com/512/8991/8991273.png"}
+            src={"https://cdn-icons-png.flaticon.com/512/584/584052.png"}
           />
           <Text fz={"lg"}>
             <Text span fw={500} inherit>
-              Ask{" "}
+              Claimed{" "}
             </Text>
-            : {parseFloat(statsData.result.lowestAsk).toFixed(2)} SWAP.HIVE
+            :{" "}
+            {props.totalHiveEngineScrap
+              ? props.totalHiveEngineScrap.toFixed(2)
+              : "0.00"}
           </Text>
+        </Group>
+        <Space h="xl" />
+        <Group>
+          <Image
+            maw={45}
+            mah={45}
+            fit="contain"
+            src={
+              "https://assets.coingecko.com/coins/images/10840/small/logo_transparent_4x.png?1584623184"
+            }
+          />
+          {
+            <Text fz={"lg"}>
+              <Text span fw={500} inherit>
+                Total SWAP.HIVE:{" "}
+              </Text>
+
+              {props.totalScrap && props.statsData.result
+                ? toHive().toFixed(2)
+                : "0.00"}
+            </Text>
+          }
         </Group>
         <Space h="xl" />
         <Group>
@@ -113,26 +138,14 @@ export default function PriceGrid() {
           {
             <Text fz={"lg"}>
               <Text span fw={500} inherit>
-                Volume{" "}
+                Total $:{" "}
               </Text>
-              : {parseFloat(statsData.result.volume).toFixed(2)} SWAP.HIVE
-            </Text>
-          }
-        </Group>
-        <Space h="xl" />
-        <Group>
-          <Image
-            maw={45}
-            mah={45}
-            fit="contain"
-            src={"https://cdn-icons-png.flaticon.com/512/7314/7314483.png"}
-          />
-          {
-            <Text fz={"lg"}>
-              <Text span fw={500} inherit>
-                Price change{" "}
-              </Text>
-              : {statsData.result.priceChangePercent}
+
+              {props.totalScrap &&
+              props.hivePrice.hive.usd &&
+              props.statsData.result
+                ? (toHive() * props.hivePrice.hive.usd).toFixed(2)
+                : "0.00"}
             </Text>
           }
         </Group>

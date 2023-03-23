@@ -9,7 +9,10 @@ import PaymentGrid from "@/components/PaymentGrid/PaymentGrid";
 import StatisticGrid from "@/components/StatisticGrid/StatistisGrid";
 import SubscriptionGrid from "@/components/SubscriptionGrid/SubscriptionGrid";
 import { getAccounts } from "@/supabase/actions/users";
-import { setIsSubscriber, useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
+import {
+  setIsSubscriber,
+  useAuthorizationStore,
+} from "@/zustand/stores/useAuthorizationStore";
 import { Container, Space, Skeleton, Tabs, Button } from "@mantine/core";
 import {
   IconChartHistogram,
@@ -29,26 +32,23 @@ export default function Home() {
     refetchInterval: 30000,
   });
 
-
   const isSubscriber = useAuthorizationStore(
     (state: { isSubscriber: boolean }) => state.isSubscriber
-  )
-
-  const { data: accounts, isLoading: isLoadingAccounts, refetch: refetchAccounts } = useQuery(
-    "accountsData",
-    getAccounts,
-    {
-      refetchOnWindowFocus: false, // Disable automatic refetching on window focus
-      refetchOnMount: false // Disable automatic refetching on mount
-    }
   );
-  
+
+  const {
+    data: accounts,
+    isLoading: isLoadingAccounts,
+    refetch: refetchAccounts,
+  } = useQuery("accountsData", getAccounts, {
+    refetchOnWindowFocus: false, // Disable automatic refetching on window focus
+    refetchOnMount: false, // Disable automatic refetching on mount
+  });
+
   // Call refetchAccounts when the isSubscriber value changes
   useEffect(() => {
-      refetchAccounts();
+    refetchAccounts();
   }, [isSubscriber, refetchAccounts]);
-
-  
 
   return (
     <>
@@ -88,13 +88,13 @@ export default function Home() {
               )}
             </Tabs.Panel>
             <Tabs.Panel value="accounts" pt="xs">
-              <MultiAccountsGrid 
-                data={data} 
-                isLoading={isLoading} 
-                accounts={accounts} 
+              <MultiAccountsGrid
+                data={data}
+                isLoading={isLoading}
+                accounts={accounts}
                 isLoadingAccounts={isLoadingAccounts}
                 refetchAccounts={refetchAccounts}
-                />
+              />
             </Tabs.Panel>
             <Tabs.Panel value="stats" pt="xs">
               <StatisticGrid />

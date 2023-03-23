@@ -78,7 +78,9 @@ function LoginButton() {
             placeholder="username"
             value={value}
             style={{ flex: 1 }}
-            onChange={(event: { currentTarget: { value: SetStateAction<string>; }; }) => setValue(event.currentTarget.value)}
+            onChange={(event: {
+              currentTarget: { value: SetStateAction<string> };
+            }) => setValue(event.currentTarget.value)}
           />
           <Button
             styles={(theme) => ({

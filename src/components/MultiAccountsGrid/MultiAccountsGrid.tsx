@@ -19,10 +19,12 @@ import {
   Skeleton,
   ActionIcon,
   Tooltip,
+  Container,
 } from "@mantine/core";
 import React, { useState, useMemo, useEffect } from "react";
 import {
   IconAdjustments,
+  IconBrandTelegram,
   IconCheck,
   IconHelpCircle,
   IconShieldCheckeredFilled,
@@ -32,6 +34,10 @@ import UserModal from "../BattleGrid/UserModal/UserModal";
 import useStyles from "./style";
 import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
 import { addUser, getAccounts } from "@/supabase/actions/users";
+import AccountsPanel from "./AccountsPanel/AccountsPanel";
+import MainAccountPanel from "./MainAccountPanel/MainAccountPanel";
+import { fetchHivePrice } from "@/app/utils/actions/currency";
+import { getStatsEngineData } from "@/app/utils/actions/hiveEngine";
 
 interface UserData {
   username: string;
@@ -46,7 +52,7 @@ interface UserData {
   minerate: number;
   attacks: number;
   claims: number;
-  claim: string;
+  actions: string;
 }
 
 interface Props {
@@ -58,6 +64,7 @@ interface Props {
 }
 
 export default function MultiAccountsGrid({ ...props }: Props) {
+  const { classes, theme } = useStyles();
   const [page, setPage] = useState(1);
   const isSubscriber = useAuthorizationStore(
     (state: { isSubscriber: boolean }) => state.isSubscriber
@@ -72,14 +79,31 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     },
   });
 
+  const mainUsername = useAuthorizationStore(
+    (state: { username: string }) => state.username
+  );
 
+  const isTablet = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
+  const isMobile = useMediaQuery("(max-width: 960px)");
 
-  const handleSubmit = (event: { preventDefault: () => void; }) => {
+  const { data: hivePrice, isLoading: loadingPrice } = useQuery(
+    "hivePrice",
+    fetchHivePrice
+  );
+
+  const { data: statsData, isLoading: isStatsDataLoading } = useQuery(
+    "statsHiveData",
+    getStatsEngineData,
+    {
+      refetchInterval: 60000,
+    }
+  );
+
+  const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     mutate(username);
   };
 
-  
   const columns: readonly Column<UserData>[] = useMemo(
     () => [
       {
@@ -183,18 +207,45 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         ),
       },
       {
-        Header: "Claim Scrap",
-        accessor: "claim",
+        Header: "Actions",
+        accessor: "actions",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
+            <Group>
+              <Tooltip
+                label="Claim $SCRAP"
+                color="dark"
+                withArrow
+                arrowPosition="center"
+                offset={10}
+              >
+                <ActionIcon
+                  variant="outline"
+                  onClick={() =>
+                    claimScrap(row.original.scrap, row.original.username)
+                  }
+                >
+                  <IconCheck size="1.125rem" />
+                </ActionIcon>
+              </Tooltip>
+
+              {/* <Tooltip
+              label={`Transfer $SCRAP to ${mainUsername}`}
+              color="dark"
+              withArrow
+              arrowPosition="center"
+              offset={10}
+            >
             <ActionIcon
               variant="outline"
               onClick={() =>
                 claimScrap(row.original.scrap, row.original.username)
               }
             >
-              <IconCheck size="1.125rem" />
+              <IconBrandTelegram size="1.125rem" />
             </ActionIcon>
+            </Tooltip> */}
+            </Group>
           </>
         ),
       },
@@ -203,7 +254,6 @@ export default function MultiAccountsGrid({ ...props }: Props) {
   );
 
   const filteredUsernameData = useMemo(() => {
-
     if (!props.data || !props.accounts) {
       return [];
     }
@@ -211,18 +261,45 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     let filteredData = props.data.filter((user: UserData) =>
       props.accounts.includes(user.username.toLowerCase())
     );
-
-    console.log(props.accounts)
-    console.log(filteredData)
-
     return filteredData;
   }, [props.data, props.accounts]);
-
-
 
   const tableData = useMemo(
     () => (filteredUsernameData ? filteredUsernameData : []),
     [filteredUsernameData]
+  );
+
+  const filteredMain = tableData.find(
+    (obj: { username: string }) => obj.username === mainUsername
+  );
+
+  const mainAccountData = useMemo(
+    () => (filteredMain ? filteredMain : null),
+    [filteredMain]
+  );
+
+  const totalHiveEngineScrapFilter = tableData.reduce(
+    (accumulator: any, currentValue: { hiveEngineScrap: any }) => {
+      return accumulator + currentValue.hiveEngineScrap;
+    },
+    0
+  );
+
+  const totalHiveEngineScrap = useMemo(
+    () => (totalHiveEngineScrapFilter ? totalHiveEngineScrapFilter : null),
+    [totalHiveEngineScrapFilter]
+  );
+
+  const totalScrapFilter = tableData.reduce(
+    (accumulator: any, currentValue: { scrap: any }) => {
+      return accumulator + currentValue.scrap;
+    },
+    0
+  );
+
+  const totalScrap = useMemo(
+    () => (totalScrapFilter ? totalScrapFilter : null),
+    [totalScrapFilter]
   );
 
   const { getTableProps, headerGroups, rows, prepareRow } = useTable(
@@ -265,48 +342,6 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         breakpoints={[{ maxWidth: "sm", cols: 1 }]}
       >
         <Grid grow>
-          {/* <Grid.Col span={12}>
-            <Box w={300} pb={5}>
-              <Group>
-                <Box w={178}>
-                  <Input
-                    disabled={!isSubscriber}
-                    placeholder="Usernames"
-                    type="text"
-                    value={username}
-                    onChange={(e: {
-                      target: { value: React.SetStateAction<string> };
-                    }) => setUsername(e.target.value)}
-                  />
-                </Box>
-                <Box w={105}>
-                  <Tooltip
-                    label="Use comma to separate names"
-                    color="dark"
-                    withArrow
-                    arrowPosition="center"
-                    offset={10}
-                  >
-                    <Button
-                      fullWidth
-                      onClick={handleClick}
-                      disabled={!isSubscriber}
-                      styles={(theme: any) => ({
-                        root: {
-                          backgroundColor: "#0a3d47",
-                          "&:not([data-disabled])": theme.fn.hover({
-                            backgroundColor: theme.fn.darken("#072f37", 0.05),
-                          }),
-                        },
-                      })}
-                    >
-                      Load data
-                    </Button>
-                  </Tooltip>
-                </Box>
-              </Group>
-            </Box>
-          </Grid.Col> */}
           <Grid.Col span={12}>
             <Box w={310} pb={5}>
               <Group>
@@ -399,8 +434,36 @@ export default function MultiAccountsGrid({ ...props }: Props) {
           total={pageCount}
           position="center"
           pt={50}
+          pb={50}
           color={"dark"}
         />
+        <Space h="xl" />
+        <Space h="xl" />
+
+        <Grid grow>
+          <Grid.Col span={isMobile ? 12 : 6}>
+            <AccountsPanel
+              accounts={tableData}
+              totalScrap={totalScrap}
+              totalHiveEngineScrap={totalHiveEngineScrap}
+              statsData={statsData}
+              isStatsDataLoading={isStatsDataLoading}
+              loadingPrice={loadingPrice}
+              hivePrice={hivePrice}
+            />
+          </Grid.Col>
+          <Grid.Col span={isMobile ? 12 : 6}>
+            <MainAccountPanel
+              accounts={tableData}
+              mainAccount={mainAccountData}
+              mainUsername={mainUsername}
+              hivePrice={hivePrice}
+              loadingPrice={loadingPrice}
+              statsData={statsData}
+              isStatsDataLoading={isStatsDataLoading}
+            />
+          </Grid.Col>
+        </Grid>
       </SimpleGrid>
       <Space h="xl" />
     </>
