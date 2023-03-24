@@ -51,7 +51,8 @@ interface UserData {
   hiveEngineStake: number;
   minerate: number;
   attacks: number;
-  claims: number;
+  lastregen: number;
+  lastclaim: number;
   actions: string;
 }
 
@@ -185,6 +186,30 @@ export default function MultiAccountsGrid({ ...props }: Props) {
       {
         Header: "Claims",
         accessor: "claims",
+      },
+      {
+        Header: "Cooldown",
+        accessor: "lastclaim",
+        Cell: ({ row }: { row: { original: UserData } }) => {
+          const cooldownLastClime = row.original.lastclaim;
+          if (cooldownLastClime) {
+            const now = new Date();
+            const lastRegenDate = new Date(cooldownLastClime);
+            const timeDiff = now.getTime() - lastRegenDate.getTime();
+            const cooldownTime = 4 * 60 * 60 * 1000; // 4 hours in milliseconds
+            const remainingTime = cooldownTime - timeDiff;
+            
+            if (remainingTime > 0) {
+              const remainingHours = Math.floor(remainingTime / (1000 * 60 * 60));
+              const remainingMinutes = Math.floor((remainingTime / (1000 * 60)) % 60);
+              return <span>{remainingHours} hours {remainingMinutes} minutes</span>;
+            } else {
+              return <span>0 hours 0 minutes</span>;
+            }
+            
+            
+            }
+        },
       },
       {
         Header: "Scrap/h",
