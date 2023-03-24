@@ -84,7 +84,7 @@ export default function AccountsPanel({ ...props }: Props) {
             <Text span fw={500} inherit>
               $SCRAP{" "}
             </Text>
-            : {props.totalScrap ? props.totalScrap.toFixed(2) : "0.00"}
+            :{" "}{props.totalScrap ? props.totalScrap.toFixed(2) : "0.00"}
           </Text>
         </Group>
         <Space h="xl" />
@@ -118,9 +118,9 @@ export default function AccountsPanel({ ...props }: Props) {
           {
             <Text fz={"lg"}>
               <Text span fw={500} inherit>
-                Total SWAP.HIVE:{" "}
+                Total SWAP.HIVE :{" "}
               </Text>
-              {(props.totalScrap || props.totalHiveEngineScrap)
+              {props.totalScrap || props.totalHiveEngineScrap
                 ? toHive().toFixed(2)
                 : "0.00"}
             </Text>
@@ -137,7 +137,7 @@ export default function AccountsPanel({ ...props }: Props) {
           {
             <Text fz={"lg"}>
               <Text span fw={500} inherit>
-                Total $:{" "}
+                Total $ :{" "}
               </Text>
 
               {(props.totalScrap || props.totalHiveEngineScrap) &&

@@ -38,7 +38,7 @@ import AccountsPanel from "./AccountsPanel/AccountsPanel";
 import MainAccountPanel from "./MainAccountPanel/MainAccountPanel";
 import { fetchHivePrice } from "@/app/utils/actions/currency";
 import { getStatsEngineData } from "@/app/utils/actions/hiveEngine";
-import { sendTokens, transferTokens } from "@/app/utils/actions/payment";
+import { transferTokens } from "@/app/utils/actions/payment";
 
 interface UserData {
   username: string;
@@ -55,6 +55,7 @@ interface UserData {
   lastclaim: number;
   actions: string;
   claims: number;
+  battle: string;
 }
 
 interface Props {
@@ -81,6 +82,11 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     },
   });
 
+  const [battleUsername, setBattleUsername] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<UserData | null>(null);
+  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+
   const mainUsername = useAuthorizationStore(
     (state: { username: string }) => state.username
   );
@@ -105,6 +111,16 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     mutate(username);
   };
 
+  const handleRowClick = (row: { original: UserData }) => {
+    setSelectedRow(row.original);
+    setBattleUsername(row.original.username);
+    setShowPopup(true);
+  };
+
+  const handlePopupClose = () => {
+    setShowPopup(false);
+  };
+
   const columns: readonly Column<UserData>[] = useMemo(
     () => [
       {
@@ -119,37 +135,87 @@ export default function MultiAccountsGrid({ ...props }: Props) {
             const hoursDiff = timeDiff / (1000 * 3600);
             if (hoursDiff <= 24) {
               return (
-                <span style={{ color: "red" }}>
+                <span
+                  style={{ color: "red", cursor: "pointer" }}
+                  onClick={() => handleRowClick(row)}
+                >
                   {row.original.username}{" "}
                   <IconShieldCheckeredFilled size={15} />
                 </span>
               );
             } else {
-              return <span>{row.original.username}</span>;
+              return (
+                <span
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleRowClick(row)}
+                >
+                  {row.original.username}
+                </span>
+              );
             }
           } else {
-            return <span>{row.original.username}</span>;
+            return (
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => handleRowClick(row)}
+              >
+                {row.original.username}
+              </span>
+            );
           }
         },
       },
       {
         Header: "Damage",
         accessor: "damage",
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.damage}
+            </span>
+          </>
+        ),
       },
       {
         Header: "Defense",
         accessor: "defense",
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.defense}
+            </span>
+          </>
+        ),
       },
       {
         Header: "Engineering",
         accessor: "engineering",
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.engineering}
+            </span>
+          </>
+        ),
       },
       {
         Header: "Favor",
         accessor: "favor",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
               {row.original.favor ? row.original.favor.toFixed(2) : 0}
             </span>
           </>
@@ -160,7 +226,10 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         accessor: "scrap",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
               {row.original.scrap ? row.original.scrap.toFixed(2) : 0}
             </span>
           </>
@@ -171,7 +240,10 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         accessor: "hiveEngineStake",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
               {row.original.hiveEngineStake
                 ? (row.original.hiveEngineStake + 1.0).toFixed(2)
                 : 0}
@@ -182,10 +254,30 @@ export default function MultiAccountsGrid({ ...props }: Props) {
       {
         Header: "Attacks",
         accessor: "attacks",
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.attacks}
+            </span>
+          </>
+        ),
       },
       {
         Header: "Claims",
         accessor: "claims",
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.claims}
+            </span>
+          </>
+        ),
       },
       {
         Header: "Cooldown",
@@ -204,12 +296,22 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               (remainingTime / (1000 * 60)) % 60
             );
             return (
-              <span>
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => handleRowClick(row)}
+              >
                 {remainingHours} hours {remainingMinutes} minutes
               </span>
             );
           } else {
-            return <span>0 hours 0 minutes</span>;
+            return (
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => handleRowClick(row)}
+              >
+                0 hours 0 minutes
+              </span>
+            );
           }
         },
       },
@@ -219,7 +321,10 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Group>
-              <span>
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => handleRowClick(row)}
+              >
                 {(row.original.minerate * 3600).toFixed(4)}
                 <img
                   src={
@@ -460,6 +565,16 @@ export default function MultiAccountsGrid({ ...props }: Props) {
             </tbody>
           </Table>
         </Box>
+        {selectedRow && (
+          <UserModal
+            showPopup={showPopup}
+            handlePopupClose={handlePopupClose}
+            selectedRow={selectedRow}
+            battleUsername={battleUsername}
+            setSelectedValue={setSelectedValue}
+            selectedValue={selectedValue}
+          />
+        )}
         <Pagination
           value={page}
           onChange={setPage}

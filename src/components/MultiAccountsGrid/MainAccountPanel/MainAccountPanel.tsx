@@ -138,7 +138,7 @@ export default function MainAccountPanel({ ...props }: Props) {
           {
             <Text fz={"lg"}>
               <Text span fw={500} inherit>
-                Total SWAP.HIVE:{" "}
+                Total SWAP.HIVE :{" "}
               </Text>
 
               {props.mainAccount && props.statsData?.result
@@ -158,7 +158,7 @@ export default function MainAccountPanel({ ...props }: Props) {
           {
             <Text fz={"lg"}>
               <Text span fw={500} inherit>
-                Total $:{" "}
+                Total $ :{" "}
               </Text>
 
               {props.mainAccount &&

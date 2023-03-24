@@ -242,7 +242,7 @@ export default function UserModal({ ...props }: Props) {
                 />
                 <Text fz={"lg"}>
                   <Text span fw={500} inherit>
-                    $SCRAP H-E
+                    $SCRAP H-E{" "}
                   </Text>
                   :{" "}
                   {props.selectedRow.hiveEngineScrap
@@ -262,7 +262,7 @@ export default function UserModal({ ...props }: Props) {
                 />
                 <Text fz={"lg"}>
                   <Text span fw={500} inherit>
-                    Favor
+                    Favor{" "}
                   </Text>
                   :{" "}
                   {props.selectedRow.favor
