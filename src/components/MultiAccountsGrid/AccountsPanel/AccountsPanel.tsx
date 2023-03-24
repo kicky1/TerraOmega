@@ -43,7 +43,7 @@ export default function AccountsPanel({ ...props }: Props) {
 
   const toHive = () => {
     return (
-      (props.totalScrap + props.totalHiveEngineScrap)*
+      (props.totalScrap + props.totalHiveEngineScrap) *
       props.statsData?.result?.highestBid
     );
   };
@@ -120,7 +120,7 @@ export default function AccountsPanel({ ...props }: Props) {
               <Text span fw={500} inherit>
                 Total SWAP.HIVE:{" "}
               </Text>
-              {(props.totalScrap && props.statsData?.result)
+              {(props.totalScrap || props.totalHiveEngineScrap)
                 ? toHive().toFixed(2)
                 : "0.00"}
             </Text>
@@ -140,9 +140,8 @@ export default function AccountsPanel({ ...props }: Props) {
                 Total $:{" "}
               </Text>
 
-              {(props.totalScrap &&
-              props.hivePrice?.hive?.usd &&
-              props?.statsData?.result)
+              {(props.totalScrap || props.totalHiveEngineScrap) &&
+              props.hivePrice?.hive?.usd
                 ? (toHive() * props.hivePrice.hive.usd).toFixed(2)
                 : "0.00"}
             </Text>

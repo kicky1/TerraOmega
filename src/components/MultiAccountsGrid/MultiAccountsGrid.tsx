@@ -38,6 +38,7 @@ import AccountsPanel from "./AccountsPanel/AccountsPanel";
 import MainAccountPanel from "./MainAccountPanel/MainAccountPanel";
 import { fetchHivePrice } from "@/app/utils/actions/currency";
 import { getStatsEngineData } from "@/app/utils/actions/hiveEngine";
+import { sendTokens, transferTokens } from "@/app/utils/actions/payment";
 
 interface UserData {
   username: string;
@@ -191,19 +192,25 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         accessor: "lastclaim",
         Cell: ({ row }: { row: { original: UserData } }) => {
           const cooldownLastClime = row.original.lastclaim;
-            const now = new Date();
-            const lastRegenDate = new Date(cooldownLastClime);
-            const timeDiff = now.getTime() - lastRegenDate.getTime();
-            const cooldownTime = 4 * 60 * 60 * 1000; // 4 hours in milliseconds
-            const remainingTime = cooldownTime - timeDiff;
-            
-            if (remainingTime > 0) {
-              const remainingHours = Math.floor(remainingTime / (1000 * 60 * 60));
-              const remainingMinutes = Math.floor((remainingTime / (1000 * 60)) % 60);
-              return <span>{remainingHours} hours {remainingMinutes} minutes</span>;
-            } else {
-              return <span>0 hours 0 minutes</span>;
-            }
+          const now = new Date();
+          const lastRegenDate = new Date(cooldownLastClime);
+          const timeDiff = now.getTime() - lastRegenDate.getTime();
+          const cooldownTime = 4 * 60 * 60 * 1000; // 4 hours in milliseconds
+          const remainingTime = cooldownTime - timeDiff;
+
+          if (remainingTime > 0) {
+            const remainingHours = Math.floor(remainingTime / (1000 * 60 * 60));
+            const remainingMinutes = Math.floor(
+              (remainingTime / (1000 * 60)) % 60
+            );
+            return (
+              <span>
+                {remainingHours} hours {remainingMinutes} minutes
+              </span>
+            );
+          } else {
+            return <span>0 hours 0 minutes</span>;
+          }
         },
       },
       {
@@ -249,22 +256,28 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                 </ActionIcon>
               </Tooltip>
 
-              {/* <Tooltip
-              label={`Transfer $SCRAP to ${mainUsername}`}
-              color="dark"
-              withArrow
-              arrowPosition="center"
-              offset={10}
-            >
-            <ActionIcon
-              variant="outline"
-              onClick={() =>
-                claimScrap(row.original.scrap, row.original.username)
-              }
-            >
-              <IconBrandTelegram size="1.125rem" />
-            </ActionIcon>
-            </Tooltip> */}
+              <Tooltip
+                label={`Transfer $SCRAP to ${localStorage.getItem("username")}`}
+                color="dark"
+                withArrow
+                arrowPosition="center"
+                offset={10}
+              >
+                <ActionIcon
+                  variant="outline"
+                  disabled={
+                    row.original.username == localStorage.getItem("username")
+                  }
+                  onClick={() =>
+                    transferTokens(
+                      row.original.username,
+                      row.original.hiveEngineScrap
+                    )
+                  }
+                >
+                  <IconBrandTelegram size="1.125rem" />
+                </ActionIcon>
+              </Tooltip>
             </Group>
           </>
         ),

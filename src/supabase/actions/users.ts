@@ -16,9 +16,8 @@ export async function isSubscriber(username: string) {
 }
 
 export async function getAccounts() {
-
-  if(!localStorage.getItem("username")){
-    return
+  if (!localStorage.getItem("username")) {
+    return;
   }
 
   let { data: accountsData, error } = await supabase

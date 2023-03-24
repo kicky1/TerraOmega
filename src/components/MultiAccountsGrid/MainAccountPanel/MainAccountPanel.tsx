@@ -42,6 +42,7 @@ interface Props {
 export default function MainAccountPanel({ ...props }: Props) {
   const { classes, theme } = useStyles();
   const isTablet = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
+  const isMobile = useMediaQuery("(max-width: 960px)");
 
   const toHive = () => {
     return (
@@ -78,15 +79,17 @@ export default function MainAccountPanel({ ...props }: Props) {
               account
             </Text>
           </Grid.Col>
-          <Grid.Col span={4}>
-            <Group position="right">
-              <Avatar
-                src={`https://images.hive.blog/u/${props.mainUsername}/avatar`}
-                radius="md"
-                size="xl"
-              />
-            </Group>
-          </Grid.Col>
+          {!isMobile && (
+            <Grid.Col span={4}>
+              <Group position="right">
+                <Avatar
+                  src={`https://images.hive.blog/u/${props.mainUsername}/avatar`}
+                  radius="md"
+                  size="xl"
+                />
+              </Group>
+            </Grid.Col>
+          )}
         </Grid>
         <Group pt="sm">
           <Image
@@ -138,7 +141,7 @@ export default function MainAccountPanel({ ...props }: Props) {
                 Total SWAP.HIVE:{" "}
               </Text>
 
-              {(props.mainAccount && props.statsData?.result)
+              {props.mainAccount && props.statsData?.result
                 ? toHive().toFixed(2)
                 : "0.00"}
             </Text>
@@ -158,9 +161,9 @@ export default function MainAccountPanel({ ...props }: Props) {
                 Total $:{" "}
               </Text>
 
-              {(props.mainAccount &&
+              {props.mainAccount &&
               props.hivePrice?.hive?.usd &&
-              props.statsData?.result)
+              props.statsData?.result
                 ? (toHive() * props.hivePrice.hive.usd).toFixed(2)
                 : "0.00"}
             </Text>
