@@ -220,7 +220,7 @@ export default function UserModal({ ...props }: Props) {
                 />
                 <Text fz={"lg"}>
                   <Text span fw={500} inherit>
-                    Scrap{" "}
+                    $SCRAP{" "}
                   </Text>
                   :{" "}
                   {props.selectedRow.scrap
@@ -242,7 +242,7 @@ export default function UserModal({ ...props }: Props) {
                 />
                 <Text fz={"lg"}>
                   <Text span fw={500} inherit>
-                    Scrap on HE
+                    $SCRAP H-E
                   </Text>
                   :{" "}
                   {props.selectedRow.hiveEngineScrap
