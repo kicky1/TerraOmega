@@ -51,9 +51,9 @@ interface UserData {
   hiveEngineStake: number;
   minerate: number;
   attacks: number;
-  lastregen: number;
   lastclaim: number;
   actions: string;
+  claims: number;
 }
 
 interface Props {
@@ -84,7 +84,6 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     (state: { username: string }) => state.username
   );
 
-  const isTablet = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
   const isMobile = useMediaQuery("(max-width: 960px)");
 
   const { data: hivePrice, isLoading: loadingPrice } = useQuery(
@@ -192,7 +191,6 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         accessor: "lastclaim",
         Cell: ({ row }: { row: { original: UserData } }) => {
           const cooldownLastClime = row.original.lastclaim;
-          if (cooldownLastClime) {
             const now = new Date();
             const lastRegenDate = new Date(cooldownLastClime);
             const timeDiff = now.getTime() - lastRegenDate.getTime();
@@ -205,9 +203,6 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               return <span>{remainingHours} hours {remainingMinutes} minutes</span>;
             } else {
               return <span>0 hours 0 minutes</span>;
-            }
-            
-            
             }
         },
       },
