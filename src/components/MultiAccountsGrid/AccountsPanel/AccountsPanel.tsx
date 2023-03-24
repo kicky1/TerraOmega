@@ -97,7 +97,7 @@ export default function AccountsPanel({ ...props }: Props) {
           />
           <Text fz={"lg"}>
             <Text span fw={500} inherit>
-              Claimed{" "}
+              $SCRAP on HE{" "}
             </Text>
             :{" "}
             {props.totalHiveEngineScrap

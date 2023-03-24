@@ -114,7 +114,7 @@ export default function MainAccountPanel({ ...props }: Props) {
           />
           <Text fz={"lg"}>
             <Text span fw={500} inherit>
-              Claimed{" "}
+              $SCRAP on HE{" "}
             </Text>
             :{" "}
             {props.mainAccount
