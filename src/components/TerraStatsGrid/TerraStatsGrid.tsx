@@ -95,7 +95,7 @@ export default function TerraStatsGrid() {
             <Text span fw={500} inherit>
               Staked{" "}
             </Text>
-            : {statsScrapData.totalScrap.toFixed(2)}
+            : {statsScrapData.totalStaked.toFixed(2)}
           </Text>
           <Image
             maw={25}
@@ -118,7 +118,7 @@ export default function TerraStatsGrid() {
             <Text span fw={500} inherit>
               Liquid{" "}
             </Text>
-            : {statsScrapData.totalStaked.toFixed(2)}
+            : {statsScrapData.totalScrap.toFixed(2)}
           </Text>
           <Image
             maw={25}
