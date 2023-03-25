@@ -250,7 +250,7 @@ export default function BattleGrid({ ...props }: Props) {
               return (
                 <span>
                   <ActionIcon variant="outline" disabled>
-                    <IconSwordOff/>
+                    <IconSwordOff />
                   </ActionIcon>
                 </span>
               );

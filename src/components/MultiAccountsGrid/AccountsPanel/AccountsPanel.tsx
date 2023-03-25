@@ -84,7 +84,7 @@ export default function AccountsPanel({ ...props }: Props) {
             <Text span fw={500} inherit>
               $SCRAP{" "}
             </Text>
-            :{" "}{props.totalScrap ? props.totalScrap.toFixed(2) : "0.00"}
+            : {props.totalScrap ? props.totalScrap.toFixed(2) : "0.00"}
           </Text>
         </Group>
         <Space h="xl" />

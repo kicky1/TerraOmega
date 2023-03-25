@@ -1,6 +1,10 @@
 import { useMutation, useQuery } from "react-query";
 import { useTable, useSortBy, Column } from "react-table";
-import { claimScrap, getUserData, upgradeAccount } from "@/app/utils/actions/users";
+import {
+  claimScrap,
+  getUserData,
+  upgradeAccount,
+} from "@/app/utils/actions/users";
 import {
   Space,
   SimpleGrid,
@@ -171,13 +175,27 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         accessor: "damage",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span
-              style={{ cursor: "pointer" }}
-              onClick={() => upgradeAccount(row.original.username, 'terracore_damage', row.original.damage)}
+            <Tooltip
+              label="Upgrade damage"
+              color="dark"
+              withArrow
+              arrowPosition="center"
+              offset={10}
             >
-              {row.original.damage}
-            <IconArrowUp size={'1.2rem'} fontWeight={100}/>
-            </span>
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() =>
+                  upgradeAccount(
+                    row.original.username,
+                    "terracore_damage",
+                    row.original.damage
+                  )
+                }
+              >
+                {row.original.damage}
+                <IconArrowUp size={"1.2rem"} fontWeight={100} />{" "}
+              </span>
+            </Tooltip>
           </>
         ),
       },
@@ -186,13 +204,27 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         accessor: "defense",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span
-              style={{ cursor: "pointer" }}
-              onClick={() => upgradeAccount(row.original.username, 'terracore_defense', row.original.defense)}
+            <Tooltip
+              label="Upgrade defense"
+              color="dark"
+              withArrow
+              arrowPosition="center"
+              offset={10}
             >
-              {row.original.defense}
-              <IconArrowUp size={'1.2rem'} fontWeight={100}/>
-            </span>
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() =>
+                  upgradeAccount(
+                    row.original.username,
+                    "terracore_defense",
+                    row.original.defense
+                  )
+                }
+              >
+                {row.original.defense}
+                <IconArrowUp size={"1.2rem"} fontWeight={100} />{" "}
+              </span>
+            </Tooltip>
           </>
         ),
       },
@@ -201,13 +233,27 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         accessor: "engineering",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span
-              style={{ cursor: "pointer" }}
-              onClick={() => upgradeAccount(row.original.username, 'terracore_engineering', (row.original.engineering*10))}
+            <Tooltip
+              label="Upgrade engineering"
+              color="dark"
+              withArrow
+              arrowPosition="center"
+              offset={10}
             >
-              {row.original.engineering}
-              <IconArrowUp size={'1.2rem'} fontWeight={100}/>
-            </span>
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() =>
+                  upgradeAccount(
+                    row.original.username,
+                    "terracore_engineering",
+                    row.original.engineering * 10
+                  )
+                }
+              >
+                {row.original.engineering}
+                <IconArrowUp size={"1.2rem"} fontWeight={100} />{" "}
+              </span>
+            </Tooltip>
           </>
         ),
       },
@@ -248,7 +294,9 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.hiveEngineScrap ? row.original.hiveEngineScrap.toFixed(2) : 0}
+              {row.original.hiveEngineScrap
+                ? row.original.hiveEngineScrap.toFixed(2)
+                : 0}
             </span>
           </>
         ),

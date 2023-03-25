@@ -129,43 +129,46 @@ export async function attackOponent(target: string) {
   });
 }
 
+export function upgradeAccount(player: string, upgrade: string, value: number) {
+  var hash =
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15);
+  let amount;
 
-export  function upgradeAccount(player: string, upgrade: string, value: number) {
-  var hash = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-  let amount
-
-  if(upgrade == 'terracore_damage' || upgrade == 'terracore_defense' || upgrade == 'terracore_engineering'){
-    amount = (value/10)**2
+  if (
+    upgrade == "terracore_damage" ||
+    upgrade == "terracore_defense" ||
+    upgrade == "terracore_engineering"
+  ) {
+    amount = (value / 10) ** 2;
   }
 
-  console.log(value)
-  console.log(amount)
-
-  
+  console.log(value);
+  console.log(amount);
 
   const json = {
-      "contractName": "tokens",
-      "contractAction": "transfer",
-      "contractPayload": {
-          "symbol": "SCRAP",
-          "to": "null",
-          "quantity": amount?.toFixed(),
-          "memo": upgrade + "-" + hash
-      }
+    contractName: "tokens",
+    contractAction: "transfer",
+    contractPayload: {
+      symbol: "SCRAP",
+      to: "null",
+      quantity: amount?.toFixed(),
+      memo: upgrade + "-" + hash,
+    },
   };
 
   //convert json to string
   const data = JSON.stringify(json);
-      if (isKeychain()) {
-        window.hive_keychain.requestCustomJson(
-          player,
-          'ssc-mainnet-hive',
-          "Active",
-          data,
-          `Upgrade ${upgrade}`,
-          (response: any) => {}
-        );
-      } else {
-        alert("You have to install keychain!");
-      }
+  if (isKeychain()) {
+    window.hive_keychain.requestCustomJson(
+      player,
+      "ssc-mainnet-hive",
+      "Active",
+      data,
+      `Upgrade ${upgrade}`,
+      (response: any) => {}
+    );
+  } else {
+    alert("You have to install keychain!");
+  }
 }
