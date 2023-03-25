@@ -300,6 +300,31 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         ),
       },
       {
+        Header: "Stash size",
+        accessor: "hiveEngineStake",
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <Tooltip
+              label="Upgrade stash size"
+              color="dark"
+              withArrow
+              arrowPosition="center"
+              offset={10}
+            >
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => handleUpgradePopup(row, "stash size")}
+              >
+                {row.original.hiveEngineStake
+                  ? (row.original.hiveEngineStake + 1.0).toFixed(2)
+                  : 0}
+                <IconArrowUp size={"0.9rem"} fontWeight={100} />
+              </span>
+            </Tooltip>
+          </>
+        ),
+      },
+      {
         Header: "Scrap",
         accessor: "scrap",
         Cell: ({ row }: { row: { original: UserData } }) => (
@@ -326,31 +351,6 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                 ? row.original.hiveEngineScrap.toFixed(2)
                 : 0}
             </span>
-          </>
-        ),
-      },
-      {
-        Header: "Stash size",
-        accessor: "hiveEngineStake",
-        Cell: ({ row }: { row: { original: UserData } }) => (
-          <>
-            <Tooltip
-              label="Upgrade stash size"
-              color="dark"
-              withArrow
-              arrowPosition="center"
-              offset={10}
-            >
-              <span
-                style={{ cursor: "pointer" }}
-                onClick={() => handleUpgradePopup(row, "stash size")}
-              >
-                {row.original.hiveEngineStake
-                  ? (row.original.hiveEngineStake + 1.0).toFixed(2)
-                  : 0}
-                <IconArrowUp size={"0.9rem"} fontWeight={100} />
-              </span>
-            </Tooltip>
           </>
         ),
       },
