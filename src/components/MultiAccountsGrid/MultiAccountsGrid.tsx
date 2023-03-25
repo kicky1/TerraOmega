@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "react-query";
 import { useTable, useSortBy, Column } from "react-table";
-import { claimScrap, getUserData } from "@/app/utils/actions/users";
+import { claimScrap, getUserData, upgradeAccount } from "@/app/utils/actions/users";
 import {
   Space,
   SimpleGrid,
@@ -24,6 +24,7 @@ import {
 import React, { useState, useMemo, useEffect } from "react";
 import {
   IconAdjustments,
+  IconArrowUp,
   IconBrandTelegram,
   IconCheck,
   IconHelpCircle,
@@ -172,9 +173,10 @@ export default function MultiAccountsGrid({ ...props }: Props) {
           <>
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => handleRowClick(row)}
+              onClick={() => upgradeAccount(row.original.username, 'terracore_damage', row.original.damage)}
             >
               {row.original.damage}
+            <IconArrowUp size={'1.2rem'} fontWeight={100}/>
             </span>
           </>
         ),
@@ -186,9 +188,10 @@ export default function MultiAccountsGrid({ ...props }: Props) {
           <>
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => handleRowClick(row)}
+              onClick={() => upgradeAccount(row.original.username, 'terracore_defense', row.original.defense)}
             >
               {row.original.defense}
+              <IconArrowUp size={'1.2rem'} fontWeight={100}/>
             </span>
           </>
         ),
@@ -200,9 +203,10 @@ export default function MultiAccountsGrid({ ...props }: Props) {
           <>
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => handleRowClick(row)}
+              onClick={() => upgradeAccount(row.original.username, 'terracore_engineering', (row.original.engineering*10))}
             >
               {row.original.engineering}
+              <IconArrowUp size={'1.2rem'} fontWeight={100}/>
             </span>
           </>
         ),
@@ -231,6 +235,20 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               onClick={() => handleRowClick(row)}
             >
               {row.original.scrap ? row.original.scrap.toFixed(2) : 0}
+            </span>
+          </>
+        ),
+      },
+      {
+        Header: "Scrap H-E",
+        accessor: "hiveEngineScrap",
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.hiveEngineScrap ? row.original.hiveEngineScrap.toFixed(2) : 0}
             </span>
           </>
         ),
