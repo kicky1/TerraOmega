@@ -44,6 +44,7 @@ import MainAccountPanel from "./MainAccountPanel/MainAccountPanel";
 import { fetchHivePrice } from "@/app/utils/actions/currency";
 import { getStatsEngineData } from "@/app/utils/actions/hiveEngine";
 import { transferTokens } from "@/app/utils/actions/payment";
+import UpgradeModal from "./UpgradeModal/UpgradeModal";
 
 interface UserData {
   username: string;
@@ -88,9 +89,19 @@ export default function MultiAccountsGrid({ ...props }: Props) {
   });
 
   const [battleUsername, setBattleUsername] = useState("");
+
   const [showPopup, setShowPopup] = useState(false);
   const [selectedRow, setSelectedRow] = useState<UserData | null>(null);
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
+
+  const [selectedUpgradeRow, setSelectedUpgradeRow] = useState<UserData | null>(
+    null
+  );
+
+  const [selectedUpgradeName, setSelectedUpgradeName] = useState("");
+
+  const [showUpgradePopup, setShowUpgradePopup] = useState(false);
+  const [inputAmount, setInputAmount] = useState("");
 
   const mainUsername = useAuthorizationStore(
     (state: { username: string }) => state.username
@@ -124,6 +135,12 @@ export default function MultiAccountsGrid({ ...props }: Props) {
 
   const handlePopupClose = () => {
     setShowPopup(false);
+  };
+
+  const handleUpgradePopup = (row: { original: UserData }, stake: string) => {
+    setSelectedUpgradeRow(row.original);
+    setSelectedUpgradeName(stake);
+    setShowUpgradePopup(true);
   };
 
   const columns: readonly Column<UserData>[] = useMemo(
@@ -193,7 +210,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                 }
               >
                 {row.original.damage}
-                <IconArrowUp size={"1.2rem"} fontWeight={100} />{" "}
+                <IconArrowUp size={"0.9rem"} fontWeight={100} />{" "}
               </span>
             </Tooltip>
           </>
@@ -222,7 +239,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                 }
               >
                 {row.original.defense}
-                <IconArrowUp size={"1.2rem"} fontWeight={100} />{" "}
+                <IconArrowUp size={"0.9rem"} fontWeight={100} />{" "}
               </span>
             </Tooltip>
           </>
@@ -251,7 +268,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                 }
               >
                 {row.original.engineering}
-                <IconArrowUp size={"1.2rem"} fontWeight={100} />{" "}
+                <IconArrowUp size={"0.9rem"} fontWeight={100} />
               </span>
             </Tooltip>
           </>
@@ -262,12 +279,23 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         accessor: "favor",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span
-              style={{ cursor: "pointer" }}
-              onClick={() => handleRowClick(row)}
+            <Tooltip
+              label="Contribute $SCRAP"
+              color="dark"
+              withArrow
+              arrowPosition="center"
+              offset={10}
             >
-              {row.original.favor ? row.original.favor.toFixed(2) : 0}
-            </span>
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => handleUpgradePopup(row, "favor")}
+              >
+                {row.original.favor
+                  ? parseFloat(row.original.favor.toFixed(2))
+                  : 0}
+                <IconArrowUp size={"0.9rem"} fontWeight={100} />
+              </span>
+            </Tooltip>
           </>
         ),
       },
@@ -306,14 +334,23 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         accessor: "hiveEngineStake",
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
-            <span
-              style={{ cursor: "pointer" }}
-              onClick={() => handleRowClick(row)}
+            <Tooltip
+              label="Upgrade stash size"
+              color="dark"
+              withArrow
+              arrowPosition="center"
+              offset={10}
             >
-              {row.original.hiveEngineStake
-                ? (row.original.hiveEngineStake + 1.0).toFixed(2)
-                : 0}
-            </span>
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => handleUpgradePopup(row, "stash size")}
+              >
+                {row.original.hiveEngineStake
+                  ? (row.original.hiveEngineStake + 1.0).toFixed(2)
+                  : 0}
+                <IconArrowUp size={"0.9rem"} fontWeight={100} />
+              </span>
+            </Tooltip>
           </>
         ),
       },
@@ -427,29 +464,31 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                 </ActionIcon>
               </Tooltip>
 
-              {row.original.username == localStorage.getItem("username") ? <></> : 
-              
-              <Tooltip
-              label={`Transfer $SCRAP to ${localStorage.getItem("username")}`}
-              color="dark"
-              withArrow
-              arrowPosition="center"
-              offset={10}
-            >
-              <ActionIcon
-                variant="outline"
-                onClick={() =>
-                  transferTokens(
-                    row.original.username,
-                    row.original.hiveEngineScrap
-                  )
-                }
-              >
-                <IconBrandTelegram size="1.125rem" />
-              </ActionIcon>
-            </Tooltip>
-              }
-
+              {row.original.username == localStorage.getItem("username") ? (
+                <></>
+              ) : (
+                <Tooltip
+                  label={`Transfer $SCRAP to ${localStorage.getItem(
+                    "username"
+                  )}`}
+                  color="dark"
+                  withArrow
+                  arrowPosition="center"
+                  offset={10}
+                >
+                  <ActionIcon
+                    variant="outline"
+                    onClick={() =>
+                      transferTokens(
+                        row.original.username,
+                        row.original.hiveEngineScrap
+                      )
+                    }
+                  >
+                    <IconBrandTelegram size="1.125rem" />
+                  </ActionIcon>
+                </Tooltip>
+              )}
             </Group>
           </>
         ),
@@ -604,6 +643,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                     <th
                       key={column.id}
                       {...column.getHeaderProps(column.getSortByToggleProps())}
+                      className={classes.header}
                     >
                       {column.render("Header")}
                       <span>
@@ -624,7 +664,9 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                 return (
                   <tr key={row.id}>
                     {row.cells.map((cell, id) => (
-                      <td key={id}>{cell.render("Cell")}</td>
+                      <td className={classes.header} key={id}>
+                        {cell.render("Cell")}
+                      </td>
                     ))}
                   </tr>
                 );
@@ -642,6 +684,19 @@ export default function MultiAccountsGrid({ ...props }: Props) {
             selectedValue={selectedValue}
           />
         )}
+
+        {selectedUpgradeRow && (
+          <UpgradeModal
+            showUpgradePopup={showUpgradePopup}
+            setShowUpgradePopup={setShowUpgradePopup}
+            selectedUpgradeRow={selectedUpgradeRow}
+            selectedUpgradeName={selectedUpgradeName}
+            setInputAmount={setInputAmount}
+            setSelectedUpgradeName={setSelectedUpgradeName}
+            inputAmount={inputAmount}
+          />
+        )}
+
         <Pagination
           value={page}
           onChange={setPage}

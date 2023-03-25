@@ -172,3 +172,67 @@ export function upgradeAccount(player: string, upgrade: string, value: number) {
     alert("You have to install keychain!");
   }
 }
+
+export function upgradeStash(player: string, value: number) {
+  var hash =
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15);
+
+  const json = {
+    contractName: "tokens",
+    contractAction: "stake",
+    contractPayload: {
+      symbol: "SCRAP",
+      to: player,
+      quantity: value?.toFixed(3),
+      memo: "stake" + "-" + hash,
+    },
+  };
+
+  //convert json to string
+  const data = JSON.stringify(json);
+  if (isKeychain()) {
+    window.hive_keychain.requestCustomJson(
+      player,
+      "ssc-mainnet-hive",
+      "Active",
+      data,
+      `Upgrade ${player} stash size`,
+      (response: any) => {}
+    );
+  } else {
+    alert("You have to install keychain!");
+  }
+}
+
+export function upgradeFavor(player: string, value: number) {
+  var hash =
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15);
+
+  const json = {
+    contractName: "tokens",
+    contractAction: "transfer",
+    contractPayload: {
+      symbol: "SCRAP",
+      to: "null",
+      quantity: value?.toFixed(3),
+      memo: "terracore_contribute" + "-" + hash,
+    },
+  };
+
+  //convert json to string
+  const data = JSON.stringify(json);
+  if (isKeychain()) {
+    window.hive_keychain.requestCustomJson(
+      player,
+      "ssc-mainnet-hive",
+      "Active",
+      data,
+      `Upgrade ${player} favor`,
+      (response: any) => {}
+    );
+  } else {
+    alert("You have to install keychain!");
+  }
+}

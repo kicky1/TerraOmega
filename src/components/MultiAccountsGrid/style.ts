@@ -24,6 +24,11 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
+  header: {
+    whiteSpace: "nowrap",
+    height: "auto",
+  },
+
   notificationContainer: {
     position: "fixed",
     top: "20px",
