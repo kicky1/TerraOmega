@@ -427,28 +427,29 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                 </ActionIcon>
               </Tooltip>
 
+              {row.original.username == localStorage.getItem("username") ? <></> : 
+              
               <Tooltip
-                label={`Transfer $SCRAP to ${localStorage.getItem("username")}`}
-                color="dark"
-                withArrow
-                arrowPosition="center"
-                offset={10}
+              label={`Transfer $SCRAP to ${localStorage.getItem("username")}`}
+              color="dark"
+              withArrow
+              arrowPosition="center"
+              offset={10}
+            >
+              <ActionIcon
+                variant="outline"
+                onClick={() =>
+                  transferTokens(
+                    row.original.username,
+                    row.original.hiveEngineScrap
+                  )
+                }
               >
-                <ActionIcon
-                  variant="outline"
-                  disabled={
-                    row.original.username == localStorage.getItem("username")
-                  }
-                  onClick={() =>
-                    transferTokens(
-                      row.original.username,
-                      row.original.hiveEngineScrap
-                    )
-                  }
-                >
-                  <IconBrandTelegram size="1.125rem" />
-                </ActionIcon>
-              </Tooltip>
+                <IconBrandTelegram size="1.125rem" />
+              </ActionIcon>
+            </Tooltip>
+              }
+
             </Group>
           </>
         ),
