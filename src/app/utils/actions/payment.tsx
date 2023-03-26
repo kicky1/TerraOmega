@@ -52,12 +52,8 @@ export async function transferTokens(username: string, amount: number) {
       "SCRAP",
       (response: any) => {
         setTimeout(() => {
-          getUserData(username).then((r) => {
-            console.log(r);
-          });
-          getUserData(userMain).then((r) => {
-            console.log(r);
-          });
+          getUserData(username).then((r) => {});
+          getUserData(userMain).then((r) => {});
         }, 5000);
       }
     );

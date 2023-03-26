@@ -113,9 +113,7 @@ export async function claimScrap(amount: number, username: string) {
           "Claim tokens",
           (response: any) => {
             setTimeout(() => {
-              getUserData(username).then((r) => {
-                console.log(r);
-              });
+              getUserData(username).then((r) => {});
             }, 5000);
           }
         );
@@ -204,9 +202,6 @@ export function upgradeAccount(player: string, upgrade: string, value: number) {
     amount = (value / 10) ** 2;
   }
 
-  console.log(value);
-  console.log(amount);
-
   const json = {
     contractName: "tokens",
     contractAction: "transfer",
@@ -229,9 +224,7 @@ export function upgradeAccount(player: string, upgrade: string, value: number) {
       `Upgrade ${upgrade}`,
       (response: any) => {
         setTimeout(() => {
-          getUserData(player).then((r) => {
-            console.log(r);
-          });
+          getUserData(player).then((r) => {});
         }, 5000);
       }
     );
@@ -267,9 +260,7 @@ export function upgradeStash(player: string, value: number) {
       `Upgrade ${player} stash size`,
       (response: any) => {
         setTimeout(() => {
-          getUserData(player).then((r) => {
-            console.log(r);
-          });
+          getUserData(player).then((r) => {});
         }, 5000);
       }
     );
@@ -305,9 +296,7 @@ export function upgradeFavor(player: string, value: number) {
       `Upgrade ${player} favor`,
       (response: any) => {
         setTimeout(() => {
-          getUserData(player).then((r) => {
-            console.log(r);
-          });
+          getUserData(player).then((r) => {});
         }, 5000);
       }
     );

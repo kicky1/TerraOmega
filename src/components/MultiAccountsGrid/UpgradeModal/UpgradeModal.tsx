@@ -52,10 +52,6 @@ export default function UpgradeModal({ ...props }: Props) {
   const isMobile = useMediaQuery("(max-width: 767px)");
 
   const upgradeAccount = () => {
-    console.log(props.inputAmount);
-    console.log(props.selectedUpgradeName);
-    console.log(props.selectedUpgradeRow.username);
-
     if (props.selectedUpgradeName == "stash size") {
       upgradeStash(
         props.selectedUpgradeRow.username,
