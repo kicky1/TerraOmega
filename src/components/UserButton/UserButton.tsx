@@ -36,7 +36,7 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
       {...others}
     >
       <Group>
-        <Avatar src={`https://images.hive.blog/u/${name}/avatar`} radius="xl" />
+        <Avatar src={name ? `https://images.hive.blog/u/${name}/avatar`: null} radius="xl" />
 
         <div style={{ flex: 1 }}>
           <Text size="sm" weight={500} color="#ffff">
