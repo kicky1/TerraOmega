@@ -23,8 +23,6 @@ import {
 } from "@mantine/core";
 import React from "react";
 import { useMediaQuery } from "@mantine/hooks";
-import { getStatsData } from "@/app/utils/actions/stats";
-import { getStatsEngineData } from "@/app/utils/actions/hiveEngine";
 import useStyles from "./style";
 
 interface Props {

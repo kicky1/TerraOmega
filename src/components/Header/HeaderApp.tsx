@@ -32,9 +32,11 @@ export default function HeaderApp() {
   const isMobile = useMediaQuery("(max-width: 767px)");
 
   const [userMenuOpened, setUserMenuOpened] = useState(false);
+
   const authorized = useAuthorizationStore(
     (state: { authorized: boolean }) => state.authorized
   );
+
   const isSubscriber = useAuthorizationStore(
     (state: { isSubscriber: boolean }) => state.isSubscriber
   );

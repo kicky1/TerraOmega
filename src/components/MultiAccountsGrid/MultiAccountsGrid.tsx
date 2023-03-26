@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "react-query";
 import { useTable, useSortBy, Column } from "react-table";
 import {
   claimScrap,
+  getUserBattlesData,
   getUserData,
   upgradeAccount,
 } from "@/app/utils/actions/users";
@@ -143,6 +144,20 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     setShowUpgradePopup(true);
   };
 
+  const { data: userBattlesData, refetch: refetchBattles } = useQuery(
+    ["userBattle", battleUsername],
+    () => getUserBattlesData(battleUsername),
+    {
+      enabled: false,
+    }
+  );
+
+  useEffect(() => {
+    if (battleUsername) {
+      refetchBattles({ queryKey: ["userBattle", battleUsername] });
+    }
+  }, [battleUsername, refetchBattles]);
+
   const columns: readonly Column<UserData>[] = useMemo(
     () => [
       {
@@ -193,7 +208,9 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Tooltip
-              label="Upgrade damage"
+              label={`Upgrade damage - ${
+                (row.original.damage / 10) ** 2
+              } $SCRAP`}
               color="dark"
               withArrow
               arrowPosition="center"
@@ -222,7 +239,9 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Tooltip
-              label="Upgrade defense"
+              label={`Upgrade defense - ${
+                (row.original.defense / 10) ** 2
+              } $SCRAP`}
               color="dark"
               withArrow
               arrowPosition="center"
@@ -251,7 +270,9 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Tooltip
-              label="Upgrade engineering"
+              label={`Upgrade engineering - ${
+                row.original.engineering ** 2
+              } $SCRAP`}
               color="dark"
               withArrow
               arrowPosition="center"
@@ -679,6 +700,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
             showPopup={showPopup}
             handlePopupClose={handlePopupClose}
             selectedRow={selectedRow}
+            userBattlesData={userBattlesData}
             battleUsername={battleUsername}
             setSelectedValue={setSelectedValue}
             selectedValue={selectedValue}

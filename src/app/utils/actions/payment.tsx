@@ -1,3 +1,5 @@
+import { getUserData } from "./users";
+
 interface PaymentData {
   username: string;
   amount: number;
@@ -37,14 +39,27 @@ export async function transferTokens(username: string, amount: number) {
   if (!localStorage.getItem("username")) {
     return false;
   }
+
   if (isKeychain()) {
+    let userMain: string;
+    const usernameFromStorage = localStorage.getItem("username");
+    userMain = usernameFromStorage ? usernameFromStorage : "";
     window.hive_keychain.requestSendToken(
       username,
       localStorage.getItem("username"),
       (amount - 0.001).toFixed(3),
       `Transfer $SCRAP to: ${localStorage.getItem("username")}`,
       "SCRAP",
-      (response: any) => {}
+      (response: any) => {
+        setTimeout(() => {
+          getUserData(username).then((r) => {
+            console.log(r);
+          });
+          getUserData(userMain).then((r) => {
+            console.log(r);
+          });
+        }, 5000);
+      }
     );
   } else {
     alert("You have to install keychain!");

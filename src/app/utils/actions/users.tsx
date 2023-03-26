@@ -1,3 +1,8 @@
+import {
+  setBattleError,
+  setBattleSuccess,
+  setScrapEarned,
+} from "@/zustand/stores/useNotificationStore";
 import api from "../api";
 const hiveTx = require("hive-tx");
 
@@ -5,6 +10,36 @@ declare global {
   interface Window {
     hive_keychain: any;
   }
+}
+
+interface UserData {
+  attacks: number;
+  balance: number;
+  claims: number;
+  cooldown: number;
+  damage: number;
+  defense: number;
+  engineering: number;
+  favor: number;
+  health: number;
+  hiveEngineScrap: number;
+  hiveEngineStake: number;
+  lastBattle: number;
+  lastPayout: number;
+  lastclaim: number;
+  lastregen: number;
+  minerate: number;
+  registrationTime: number;
+  scrap: number;
+  username: string;
+}
+
+interface UserBattleData {
+  id: string;
+  username: string;
+  attacked: string;
+  scrap: number;
+  timestamp: number;
 }
 
 const isKeychain = () => {
@@ -19,14 +54,20 @@ export async function getUsersData() {
   return filteredData;
 }
 
-export async function getUserBattlesData(username: string) {
-  const { data } = await api.get(`battle_logs/${username}`, {});
+export async function getUserBattlesData(username: string): Promise<any> {
+  const response = await fetch(
+    `https://terracore.herokuapp.com/battle_logs/${username}`
+  );
+  const data = await response.json();
   return data;
 }
 
-export async function getUserData(username: string) {
-  const { data } = await api.get(`player/${username}`, {});
-  return data;
+export async function getUserData(username: string): Promise<UserData> {
+  const response = await fetch(
+    `https://terracore.herokuapp.com/player/${username}`
+  );
+  const data = await response.json();
+  return data as UserData;
 }
 
 export async function claimScrap(amount: number, username: string) {
@@ -70,7 +111,13 @@ export async function claimScrap(amount: number, username: string) {
           "Active",
           JSON.stringify(claimData),
           "Claim tokens",
-          (response: any) => {}
+          (response: any) => {
+            setTimeout(() => {
+              getUserData(username).then((r) => {
+                console.log(r);
+              });
+            }, 5000);
+          }
         );
       } else {
         alert("You have to install keychain!");
@@ -120,7 +167,21 @@ export async function attackOponent(target: string) {
           "Active",
           JSON.stringify(battleData),
           `Attack ${target}`,
-          (response: any) => {}
+          async (response: any) => {
+            await new Promise((resolve) => setTimeout(resolve, 5000));
+            await getUserData(response.data.username);
+            await new Promise((resolve) => setTimeout(resolve, 10000));
+            const battlesData = await getUserBattlesData(
+              response.data.username
+            );
+
+            if (battlesData[0].attacked === target) {
+              setScrapEarned(battlesData[0].scrap);
+              setBattleSuccess(true);
+            } else {
+              setBattleError(true);
+            }
+          }
         );
       } else {
         alert("You have to install keychain!");
@@ -166,7 +227,13 @@ export function upgradeAccount(player: string, upgrade: string, value: number) {
       "Active",
       data,
       `Upgrade ${upgrade}`,
-      (response: any) => {}
+      (response: any) => {
+        setTimeout(() => {
+          getUserData(player).then((r) => {
+            console.log(r);
+          });
+        }, 5000);
+      }
     );
   } else {
     alert("You have to install keychain!");
@@ -198,7 +265,13 @@ export function upgradeStash(player: string, value: number) {
       "Active",
       data,
       `Upgrade ${player} stash size`,
-      (response: any) => {}
+      (response: any) => {
+        setTimeout(() => {
+          getUserData(player).then((r) => {
+            console.log(r);
+          });
+        }, 5000);
+      }
     );
   } else {
     alert("You have to install keychain!");
@@ -230,7 +303,13 @@ export function upgradeFavor(player: string, value: number) {
       "Active",
       data,
       `Upgrade ${player} favor`,
-      (response: any) => {}
+      (response: any) => {
+        setTimeout(() => {
+          getUserData(player).then((r) => {
+            console.log(r);
+          });
+        }, 5000);
+      }
     );
   } else {
     alert("You have to install keychain!");

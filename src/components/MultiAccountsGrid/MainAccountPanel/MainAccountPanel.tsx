@@ -83,7 +83,11 @@ export default function MainAccountPanel({ ...props }: Props) {
             <Grid.Col span={4}>
               <Group position="right">
                 <Avatar
-                  src={`https://images.hive.blog/u/${props.mainUsername}/avatar`}
+                  src={
+                    props.mainUsername
+                      ? `https://images.hive.blog/u/${props.mainUsername}/avatar`
+                      : null
+                  }
                   radius="md"
                   size="xl"
                 />

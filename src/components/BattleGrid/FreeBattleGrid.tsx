@@ -72,7 +72,11 @@ export default function FreeBattleGrid({ ...props }: Props) {
                   <Avatar
                     radius="lg"
                     size="sm"
-                    src={`https://images.hive.blog/u/${row.original.username}/avatar`}
+                    src={
+                      row.original.username
+                        ? `https://images.hive.blog/u/${row.original.username}/avatar`
+                        : null
+                    }
                   />
                 </span>
               );
@@ -82,7 +86,11 @@ export default function FreeBattleGrid({ ...props }: Props) {
                   <Avatar
                     radius="lg"
                     size="sm"
-                    src={`https://images.hive.blog/u/${row.original.username}/avatar`}
+                    src={
+                      row.original.username
+                        ? `https://images.hive.blog/u/${row.original.username}/avatar`
+                        : null
+                    }
                   />
                 </span>
               );
@@ -93,7 +101,11 @@ export default function FreeBattleGrid({ ...props }: Props) {
                 <Avatar
                   radius="lg"
                   size="sm"
-                  src={`https://images.hive.blog/u/${row.original.username}/avatar`}
+                  src={
+                    row.original.username
+                      ? `https://images.hive.blog/u/${row.original.username}/avatar`
+                      : null
+                  }
                 />
               </span>
             );

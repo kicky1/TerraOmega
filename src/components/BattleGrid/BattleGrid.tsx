@@ -35,6 +35,11 @@ import { useMediaQuery } from "@mantine/hooks";
 import UserModal from "./UserModal/UserModal";
 import useStyles from "./style";
 import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
+import {
+  setBattleError,
+  setBattleSuccess,
+  useNotificationStore,
+} from "@/zustand/stores/useNotificationStore";
 
 interface UserData {
   id: string;
@@ -70,30 +75,45 @@ export default function BattleGrid({ ...props }: Props) {
   const [battleUsername, setBattleUsername] = useState("");
   const { classes, theme } = useStyles();
 
-  const [showNotification, setShowNotification] = useState(false);
   const isSubscriber = useAuthorizationStore(
     (state: { isSubscriber: boolean }) => state.isSubscriber
   );
 
-  const handleNotificationClose = () => {
-    setShowNotification(false);
-  };
+  const battleSuccess = useNotificationStore(
+    (state: { battleSuccess: boolean }) => state.battleSuccess
+  );
 
-  const handleNotificationOpen = () => {
-    setShowNotification(true);
-  };
+  const battleError = useNotificationStore(
+    (state: { battleError: boolean }) => state.battleError
+  );
+
+  const scrapEarned = useNotificationStore(
+    (state: { scrapEarned: number }) => state.scrapEarned
+  );
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
-    if (showNotification) {
+    if (battleSuccess) {
       timeoutId = setTimeout(() => {
-        setShowNotification(false);
-      }, 4000);
+        setBattleSuccess(false);
+      }, 6000);
     }
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [showNotification]);
+  }, [battleSuccess]);
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    if (battleError) {
+      timeoutId = setTimeout(() => {
+        setBattleError(false);
+      }, 6000);
+    }
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [battleError]);
 
   const handleClick = () => {
     setUsername(username);
@@ -118,21 +138,19 @@ export default function BattleGrid({ ...props }: Props) {
     }
   );
 
-  // const { data: userBattlesData , refetch: refetchBattles } = useQuery(
-  //   ["userBattle", battleUsername],
-  //   () => getUserBattlesData(battleUsername),
-  //   {
-  //     enabled: false,
-  //   }
-  // );
+  const { data: userBattlesData, refetch: refetchBattles } = useQuery(
+    ["userBattle", battleUsername],
+    () => getUserBattlesData(battleUsername),
+    {
+      enabled: false,
+    }
+  );
 
-  // useEffect(() => {
-  //   if (battleUsername) {
-  //     refetchBattles({ queryKey: ["userBattle", battleUsername] });
-  //   }
-  // }, [battleUsername, refetchBattles]);
-
-  const defaultSort = useMemo(() => [{ id: "damage", desc: true }], []);
+  useEffect(() => {
+    if (battleUsername) {
+      refetchBattles({ queryKey: ["userBattle", battleUsername] });
+    }
+  }, [battleUsername, refetchBattles]);
 
   const columns: readonly Column<UserData>[] = useMemo(
     () => [
@@ -156,7 +174,11 @@ export default function BattleGrid({ ...props }: Props) {
                   <Avatar
                     radius="lg"
                     size="sm"
-                    src={`https://images.hive.blog/u/${row.original.username}/avatar`}
+                    src={
+                      row.original.username
+                        ? `https://images.hive.blog/u/${row.original.username}/avatar`
+                        : null
+                    }
                   />
                 </span>
               );
@@ -169,7 +191,11 @@ export default function BattleGrid({ ...props }: Props) {
                   <Avatar
                     radius="lg"
                     size="sm"
-                    src={`https://images.hive.blog/u/${row.original.username}/avatar`}
+                    src={
+                      row.original.username
+                        ? `https://images.hive.blog/u/${row.original.username}/avatar`
+                        : null
+                    }
                   />
                 </span>
               );
@@ -183,7 +209,11 @@ export default function BattleGrid({ ...props }: Props) {
                 <Avatar
                   radius="lg"
                   size="sm"
-                  src={`https://images.hive.blog/u/${row.original.username}/avatar`}
+                  src={
+                    row.original.username
+                      ? `https://images.hive.blog/u/${row.original.username}/avatar`
+                      : null
+                  }
                 />
               </span>
             );
@@ -444,7 +474,7 @@ export default function BattleGrid({ ...props }: Props) {
     if (userData) {
       filteredData = filteredData.filter(
         (user: UserData) =>
-          user.defense < userData.damage && user.favor < userData.favor
+          user.defense < userData?.damage && user.favor < userData.favor
       );
       filteredData = filteredData.sort(
         (a: { scrap: number }, b: { scrap: number }) => b.scrap - a.scrap
@@ -597,7 +627,7 @@ export default function BattleGrid({ ...props }: Props) {
             showPopup={showPopup}
             handlePopupClose={handlePopupClose}
             selectedRow={selectedRow}
-            // userBattlesData={userBattlesData}
+            userBattlesData={userBattlesData}
             battleUsername={battleUsername}
             setSelectedValue={setSelectedValue}
             selectedValue={selectedValue}
@@ -616,21 +646,44 @@ export default function BattleGrid({ ...props }: Props) {
       <Space h="xl" />
       <div>
         <Transition
-          mounted={showNotification}
+          mounted={battleSuccess}
           transition="fade"
           duration={300}
           timingFunction="ease"
-          onExited={handleNotificationClose}
+          onExited={() => setBattleSuccess(false)}
         >
           {(transitionStyles) => (
             <div style={transitionStyles}>
               <div className={classes.notificationContainer}>
                 <Notification
-                  title="Attack error"
-                  color="red"
-                  onClose={handleNotificationClose}
+                  title="Scrap robbed"
+                  color="teal"
+                  onClose={() => setBattleSuccess(false)}
                 >
-                  You can not attack a player who does not exist!
+                  You got {scrapEarned.toFixed(2)} $SCRAP from last fight.
+                </Notification>
+              </div>
+            </div>
+          )}
+        </Transition>
+      </div>
+      <div>
+        <Transition
+          mounted={battleError}
+          transition="fade"
+          duration={300}
+          timingFunction="ease"
+          onExited={() => setBattleError(false)}
+        >
+          {(transitionStyles) => (
+            <div style={transitionStyles}>
+              <div className={classes.notificationContainer}>
+                <Notification
+                  title="Error during fight"
+                  color="red"
+                  onClose={() => setBattleError(false)}
+                >
+                  Failed to steal scrap, you have no attacks left!
                 </Notification>
               </div>
             </div>

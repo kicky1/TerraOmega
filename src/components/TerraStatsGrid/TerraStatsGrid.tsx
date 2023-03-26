@@ -14,7 +14,7 @@ export default function TerraStatsGrid() {
     "statsData",
     getStatsData,
     {
-      refetchInterval: 60000,
+      refetchInterval: 300000,
     }
   );
 

@@ -12,7 +12,7 @@ export default function NextLevelGrid() {
     "statsData",
     getStatsData,
     {
-      refetchInterval: 60000,
+      refetchInterval: 300000,
     }
   );
 

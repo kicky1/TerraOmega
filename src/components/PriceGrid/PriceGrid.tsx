@@ -35,7 +35,7 @@ export default function PriceGrid() {
     "statsHiveData",
     getStatsEngineData,
     {
-      refetchInterval: 60000,
+      refetchInterval: 300000,
     }
   );
 

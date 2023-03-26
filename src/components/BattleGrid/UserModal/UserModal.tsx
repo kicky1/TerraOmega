@@ -13,7 +13,7 @@ import {
   Skeleton,
   Divider,
 } from "@mantine/core";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { getUserDataProfile } from "@/app/utils/actions/hiveUsers";
 
@@ -44,7 +44,7 @@ interface Props {
   showPopup: boolean;
   handlePopupClose: () => void;
   selectedRow: UserData;
-  // userBattlesData: any;
+  userBattlesData: any;
   battleUsername: string;
   setSelectedValue: React.Dispatch<React.SetStateAction<string | null>>;
   selectedValue: string | null;
@@ -61,21 +61,25 @@ export default function UserModal({ ...props }: Props) {
   });
 
   const isMobile = useMediaQuery("(max-width: 767px)");
-  // const userRobbingData = useMemo(() => {
-  //   if (!props.userBattlesData) {
-  //     return [];
-  //   }
-  //   let filteredData = props.userBattlesData.filter((user: UserBattleData) => !user.attacked.includes(props.battleUsername));
-  //   return filteredData;
-  // }, [props.userBattlesData]);
+  const userRobbingData = useMemo(() => {
+    if (!props.userBattlesData) {
+      return [];
+    }
+    let filteredData = props.userBattlesData.filter(
+      (user: UserBattleData) => !user.attacked.includes(props.battleUsername)
+    );
+    return filteredData;
+  }, [props.userBattlesData]);
 
-  // const userRobbedData = useMemo(() => {
-  //   if (!props.userBattlesData) {
-  //     return [];
-  //   }
-  //   let filteredData = props.userBattlesData.filter((user: UserBattleData) => user.attacked.includes(props.battleUsername));
-  //   return filteredData;
-  // }, [props.userBattlesData]);
+  const userRobbedData = useMemo(() => {
+    if (!props.userBattlesData) {
+      return [];
+    }
+    let filteredData = props.userBattlesData.filter((user: UserBattleData) =>
+      user.attacked.includes(props.battleUsername)
+    );
+    return filteredData;
+  }, [props.userBattlesData]);
 
   useEffect(() => {
     if (props.battleUsername) {
@@ -117,7 +121,11 @@ export default function UserModal({ ...props }: Props) {
                 <Avatar
                   radius="lg"
                   size="xl"
-                  src={`https://images.hive.blog/u/${props.selectedRow.username}/avatar`}
+                  src={
+                    props.selectedRow.username
+                      ? `https://images.hive.blog/u/${props.selectedRow.username}/avatar`
+                      : null
+                  }
                 />
                 <div style={{ flex: 1 }}>
                   <Text size="lg" weight={500}>
@@ -383,21 +391,32 @@ export default function UserModal({ ...props }: Props) {
                 </>
               )}
               <Space h="xl" />
-              {/* <Text fz={"lg"}>
+              <Text fz={"lg"}>
                 <Text span fw={500}>
                   Data from last 100 space battles
                 </Text>
               </Text>
               <Space h="xs" />
               <Group>
-                <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/4828/4828069.png"} />
+                <Image
+                  maw={45}
+                  mah={45}
+                  fit="contain"
+                  src={
+                    "https://cdn-icons-png.flaticon.com/512/4828/4828069.png"
+                  }
+                />
                 <Text fz={"lg"}>
                   <Text span fw={500} inherit>
                     Total gain:{" "}
                   </Text>
                   <>
                     {(() => {
-                      const totalScrap = userRobbingData.reduce((total: number, value: { scrap: number }) => total + value.scrap, 0);
+                      const totalScrap = userRobbingData.reduce(
+                        (total: number, value: { scrap: number }) =>
+                          total + value.scrap,
+                        0
+                      );
                       return totalScrap.toFixed(2);
                     })()}
                   </>
@@ -405,19 +424,30 @@ export default function UserModal({ ...props }: Props) {
               </Group>
               <Space h="lg" />
               <Group>
-                <Image maw={45} mah={45} fit="contain" src={"https://cdn-icons-png.flaticon.com/512/2936/2936762.png"} />
+                <Image
+                  maw={45}
+                  mah={45}
+                  fit="contain"
+                  src={
+                    "https://cdn-icons-png.flaticon.com/512/2936/2936762.png"
+                  }
+                />
                 <Text fz={"lg"}>
                   <Text span fw={500} inherit>
                     Total loss:{" "}
                   </Text>
                   <>
                     {(() => {
-                      const totalScrap = userRobbedData.reduce((total: number, value: { scrap: number }) => total + value.scrap, 0);
+                      const totalScrap = userRobbedData.reduce(
+                        (total: number, value: { scrap: number }) =>
+                          total + value.scrap,
+                        0
+                      );
                       return totalScrap.toFixed(2);
                     })()}
                   </>
                 </Text>
-                  </Group> */}
+              </Group>
             </Grid.Col>
             <Grid.Col span={6}></Grid.Col>
           </Grid>
