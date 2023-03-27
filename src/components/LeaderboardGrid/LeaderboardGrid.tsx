@@ -2,7 +2,11 @@ import { useState } from "react";
 import { Space, SimpleGrid, Pagination, Center } from "@mantine/core";
 import PodiumCard from "./PodiumCard/PodiumCard";
 import { useQuery } from "react-query";
-import { getLeaderboard, getUserBattlesData, getUserData } from "@/app/utils/actions/users";
+import {
+  getLeaderboard,
+  getUserBattlesData,
+  getUserData,
+} from "@/app/utils/actions/users";
 
 interface UserData {
   attacks: number;
@@ -42,10 +46,9 @@ export default function LeaderboardGrid() {
     return <></>;
   }
 
-  const filteredData = leaderBoardData.slice(3, -1).slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+  const filteredData = leaderBoardData
+    .slice(3, -1)
+    .slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const pageCount = Math.ceil(leaderBoardData.length / pageSize);
 
@@ -100,4 +103,3 @@ export default function LeaderboardGrid() {
     </>
   );
 }
-

@@ -78,7 +78,6 @@ export default function Home() {
               <Tabs.Tab value="info" icon={<IconQuestionMark size="1rem" />}>
                 Info
               </Tabs.Tab>
-
             </Tabs.List>
             <Tabs.Panel value="home" pt="xs">
               <SubscriptionGrid />

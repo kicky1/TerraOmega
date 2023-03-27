@@ -56,11 +56,9 @@ export async function getUsersData() {
 }
 
 export async function getLeaderboard(): Promise<UserData[]> {
-  const response = await fetch(
-    `https://terracore.herokuapp.com/leaderboard`
-  );
+  const response = await fetch(`https://terracore.herokuapp.com/leaderboard`);
   const data = await response.json();
-  return data
+  return data;
 }
 
 export async function getUserBattlesData(username: string): Promise<any> {
@@ -78,8 +76,6 @@ export async function getUserData(username: string): Promise<UserData> {
   const data = await response.json();
   return data as UserData;
 }
-
-
 
 export async function claimScrap(amount: number, username: string) {
   const operations = [

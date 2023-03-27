@@ -1,15 +1,12 @@
 import { rem } from "@mantine/core";
 import { createStyles } from "@mantine/styles";
 
-
-
-
-const useStyles = createStyles((theme, gradientColors: string[] ) => ({
+const useStyles = createStyles((theme, gradientColors: string[]) => ({
   card: {
     position: "relative",
     overflow: "hidden",
     transition: "transform 150ms ease, box-shadow 100ms ease",
-   
+
     paddingLeft: `calc(${theme.spacing.xl} * 2)`,
 
     "&::before": {
@@ -21,8 +18,8 @@ const useStyles = createStyles((theme, gradientColors: string[] ) => ({
       width: rem(105),
       backgroundImage: theme.fn.linearGradient(
         0,
-        gradientColors[1] ,
-        gradientColors[0]    
+        gradientColors[1],
+        gradientColors[0]
       ),
     },
   },
@@ -38,9 +35,15 @@ const useStyles = createStyles((theme, gradientColors: string[] ) => ({
     color: theme.colorScheme === "dark" ? theme.white : "inherit",
   },
   badge: {
-    borderColor: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.colors.gray[5],
-    color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.colors.gray[5]
-  }
+    borderColor:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[0]
+        : theme.colors.gray[5],
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[0]
+        : theme.colors.gray[5],
+  },
 }));
 
 export default useStyles;
