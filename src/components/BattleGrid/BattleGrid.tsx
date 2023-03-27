@@ -679,11 +679,11 @@ export default function BattleGrid({ ...props }: Props) {
             <div style={transitionStyles}>
               <div className={classes.notificationContainer}>
                 <Notification
-                  title="Error during fight"
+                  title="Warning"
                   color="red"
                   onClose={() => setBattleError(false)}
                 >
-                  Failed to steal scrap, you have no attacks left!
+                  Failed to steal opponent's scrap!
                 </Notification>
               </div>
             </div>
