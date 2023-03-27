@@ -10,11 +10,13 @@ import {
   Avatar,
   SimpleGrid,
   Badge,
+  Indicator,
 } from "@mantine/core";
 import React from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { getStatsData } from "@/app/utils/actions/stats";
 import useStyles from "./style";
+import avatar from "../../../assets/avatar.png";
 
 interface UserData {
   attacks: number;
@@ -61,18 +63,16 @@ export default function PodiumCard({ ...props }: Props) {
         key={props.userData.username}
       >
         <Grid grow>
-          <Grid.Col span={8}>
+          <Grid.Col span={isMobile ? 12 : 8}>
             <Group spacing={40}>
+            <Indicator inline label={props.place} color="dark" size={18} disabled={!isMobile}>
               <Avatar
-                src={
-                  props.userData.username
-                    ? `https://images.hive.blog/u/${props.userData.username}/avatar`
-                    : null
-                }
-                alt={props.userData.username}
+                src={`https://images.hive.blog/u/${props.userData.username}/avatar`}
+                alt={props.userData.username ? props.userData.username : 'avatar'}
                 radius="md"
                 size={"lg"}
               />
+              </Indicator>
               <div>
                 <Text fz="md">{props.userData.username}</Text>
                 <Text fz="sm" c="dimmed">
@@ -81,7 +81,7 @@ export default function PodiumCard({ ...props }: Props) {
               </div>
             </Group>
           </Grid.Col>
-          <Grid.Col span={4}>
+          {!isMobile && <Grid.Col span={4}>
             <Group position="right">
               <Badge
                 sx={(theme) => ({ padding: 10 })}
@@ -93,7 +93,9 @@ export default function PodiumCard({ ...props }: Props) {
                 {props.place}
               </Badge>
             </Group>
-          </Grid.Col>
+          </Grid.Col> }
+
+          
         </Grid>
       </Card>
     </>
