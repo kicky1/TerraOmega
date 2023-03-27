@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { useTable, useSortBy, Column } from "react-table";
+import { useTable, useSortBy, Column, TableState } from "react-table";
 import {
   Space,
   SimpleGrid,
@@ -274,6 +274,9 @@ export default function FreeBattleGrid({ ...props }: Props) {
     {
       columns,
       data: tableData,
+      initialState: { sortBy: [{ id: "scrap", desc: true }] } as Partial<
+      TableState<UserData>
+    >,
     },
     useSortBy
   );
