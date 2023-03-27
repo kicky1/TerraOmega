@@ -13,6 +13,7 @@ declare global {
 }
 
 interface UserData {
+  slice(arg0: number, arg1: number): unknown;
   attacks: number;
   balance: number;
   claims: number;
@@ -54,6 +55,14 @@ export async function getUsersData() {
   return filteredData;
 }
 
+export async function getLeaderboard(): Promise<UserData[]> {
+  const response = await fetch(
+    `https://terracore.herokuapp.com/leaderboard`
+  );
+  const data = await response.json();
+  return data
+}
+
 export async function getUserBattlesData(username: string): Promise<any> {
   const response = await fetch(
     `https://terracore.herokuapp.com/battle_logs/${username}`
@@ -69,6 +78,8 @@ export async function getUserData(username: string): Promise<UserData> {
   const data = await response.json();
   return data as UserData;
 }
+
+
 
 export async function claimScrap(amount: number, username: string) {
   const operations = [

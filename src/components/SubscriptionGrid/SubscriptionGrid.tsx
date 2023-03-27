@@ -50,9 +50,9 @@ export default function SubscriptionGrid() {
     },
     {
       image: "https://cdn-icons-png.flaticon.com/512/2171/2171382.png",
-      title: "Account Loading and Scrap Claiming",
+      title: "Multi-Accounts Managment",
       description:
-        "This feature makes it easy to load accounts and claim scrap from each one. This saves you time and helps you earn more $SCRAP in less time. Simply load your accounts into the system and let the tool handle the rest.",
+        "This feature makes it easy to load accounts and manage everyone. This saves you time and helps you earn more $SCRAP in less time. Simply load your accounts into the system and let the tool handle the rest.",
     },
   ];
 

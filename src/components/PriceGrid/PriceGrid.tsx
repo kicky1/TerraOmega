@@ -84,7 +84,7 @@ export default function PriceGrid() {
             <Text span fw={500} inherit>
               Bid{" "}
             </Text>
-            : {parseFloat(statsData.result.highestBid).toFixed(2)} SWAP.HIVE
+            : { statsData ? parseFloat(statsData.result.highestBid).toFixed(2) : 0.00} SWAP.HIVE
           </Text>
         </Group>
         <Space h="xl" />
@@ -99,7 +99,7 @@ export default function PriceGrid() {
             <Text span fw={500} inherit>
               Ask{" "}
             </Text>
-            : {parseFloat(statsData.result.lowestAsk).toFixed(2)} SWAP.HIVE
+            : {statsData ? parseFloat(statsData.result.lowestAsk).toFixed(2) : 0.00} SWAP.HIVE
           </Text>
         </Group>
         <Space h="xl" />
@@ -115,7 +115,7 @@ export default function PriceGrid() {
               <Text span fw={500} inherit>
                 Volume{" "}
               </Text>
-              : {parseFloat(statsData.result.volume).toFixed(2)} SWAP.HIVE
+              : {statsData ? parseFloat(statsData.result.volume).toFixed(2) : 0.00} SWAP.HIVE
             </Text>
           }
         </Group>

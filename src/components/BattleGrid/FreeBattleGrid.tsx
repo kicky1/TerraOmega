@@ -275,8 +275,8 @@ export default function FreeBattleGrid({ ...props }: Props) {
       columns,
       data: tableData,
       initialState: { sortBy: [{ id: "scrap", desc: true }] } as Partial<
-      TableState<UserData>
-    >,
+        TableState<UserData>
+      >,
     },
     useSortBy
   );

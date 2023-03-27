@@ -4,6 +4,7 @@ import { getUsersData } from "@/app/utils/actions/users";
 import BattleGrid from "@/components/BattleGrid/BattleGrid";
 import FreeBattleGrid from "@/components/BattleGrid/FreeBattleGrid";
 import { InfoGrid } from "@/components/InfoGrid/InfoGrid";
+import LeaderboardGrid from "@/components/LeaderboardGrid/LeaderboardGrid";
 import MultiAccountsGrid from "@/components/MultiAccountsGrid/MultiAccountsGrid";
 import PaymentGrid from "@/components/PaymentGrid/PaymentGrid";
 import StatisticGrid from "@/components/StatisticGrid/StatistisGrid";
@@ -18,6 +19,7 @@ import {
   IconChartHistogram,
   IconCoinBitcoin,
   IconHome,
+  IconPlanet,
   IconQuestionMark,
   IconTableOptions,
   IconUsers,
@@ -58,6 +60,9 @@ export default function Home() {
               <Tabs.Tab value="home" icon={<IconHome size="1rem" />}>
                 Home
               </Tabs.Tab>
+              <Tabs.Tab value="leader" icon={<IconPlanet size="1rem" />}>
+                Ladder
+              </Tabs.Tab>
               <Tabs.Tab value="tab" icon={<IconTableOptions size="1rem" />}>
                 Table
               </Tabs.Tab>
@@ -67,15 +72,19 @@ export default function Home() {
               <Tabs.Tab value="stats" icon={<IconChartHistogram size="1rem" />}>
                 Stats
               </Tabs.Tab>
-              <Tabs.Tab value="info" icon={<IconQuestionMark size="1rem" />}>
-                Info
-              </Tabs.Tab>
               <Tabs.Tab value="sub" icon={<IconCoinBitcoin size="1rem" />}>
                 Subscription
               </Tabs.Tab>
+              <Tabs.Tab value="info" icon={<IconQuestionMark size="1rem" />}>
+                Info
+              </Tabs.Tab>
+
             </Tabs.List>
             <Tabs.Panel value="home" pt="xs">
               <SubscriptionGrid />
+            </Tabs.Panel>
+            <Tabs.Panel value="leader" pt="xs">
+              <LeaderboardGrid />
             </Tabs.Panel>
             <Tabs.Panel value="tab" pt="xs">
               {isSubscriber ? (
