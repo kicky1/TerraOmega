@@ -57,23 +57,25 @@ export default function LeaderboardGrid() {
       <Space h="xl" />
       <Space h="xl" />
       <SimpleGrid cols={3} pb={15} breakpoints={[{ maxWidth: "lg", cols: 1 }]}>
-        <PodiumCard
-          userData={leaderBoardData[1]}
-          place={2}
-          title={"Cosmic Legend"}
-          gradientColors={["#2195f3ed", "#0D47A1ac"]}
-        />
-        <PodiumCard
+      <PodiumCard
           userData={leaderBoardData[0]}
           place={1}
           title={"Galactic Conqueror"}
           gradientColors={["#fcd307", "#F7931Eac"]}
         />
         <PodiumCard
+          userData={leaderBoardData[1]}
+          place={2}
+          title={"Cosmic Legend"}
+          gradientColors={["#ff9900f2", "#E64A19ac"]}
+        />
+
+        <PodiumCard
           userData={leaderBoardData[2]}
           place={3}
           title={"Intergalactic Hero"}
-          gradientColors={["#ff9900f2", "#E64A19ac"]}
+          gradientColors={["#2195f3ed", "#0D47A1ac"]}
+          
         />
       </SimpleGrid>
       <SimpleGrid cols={2} pb={15} breakpoints={[{ maxWidth: "md", cols: 1 }]}>
