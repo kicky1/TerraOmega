@@ -16,6 +16,7 @@ import {
 import React, { useEffect, useMemo } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { getUserDataProfile } from "@/app/utils/actions/hiveUsers";
+import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
 
 interface UserData {
   username: string;
@@ -59,6 +60,10 @@ export default function UserModal({ ...props }: Props) {
   } = useQuery(["userHive"], () => getUserDataProfile(props.battleUsername), {
     enabled: false,
   });
+
+  const isSubscriber = useAuthorizationStore(
+    (state: { isSubscriber: boolean }) => state.isSubscriber
+  );
 
   const isMobile = useMediaQuery("(max-width: 767px)");
   const userRobbingData = useMemo(() => {
@@ -350,6 +355,7 @@ export default function UserModal({ ...props }: Props) {
           <Grid grow>
             <Grid.Col span={isMobile ? 12 : 6}>
               <Select
+                disabled={!isSubscriber}
                 clearable
                 pt={5}
                 pb={5}

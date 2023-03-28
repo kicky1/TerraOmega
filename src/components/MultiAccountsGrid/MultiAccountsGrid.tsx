@@ -4,6 +4,7 @@ import {
   claimScrap,
   getUserBattlesData,
   getUserData,
+  getUsersData,
   upgradeAccount,
 } from "@/app/utils/actions/users";
 import {
@@ -25,27 +26,26 @@ import {
   ActionIcon,
   Tooltip,
   Container,
+  Title,
 } from "@mantine/core";
 import React, { useState, useMemo, useEffect } from "react";
 import {
-  IconAdjustments,
+  IconArrowDown,
   IconArrowUp,
   IconBrandTelegram,
   IconCheck,
-  IconHelpCircle,
   IconShieldCheckeredFilled,
 } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
 import UserModal from "../BattleGrid/UserModal/UserModal";
 import useStyles from "./style";
 import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
-import { addUser, getAccounts } from "@/supabase/actions/users";
-import AccountsPanel from "./AccountsPanel/AccountsPanel";
-import MainAccountPanel from "./MainAccountPanel/MainAccountPanel";
+import { addUser } from "@/supabase/actions/users";
 import { fetchHivePrice } from "@/app/utils/actions/currency";
 import { getStatsEngineData } from "@/app/utils/actions/hiveEngine";
 import { transferTokens } from "@/app/utils/actions/payment";
 import UpgradeModal from "./UpgradeModal/UpgradeModal";
+import BattleGrid from "../BattleGrid/BattleGrid";
 
 interface UserData {
   username: string;
@@ -66,9 +66,7 @@ interface UserData {
 }
 
 interface Props {
-  data: any;
   accounts: any;
-  isLoading: boolean;
   isLoadingAccounts: boolean;
   refetchAccounts: any;
 }
@@ -79,7 +77,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
   const isSubscriber = useAuthorizationStore(
     (state: { isSubscriber: boolean }) => state.isSubscriber
   );
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
   const [username, setUsername] = useState("");
 
   const { mutate } = useMutation(addUser, {
@@ -99,6 +97,10 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     null
   );
 
+  const { data, isLoading } = useQuery("tableData", getUsersData, {
+    refetchInterval: 10000,
+  });
+
   const [selectedUpgradeName, setSelectedUpgradeName] = useState("");
 
   const [showUpgradePopup, setShowUpgradePopup] = useState(false);
@@ -113,14 +115,6 @@ export default function MultiAccountsGrid({ ...props }: Props) {
   const { data: hivePrice, isLoading: loadingPrice } = useQuery(
     "hivePrice",
     fetchHivePrice
-  );
-
-  const { data: statsData, isLoading: isStatsDataLoading } = useQuery(
-    "statsHiveData",
-    getStatsEngineData,
-    {
-      refetchInterval: 60000,
-    }
   );
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
@@ -519,15 +513,15 @@ export default function MultiAccountsGrid({ ...props }: Props) {
   );
 
   const filteredUsernameData = useMemo(() => {
-    if (!props.data || !props.accounts) {
+    if (!data || !props.accounts) {
       return [];
     }
 
-    let filteredData = props.data.filter((user: UserData) =>
+    let filteredData = data.filter((user: UserData) =>
       props.accounts.includes(user.username.toLowerCase())
     );
     return filteredData;
-  }, [props.data, props.accounts]);
+  }, [data, props.accounts]);
 
   const tableData = useMemo(
     () => (filteredUsernameData ? filteredUsernameData : []),
@@ -575,7 +569,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     useSortBy
   );
 
-  if (props.isLoading || props.isLoadingAccounts) {
+  if (isLoading || props.isLoadingAccounts) {
     return (
       <>
         <Space h="xl" />
@@ -599,57 +593,53 @@ export default function MultiAccountsGrid({ ...props }: Props) {
   return (
     <>
       <Space h="xl" />
-      <Space h="xl" />
+      <Grid grow>
+        <Grid.Col span={isMobile ? 12 : 6}>
+          <Title order={2}>Accounts Dashboard</Title>
+        </Grid.Col>
+        <Grid.Col span={isMobile ? 12 : 6}>
+          <Group position={isMobile ? "left" : "right"}>
+            <Input
+              disabled={!isSubscriber}
+              placeholder="Usernames"
+              type="text"
+              value={username}
+              onChange={(e: {
+                target: { value: React.SetStateAction<string> };
+              }) => setUsername(e.target.value)}
+            />
+            <Tooltip
+              label="Use comma to separate names"
+              color="dark"
+              withArrow
+              arrowPosition="center"
+              offset={10}
+            >
+              <Button
+                onClick={handleSubmit}
+                disabled={!isSubscriber}
+                styles={(theme: any) => ({
+                  root: {
+                    backgroundColor: "#0a3d47",
+                    "&:not([data-disabled])": theme.fn.hover({
+                      backgroundColor: theme.fn.darken("#072f37", 0.05),
+                    }),
+                  },
+                })}
+              >
+                Add account
+              </Button>
+            </Tooltip>
+          </Group>
+        </Grid.Col>
+      </Grid>
+
       <SimpleGrid
         cols={1}
         mt={0}
         spacing={0}
         breakpoints={[{ maxWidth: "sm", cols: 1 }]}
       >
-        <Grid grow>
-          <Grid.Col span={12}>
-            <Box w={310} pb={5}>
-              <Group>
-                <Box w={168}>
-                  <Input
-                    disabled={!isSubscriber}
-                    placeholder="Usernames"
-                    type="text"
-                    value={username}
-                    onChange={(e: {
-                      target: { value: React.SetStateAction<string> };
-                    }) => setUsername(e.target.value)}
-                  />
-                </Box>
-                <Box w={125}>
-                  <Tooltip
-                    label="Use comma to separate names"
-                    color="dark"
-                    withArrow
-                    arrowPosition="center"
-                    offset={10}
-                  >
-                    <Button
-                      fullWidth
-                      onClick={handleSubmit}
-                      disabled={!isSubscriber}
-                      styles={(theme: any) => ({
-                        root: {
-                          backgroundColor: "#0a3d47",
-                          "&:not([data-disabled])": theme.fn.hover({
-                            backgroundColor: theme.fn.darken("#072f37", 0.05),
-                          }),
-                        },
-                      })}
-                    >
-                      Add account
-                    </Button>
-                  </Tooltip>
-                </Box>
-              </Group>
-            </Box>
-          </Grid.Col>
-        </Grid>
         <Box
           sx={{
             overflowX: "auto",
@@ -668,11 +658,15 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                     >
                       {column.render("Header")}
                       <span>
-                        {column.isSorted
-                          ? column.isSortedDesc
-                            ? " 🔽"
-                            : " 🔼"
-                          : ""}
+                        {column.isSorted ? (
+                          column.isSortedDesc ? (
+                            <IconArrowDown size={15} />
+                          ) : (
+                            <IconArrowUp size={15} />
+                          )
+                        ) : (
+                          ""
+                        )}
                       </span>
                     </th>
                   ))}
@@ -725,14 +719,16 @@ export default function MultiAccountsGrid({ ...props }: Props) {
           withControls
           total={pageCount}
           position="center"
-          pt={50}
-          pb={50}
+          pt={25}
+          pb={5}
           color={"dark"}
         />
         <Space h="xl" />
         <Space h="xl" />
 
-        <Grid grow>
+        <BattleGrid data={data} isLoading={isLoading} />
+
+        {/* <Grid grow>
           <Grid.Col span={isMobile ? 12 : 6}>
             <AccountsPanel
               accounts={tableData}
@@ -755,7 +751,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               isStatsDataLoading={isStatsDataLoading}
             />
           </Grid.Col>
-        </Grid>
+        </Grid> */}
       </SimpleGrid>
       <Space h="xl" />
     </>

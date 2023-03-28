@@ -1,8 +1,14 @@
-import { Container, Title, Accordion, createStyles, rem } from "@mantine/core";
+import {
+  Container,
+  Title,
+  Accordion,
+  createStyles,
+  rem,
+  Space,
+} from "@mantine/core";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
-    paddingTop: `calc(${theme.spacing.xl} * 2)`,
     paddingBottom: `calc(${theme.spacing.xl} * 2)`,
     minHeight: 650,
   },
@@ -80,32 +86,35 @@ const questionData = [
 export function InfoGrid() {
   const { classes } = useStyles();
   return (
-    <Container size="md" className={classes.wrapper}>
-      <Title align="center" className={classes.title}>
-        Frequently Asked Questions
-      </Title>
+    <>
+      <Space h="xl" />
+      <Container size="md" className={classes.wrapper}>
+        <Title align="center" className={classes.title}>
+          Frequently Asked Questions
+        </Title>
 
-      <Accordion variant="separated">
-        {questionData.map((item) => {
-          return (
-            <Accordion.Item
-              className={classes.item}
-              value={item.value}
-              key={item.value}
-            >
-              <Accordion.Control
-                sx={{
-                  overflow: "hidden",
-                  lineHeight: 1.3,
-                }}
+        <Accordion variant="separated">
+          {questionData.map((item) => {
+            return (
+              <Accordion.Item
+                className={classes.item}
+                value={item.value}
+                key={item.value}
               >
-                {item.title}
-              </Accordion.Control>
-              <Accordion.Panel>{item.question}</Accordion.Panel>
-            </Accordion.Item>
-          );
-        })}
-      </Accordion>
-    </Container>
+                <Accordion.Control
+                  sx={{
+                    overflow: "hidden",
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {item.title}
+                </Accordion.Control>
+                <Accordion.Panel>{item.question}</Accordion.Panel>
+              </Accordion.Item>
+            );
+          })}
+        </Accordion>
+      </Container>
+    </>
   );
 }

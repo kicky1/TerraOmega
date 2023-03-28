@@ -49,7 +49,6 @@ export default function PaymentGrid() {
   return (
     <>
       <Space h="xl" />
-      <Space h="xl" />
       <Center>
         <Container size={"xs"}>
           <Card withBorder p="xl" radius={10} className={classes.card}>

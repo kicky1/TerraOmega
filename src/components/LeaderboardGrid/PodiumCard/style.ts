@@ -1,6 +1,6 @@
 import { rem } from "@mantine/core";
 import { createStyles } from "@mantine/styles";
-import podium  from "../../../assets/podium.png"
+import podium from "../../../assets/podium.png";
 
 const useStyles = createStyles((theme, gradientColors: string[]) => ({
   card: {
@@ -16,12 +16,7 @@ const useStyles = createStyles((theme, gradientColors: string[]) => ({
       top: 0,
       bottom: 0,
       left: 0,
-      width: rem(105),
-      // backgroundImage: theme.fn.linearGradient(
-      //   0,
-      //   gradientColors[1],
-      //   gradientColors[0]
-      // ),
+      width: rem(91),
       backgroundImage: `url(${gradientColors[0]})`,
       backgroundSize: "200% 200%",
     },

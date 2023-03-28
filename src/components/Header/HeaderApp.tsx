@@ -51,7 +51,7 @@ export default function HeaderApp() {
   return (
     <Container fluid className={classes.header} p={5} pb={15}>
       <Container size={"xl"}>
-        <Header height={"100%"} className={classes.header}>
+        <Header height={"100%"} className={classes.subheader}>
           <Grid justify="space-between" align="center">
             <Grid.Col span={3}></Grid.Col>
             <Grid.Col span={tablet ? 9 : 6}>
@@ -62,7 +62,7 @@ export default function HeaderApp() {
                 offset={10}
               >
                 <Anchor href="https://www.terracoregame.com/" target="_blank">
-                  <Image src={logo.src} alt="Logo" fit="contain" height={125} />
+                  <Image src={logo.src} alt="Logo" fit="contain" height={100} />
                 </Anchor>
               </Tooltip>
             </Grid.Col>
@@ -71,7 +71,7 @@ export default function HeaderApp() {
                 {authorized && !isMobile ? (
                   <Menu
                     shadow="md"
-                    width={260}
+                    width={170}
                     position="bottom-end"
                     onClose={() => setUserMenuOpened(false)}
                     onOpen={() => setUserMenuOpened(true)}

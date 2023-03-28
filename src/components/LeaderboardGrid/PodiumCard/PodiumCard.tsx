@@ -53,11 +53,18 @@ export default function PodiumCard({ ...props }: Props) {
 
   console.log(props.userData);
 
+  const points =
+    Math.pow(props.userData.damage / 10, 2) +
+    Math.pow(props.userData.defense / 10, 2) +
+    Math.pow(props.userData.engineering, 2) +
+    props.userData.favor +
+    props.userData.hiveEngineStake;
+
   return (
     <>
       <Card
         withBorder
-        p="lg"
+        p="sm"
         radius={10}
         className={classes.card}
         key={props.userData.username}
@@ -65,38 +72,65 @@ export default function PodiumCard({ ...props }: Props) {
         <Grid grow>
           <Grid.Col span={isMobile ? 12 : 8}>
             <Group spacing={40}>
-            <Indicator radius={'sm'}  inline label={props.place } position="bottom-start" color="dark" size={18} disabled={!isMobile}>
-              <Avatar
-                src={`https://images.hive.blog/u/${props.userData.username}/avatar`}
-                alt={props.userData.username ? props.userData.username : 'avatar'}
-                radius="md"
-                size={"lg"}
-                color="red"
-              />
+              <Indicator
+                radius={"sm"}
+                inline
+                label={props.place}
+                position="bottom-start"
+                color="dark"
+                size={18}
+                disabled={!isMobile}
+              >
+                <Avatar
+                  src={`https://images.hive.blog/u/${props.userData.username}/avatar`}
+                  alt={
+                    props.userData.username ? props.userData.username : "avatar"
+                  }
+                  radius="md"
+                  size={"lg"}
+                  color="red"
+                  ml={5}
+                />
               </Indicator>
               <div>
-                <Text fz="md">{props.userData.username}</Text>
+                <Text fz="md" fw={500}>
+                  {props.userData.username}
+                </Text>
                 <Text fz="sm" c="dimmed">
                   {props.title}
+                </Text>
+                <Text fz="sm">
+                  <Group spacing={"xs"}>
+                    {points.toFixed(2)}
+                    <Image
+                      src={
+                        "https://cdn-icons-png.flaticon.com/512/9638/9638035.png"
+                      }
+                      alt="Points"
+                      height={15}
+                      width={15}
+                      fit="cover"
+                    />
+                  </Group>
                 </Text>
               </div>
             </Group>
           </Grid.Col>
-          {!isMobile && <Grid.Col span={4}>
-            <Group position="right">
-              <Badge
-                sx={(theme) => ({ padding: 10 })}
-                className={classes.badge}
-                size="lg"
-                radius="sm"
-                variant="outline"
-              >
-                {props.place}
-              </Badge>
-            </Group>
-          </Grid.Col> }
-
-          
+          {!isMobile && (
+            <Grid.Col span={4}>
+              <Group position="right">
+                <Badge
+                  sx={(theme) => ({ padding: 10 })}
+                  className={classes.badge}
+                  size="lg"
+                  radius="sm"
+                  variant="outline"
+                >
+                  {props.place}
+                </Badge>
+              </Group>
+            </Grid.Col>
+          )}
         </Grid>
       </Card>
     </>

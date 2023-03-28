@@ -33,11 +33,11 @@ export default function RootLayout({
 
   const queryClient = new QueryClient();
   return (
-    <QueryClientProvider client={queryClient}>
-      <ColorSchemeProvider
-        colorScheme={colorScheme}
-        toggleColorScheme={toggleColorScheme}
-      >
+    <ColorSchemeProvider
+      colorScheme={colorScheme}
+      toggleColorScheme={toggleColorScheme}
+    >
+      <QueryClientProvider client={queryClient}>
         <MantineProvider
           theme={{ colorScheme }}
           withGlobalStyles
@@ -55,7 +55,7 @@ export default function RootLayout({
             </body>
           </html>
         </MantineProvider>
-      </ColorSchemeProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </ColorSchemeProvider>
   );
 }

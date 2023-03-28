@@ -7,6 +7,11 @@ const useStyles = createStyles((theme) => ({
     right: "20px",
     zIndex: 9999,
   },
+
+  header: {
+    whiteSpace: "nowrap",
+    height: "auto",
+  },
 }));
 
 export default useStyles;

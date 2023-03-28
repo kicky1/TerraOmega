@@ -8,7 +8,6 @@ export default function StatisticGrid() {
   return (
     <>
       <Space h="xl" />
-      <Space h="xl" />
       <SimpleGrid
         cols={3}
         breakpoints={[

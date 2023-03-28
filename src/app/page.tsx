@@ -31,7 +31,7 @@ export const runtime = "experimental-edge";
 
 export default function Home() {
   const { data, isLoading } = useQuery("usersData", getUsersData, {
-    refetchInterval: 30000,
+    refetchInterval: 300000,
   });
 
   const isSubscriber = useAuthorizationStore(
@@ -86,16 +86,10 @@ export default function Home() {
               <LeaderboardGrid />
             </Tabs.Panel>
             <Tabs.Panel value="tab" pt="xs">
-              {isSubscriber ? (
-                <BattleGrid data={data} isLoading={isLoading} />
-              ) : (
-                <FreeBattleGrid data={data} isLoading={isLoading} />
-              )}
+              <FreeBattleGrid data={data} isLoading={isLoading} />
             </Tabs.Panel>
             <Tabs.Panel value="accounts" pt="xs">
               <MultiAccountsGrid
-                data={data}
-                isLoading={isLoading}
                 accounts={accounts}
                 isLoadingAccounts={isLoadingAccounts}
                 refetchAccounts={refetchAccounts}
