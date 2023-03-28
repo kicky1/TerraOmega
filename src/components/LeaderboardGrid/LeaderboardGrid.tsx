@@ -61,20 +61,21 @@ export default function LeaderboardGrid() {
           userData={leaderBoardData[0]}
           place={1}
           title={"Galactic Conqueror"}
-          gradientColors={["#fcd307", "#F7931Eac"]}
-        />
+          gradientColors={["https://i.imgur.com/BXgZ31l.jpg"]}
+          />
         <PodiumCard
           userData={leaderBoardData[1]}
           place={2}
           title={"Cosmic Legend"}
-          gradientColors={["#ff9900f2", "#E64A19ac"]}
-        />
+          gradientColors={["https://i.imgur.com/C3Y3FD5.jpg"]}
+          
+          />
 
         <PodiumCard
           userData={leaderBoardData[2]}
           place={3}
           title={"Intergalactic Hero"}
-          gradientColors={["#2195f3ed", "#0D47A1ac"]}
+          gradientColors={["https://i.imgur.com/MjdBSVR.jpg"]}
           
         />
       </SimpleGrid>
@@ -85,8 +86,8 @@ export default function LeaderboardGrid() {
             userData={card}
             place={index + 4 + (currentPage - 1) * pageSize}
             title={"Starship Captain"}
-            gradientColors={["#0D47A1ac", "#071b38"]}
-          />
+            gradientColors={["https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80", "#0D47A1ac"]}
+            />
         ))}
       </SimpleGrid>
       <Pagination

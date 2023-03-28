@@ -65,12 +65,13 @@ export default function PodiumCard({ ...props }: Props) {
         <Grid grow>
           <Grid.Col span={isMobile ? 12 : 8}>
             <Group spacing={40}>
-            <Indicator inline label={props.place} color="dark" size={18} disabled={!isMobile}>
+            <Indicator radius={'sm'}  inline label={props.place } position="bottom-start" color="dark" size={18} disabled={!isMobile}>
               <Avatar
                 src={`https://images.hive.blog/u/${props.userData.username}/avatar`}
                 alt={props.userData.username ? props.userData.username : 'avatar'}
                 radius="md"
                 size={"lg"}
+                color="red"
               />
               </Indicator>
               <div>
