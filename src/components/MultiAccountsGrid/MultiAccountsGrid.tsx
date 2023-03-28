@@ -46,6 +46,8 @@ import { getStatsEngineData } from "@/app/utils/actions/hiveEngine";
 import { transferTokens } from "@/app/utils/actions/payment";
 import UpgradeModal from "./UpgradeModal/UpgradeModal";
 import BattleGrid from "../BattleGrid/BattleGrid";
+import AccountsPanel from "./AccountsPanel/AccountsPanel";
+import MainAccountPanel from "./MainAccountPanel/MainAccountPanel";
 
 interface UserData {
   username: string;
@@ -76,6 +78,13 @@ export default function MultiAccountsGrid({ ...props }: Props) {
   const [page, setPage] = useState(1);
   const isSubscriber = useAuthorizationStore(
     (state: { isSubscriber: boolean }) => state.isSubscriber
+  );
+  const { data: statsData, isLoading: isStatsDataLoading } = useQuery(
+    "statsHiveData",
+    getStatsEngineData,
+    {
+      refetchInterval: 300000,
+    }
   );
   const [pageSize, setPageSize] = useState(5);
   const [username, setUsername] = useState("");
@@ -569,7 +578,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     useSortBy
   );
 
-  if (isLoading || props.isLoadingAccounts) {
+  if (isLoading || props.isLoadingAccounts || isStatsDataLoading) {
     return (
       <>
         <Space h="xl" />
@@ -728,7 +737,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
 
         <BattleGrid data={data} isLoading={isLoading} />
 
-        {/* <Grid grow>
+         <Grid grow>
           <Grid.Col span={isMobile ? 12 : 6}>
             <AccountsPanel
               accounts={tableData}
@@ -751,7 +760,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               isStatsDataLoading={isStatsDataLoading}
             />
           </Grid.Col>
-        </Grid> */}
+        </Grid> 
       </SimpleGrid>
       <Space h="xl" />
     </>
