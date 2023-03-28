@@ -736,31 +736,33 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         <Space h="xl" />
 
         <BattleGrid data={data} isLoading={isLoading} />
-
-         <Grid grow>
-          <Grid.Col span={isMobile ? 12 : 6}>
-            <AccountsPanel
-              accounts={tableData}
-              totalScrap={totalScrap}
-              totalHiveEngineScrap={totalHiveEngineScrap}
-              statsData={statsData}
-              isStatsDataLoading={isStatsDataLoading}
-              loadingPrice={loadingPrice}
-              hivePrice={hivePrice}
-            />
-          </Grid.Col>
-          <Grid.Col span={isMobile ? 12 : 6}>
-            <MainAccountPanel
-              accounts={tableData}
-              mainAccount={mainAccountData}
-              mainUsername={mainUsername}
-              hivePrice={hivePrice}
-              loadingPrice={loadingPrice}
-              statsData={statsData}
-              isStatsDataLoading={isStatsDataLoading}
-            />
-          </Grid.Col>
-        </Grid> 
+        <Space h="xl" />
+        {isSubscriber ? (
+          <Grid grow>
+            <Grid.Col span={isMobile ? 12 : 6}>
+              <AccountsPanel
+                accounts={tableData}
+                totalScrap={totalScrap}
+                totalHiveEngineScrap={totalHiveEngineScrap}
+                statsData={statsData}
+                isStatsDataLoading={isStatsDataLoading}
+                loadingPrice={loadingPrice}
+                hivePrice={hivePrice}
+              />
+            </Grid.Col>
+            <Grid.Col span={isMobile ? 12 : 6}>
+              <MainAccountPanel
+                accounts={tableData}
+                mainAccount={mainAccountData}
+                mainUsername={mainUsername}
+                hivePrice={hivePrice}
+                loadingPrice={loadingPrice}
+                statsData={statsData}
+                isStatsDataLoading={isStatsDataLoading}
+              />
+            </Grid.Col>
+          </Grid>
+        ) : null}
       </SimpleGrid>
       <Space h="xl" />
     </>
