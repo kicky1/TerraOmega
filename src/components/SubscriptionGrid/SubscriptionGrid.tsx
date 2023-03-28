@@ -1,32 +1,9 @@
-import { useQuery } from "react-query";
-import { useTable, useSortBy, Column } from "react-table";
-import { getUserBattlesData, getUserData } from "@/app/utils/actions/users";
 import {
   Space,
-  SimpleGrid,
-  Box,
-  Table,
-  Text,
-  Pagination,
-  Input,
-  Grid,
-  Button,
-  Checkbox,
-  Group,
-  Modal,
-  RingProgress,
-  Select,
-  Skeleton,
 } from "@mantine/core";
-import React, { useState, useMemo, useEffect } from "react";
-import { IconHelpCircle, IconShieldCheckeredFilled } from "@tabler/icons-react";
-import { useMediaQuery } from "@mantine/hooks";
-import PriceGrid from "../PriceGrid/PriceGrid";
-import TerraStatsGrid from "../TerraStatsGrid/TerraStatsGrid";
-import NextLevelGrid from "../NextLevelGrid/NextLevelGrid";
-import useStyles from "./style";
+import React from "react";
+
 import { Subscription } from "./Subscription/Subscription";
-import PaymentForm from "../PaymentGrid/PaymentGrid";
 
 export default function SubscriptionGrid() {
   const functionalitiesData = [

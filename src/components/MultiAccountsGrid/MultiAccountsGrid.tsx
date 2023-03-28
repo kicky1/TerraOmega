@@ -65,6 +65,8 @@ interface UserData {
   actions: string;
   claims: number;
   battle: string;
+  dodge: number;
+  crit: number;
 }
 
 interface Props {
@@ -211,7 +213,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Tooltip
-              label={`Upgrade damage - ${
+              label={`Upgrade for ${
                 (row.original.damage / 10) ** 2
               } $SCRAP`}
               color="dark"
@@ -242,7 +244,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Tooltip
-              label={`Upgrade defense - ${
+              label={`Upgrade for ${
                 (row.original.defense / 10) ** 2
               } $SCRAP`}
               color="dark"
@@ -273,7 +275,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Tooltip
-              label={`Upgrade engineering - ${
+              label={`Upgrade for ${
                 row.original.engineering ** 2
               } $SCRAP`}
               color="dark"
@@ -304,7 +306,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Tooltip
-              label="Contribute $SCRAP"
+              label="Gain favor"
               color="dark"
               withArrow
               arrowPosition="center"
@@ -329,7 +331,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Tooltip
-              label="Upgrade stash size"
+              label="Increase size"
               color="dark"
               withArrow
               arrowPosition="center"
@@ -345,6 +347,21 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                 <IconArrowUp size={"0.9rem"} fontWeight={100} />
               </span>
             </Tooltip>
+          </>
+        ),
+      },
+      {
+        Header: "Dodge",
+        accessor: "dodge" as const,
+        defaultCanSort: false,
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.hiveEngineStake ? (row.original.hiveEngineStake*0.025).toFixed(3) : 0}
+            </span>
           </>
         ),
       },

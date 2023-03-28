@@ -1,5 +1,6 @@
 import { rem } from "@mantine/core";
 import { createStyles } from "@mantine/styles";
+import backgorund from "../../assets/backgorund.jpg"
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -16,11 +17,7 @@ const useStyles = createStyles((theme) => ({
       bottom: 0,
       left: 0,
       width: rem(6),
-      backgroundImage: theme.fn.linearGradient(
-        0,
-        theme.colors.green[8],
-        theme.colors.blue[9]
-      ),
+      backgroundImage: `url(${backgorund.src})`,
     },
   },
 }));

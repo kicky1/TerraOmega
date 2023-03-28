@@ -18,8 +18,8 @@ const useStyles = createStyles((theme) => ({
       width: rem(6),
       backgroundImage: theme.fn.linearGradient(
         0,
-        theme.colors.green[8],
-        theme.colors.blue[9]
+        theme.colors.violet[9],
+        theme.colors.cyan[9]
       ),
     },
   },

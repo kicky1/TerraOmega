@@ -58,6 +58,7 @@ interface UserData {
   attacks: number;
   claims: number;
   battle: string;
+  dodge: number;
 }
 
 interface Props {
@@ -297,6 +298,21 @@ export default function BattleGrid({ ...props }: Props) {
               onClick={() => handleRowClick(row)}
             >
               {row.original.favor ? row.original.favor.toFixed(2) : 0}
+            </span>
+          </>
+        ),
+      },
+      {
+        Header: "Dodge",
+        accessor: "dodge" as const,
+        defaultCanSort: false,
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.hiveEngineStake ? (row.original.hiveEngineStake*0.025).toFixed(3) : 0}
             </span>
           </>
         ),

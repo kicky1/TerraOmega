@@ -7,6 +7,8 @@ import {
   getUserBattlesData,
   getUserData,
 } from "@/app/utils/actions/users";
+import backgorund from "../../assets/backgorund.jpg";
+import backgorund2 from "../../assets/backgorund2.jpg"
 
 interface UserData {
   attacks: number;
@@ -62,20 +64,20 @@ export default function LeaderboardGrid() {
           userData={leaderBoardData[0]}
           place={1}
           title={"Galactic Conqueror"}
-          gradientColors={["https://i.imgur.com/BXgZ31l.jpg"]}
+          gradientColors={[backgorund.src]}
         />
         <PodiumCard
           userData={leaderBoardData[1]}
           place={2}
           title={"Cosmic Legend"}
-          gradientColors={["https://i.imgur.com/C3Y3FD5.jpg"]}
+          gradientColors={[backgorund.src]}
         />
 
         <PodiumCard
           userData={leaderBoardData[2]}
           place={3}
           title={"Intergalactic Hero"}
-          gradientColors={["https://i.imgur.com/MjdBSVR.jpg"]}
+          gradientColors={[backgorund.src]}
         />
       </SimpleGrid>
       <SimpleGrid cols={2} pb={15} breakpoints={[{ maxWidth: "md", cols: 1 }]}>
@@ -85,10 +87,7 @@ export default function LeaderboardGrid() {
             userData={card}
             place={index + 4 + (currentPage - 1) * pageSize}
             title={"Starship Captain"}
-            gradientColors={[
-              "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80",
-              "#0D47A1ac",
-            ]}
+            gradientColors={[backgorund2.src]}
           />
         ))}
       </SimpleGrid>

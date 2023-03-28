@@ -16,11 +16,7 @@ const useStyles = createStyles((theme) => ({
       bottom: 0,
       left: 0,
       width: rem(6),
-      backgroundImage: theme.fn.linearGradient(
-        0,
-        theme.colors.green[8],
-        theme.colors.blue[9]
-      ),
+      backgroundImage: `url("https://i.imgur.com/C3Y3FD5.jpg")`,
     },
   },
 
