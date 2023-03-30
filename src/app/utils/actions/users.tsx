@@ -169,11 +169,13 @@ export async function claimAllScrap(usernames: UserData[]) {
 
       if (isKeychain()) {
         usernames.map(async (user: UserData) => { 
-          await new Promise((resolve) => setTimeout(resolve, 5000));
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+
           claimData = {
             amount: user.hiveEngineScrap.toFixed(8),
             "tx-hash": hash_hex.substring(0, 22),
           };
+
           window.hive_keychain.requestCustomJson(
             user.username,
             "terracore_claim",
@@ -182,14 +184,13 @@ export async function claimAllScrap(usernames: UserData[]) {
             "Claim tokens",
             async (response: any) => {
               
-              await new Promise((resolve) => setTimeout(resolve, 5000));
               if(response.success == true){
                 setClaimSuccess(true)
               }
-                getUserData(user.username)
-                console.log(response)
+                
             }
           );
+          setClaimSuccess(true)
         })
 
       } else {

@@ -121,7 +121,8 @@ export default function BattleGrid({ ...props }: Props) {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [battleSuccess]);
+  }, [claimSuccess]);
+
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;

@@ -666,7 +666,16 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         <Grid.Col span={isMobile ? 12 : 6}>
         <Box w={180}>
         <Button
-          onClick={()=>{claimAllScrap(tableData)}}
+          onClick={()=>{
+            claimAllScrap(tableData).then(
+              async () => {
+                await new Promise((resolve) => setTimeout(resolve, 7500));
+                tableData.map(async (user: UserData) => { 
+                  getUserData(user.username)
+                })
+              }
+            )
+          }}
           // onClick={()=>{claimTokensForEnabledUsers()}}
           disabled={!isSubscriber}
           fullWidth
