@@ -1,6 +1,7 @@
 import {
   setBattleError,
   setBattleSuccess,
+  setClaimSuccess,
   setScrapEarned,
 } from "@/zustand/stores/useNotificationStore";
 import api from "../api";
@@ -115,15 +116,82 @@ export async function claimScrap(amount: number, username: string) {
         window.hive_keychain.requestCustomJson(
           username,
           "terracore_claim",
-          "Active",
+          "Posting",
           JSON.stringify(claimData),
           "Claim tokens",
           (response: any) => {
+            console.log(response)
+            if(response.success == true){
+              setClaimSuccess(true)
+            }
             setTimeout(() => {
               getUserData(username).then((r) => {});
             }, 5000);
           }
         );
+      } else {
+        alert("You have to install keychain!");
+      }
+    });
+  });
+}
+
+export async function claimAllScrap(usernames: UserData[]) {
+  const operations = [
+    [
+      "claim",
+      {
+        amount: 10,
+      },
+    ],
+  ];
+
+  let claimData = {};
+
+  const tx = new hiveTx.Transaction();
+  tx.create(operations).then(() => {
+    const transaction = tx.transaction.expiration;
+    const hash_object = crypto.subtle.digest(
+      "SHA-256",
+      new TextEncoder().encode(transaction)
+    );
+
+    hash_object.then(function (hash_arraybuffer) {
+      const hash_uint8 = new Uint8Array(hash_arraybuffer);
+
+      const hash_hex = Array.prototype.map
+        .call(hash_uint8, function (x) {
+          return ("00" + x.toString(16)).slice(-2);
+        })
+        .join("");
+
+
+
+      if (isKeychain()) {
+        usernames.map(async (user: UserData) => { 
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+          claimData = {
+            amount: user.hiveEngineScrap.toFixed(8),
+            "tx-hash": hash_hex.substring(0, 22),
+          };
+          window.hive_keychain.requestCustomJson(
+            user.username,
+            "terracore_claim",
+            "Posting",
+            JSON.stringify(claimData),
+            "Claim tokens",
+            async (response: any) => {
+              
+              await new Promise((resolve) => setTimeout(resolve, 5000));
+              if(response.success == true){
+                setClaimSuccess(true)
+              }
+                getUserData(user.username)
+                console.log(response)
+            }
+          );
+        })
+
       } else {
         alert("You have to install keychain!");
       }
@@ -175,7 +243,7 @@ export async function attackOponent(target: string) {
           async (response: any) => {
             await new Promise((resolve) => setTimeout(resolve, 5000));
             await getUserData(response.data.username);
-            await new Promise((resolve) => setTimeout(resolve, 10000));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
             const battlesData = await getUserBattlesData(
               response.data.username
             );
@@ -226,7 +294,7 @@ export function upgradeAccount(player: string, upgrade: string, value: number) {
     window.hive_keychain.requestCustomJson(
       player,
       "ssc-mainnet-hive",
-      "Active",
+      "Posting",
       data,
       `Upgrade ${upgrade}`,
       (response: any) => {

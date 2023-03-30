@@ -40,6 +40,7 @@ import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
 import {
   setBattleError,
   setBattleSuccess,
+  setClaimSuccess,
   useNotificationStore,
 } from "@/zustand/stores/useNotificationStore";
 
@@ -86,6 +87,10 @@ export default function BattleGrid({ ...props }: Props) {
     (state: { battleSuccess: boolean }) => state.battleSuccess
   );
 
+  const claimSuccess = useNotificationStore(
+    (state: { claimSuccess: boolean }) => state.claimSuccess
+  );
+
   const battleError = useNotificationStore(
     (state: { battleError: boolean }) => state.battleError
   );
@@ -99,6 +104,18 @@ export default function BattleGrid({ ...props }: Props) {
     if (battleSuccess) {
       timeoutId = setTimeout(() => {
         setBattleSuccess(false);
+      }, 6000);
+    }
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [battleSuccess]);
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    if (claimSuccess) {
+      timeoutId = setTimeout(() => {
+        setClaimSuccess(false);
       }, 6000);
     }
     return () => {
@@ -532,6 +549,29 @@ export default function BattleGrid({ ...props }: Props) {
           />
         </SimpleGrid>
         <Space h="xl" />
+        <div>
+          <Transition
+            mounted={claimSuccess}
+            transition="fade"
+            duration={300}
+            timingFunction="ease"
+            onExited={() => setClaimSuccess(false)}
+          >
+            {(transitionStyles) => (
+              <div style={transitionStyles}>
+                <div className={classes.notificationContainer}>
+                  <Notification
+                    title="Claim $SCRAP"
+                    color="teal"
+                    onClose={() => setClaimSuccess(false)}
+                  >
+                    The transaction has been broadcasted successfully.
+                  </Notification>
+                </div>
+              </div>
+            )}
+          </Transition>
+        </div>
         <div>
           <Transition
             mounted={battleSuccess}

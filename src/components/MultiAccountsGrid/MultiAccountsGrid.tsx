@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "react-query";
 import { useTable, useSortBy, Column } from "react-table";
 import {
+  claimAllScrap,
   claimScrap,
   getUserBattlesData,
   getUserData,
@@ -48,6 +49,7 @@ import UpgradeModal from "./UpgradeModal/UpgradeModal";
 import BattleGrid from "../BattleGrid/BattleGrid";
 import AccountsPanel from "./AccountsPanel/AccountsPanel";
 import MainAccountPanel from "./MainAccountPanel/MainAccountPanel";
+import { claimTokensForEnabledUsers } from "../../../scripts/scripts";
 
 interface UserData {
   username: string;
@@ -554,6 +556,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     [filteredUsernameData]
   );
 
+
   const filteredMain = tableData.find(
     (obj: { username: string }) => obj.username === mainUsername
   );
@@ -633,6 +636,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               onChange={(e: {
                 target: { value: React.SetStateAction<string> };
               }) => setUsername(e.target.value)}
+              w={180}
             />
             <Tooltip
               label="Use comma to separate names"
@@ -652,13 +656,37 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                     }),
                   },
                 })}
+                w={isMobile ? 180 : 120}
               >
                 Add account
               </Button>
             </Tooltip>
           </Group>
         </Grid.Col>
+        <Grid.Col span={isMobile ? 12 : 6}>
+        <Box w={180}>
+        <Button
+          onClick={()=>{claimAllScrap(tableData)}}
+          // onClick={()=>{claimTokensForEnabledUsers()}}
+          
+          disabled={!isSubscriber}
+          fullWidth
+          styles={(theme: any) => ({
+            root: {
+              backgroundColor: "#0a3d47",
+              "&:not([data-disabled])": theme.fn.hover({
+                backgroundColor: theme.fn.darken("#072f37", 0.05),
+              }),
+            },
+          })}
+        >
+          Claim entire $SCRAP
+        </Button>
+        </Box>
+        </Grid.Col>
       </Grid>
+      
+ 
 
       <SimpleGrid
         cols={1}
@@ -751,7 +779,6 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         />
         <Space h="xl" />
         <Space h="xl" />
-
         <BattleGrid data={data} isLoading={isLoading} />
         <Space h="xl" />
         {isSubscriber ? (
