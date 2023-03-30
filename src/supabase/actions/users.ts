@@ -35,7 +35,8 @@ export async function getAccounts() {
     return;
   }
 
-  const accounts = accountsData[0].accounts;
+  let accounts = accountsData[0].accounts;
+
 
   return accounts;
 }

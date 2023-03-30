@@ -173,6 +173,8 @@ export default function BattleGrid({ ...props }: Props) {
     }
   }, [battleUsername, refetchBattles]);
 
+
+
   const columns: readonly Column<UserData>[] = useMemo(
     () => [
       {
@@ -354,6 +356,9 @@ export default function BattleGrid({ ...props }: Props) {
     []
   );
 
+
+  
+
   const filteredUsernameData = useMemo(() => {
     if (!props.data) {
       return [];
@@ -368,9 +373,15 @@ export default function BattleGrid({ ...props }: Props) {
         (user: UserData) =>
           user.defense < userData?.damage && user.favor < userData.favor
       );
+
+ 
+
+
       filteredData = filteredData.sort(
         (a: { scrap: number }, b: { scrap: number }) => b.scrap - a.scrap
       );
+
+      
     }
 
     return filteredData;

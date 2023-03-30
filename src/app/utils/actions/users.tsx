@@ -51,7 +51,7 @@ const isKeychain = () => {
 export async function getUsersData() {
   const { data } = await api.get("players", {});
   const filteredData = data.filter((obj: any) =>
-    obj.hasOwnProperty("username")
+    obj.hasOwnProperty("username") && obj.defense >= 10
   );
   return filteredData;
 }

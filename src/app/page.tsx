@@ -24,7 +24,7 @@ import {
   IconTableOptions,
   IconUsers,
 } from "@tabler/icons-react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useQuery } from "react-query";
 
 export const runtime = "experimental-edge";
@@ -33,6 +33,9 @@ export default function Home() {
   const { data, isLoading } = useQuery("usersData", getUsersData, {
     refetchInterval: 300000,
   });
+
+  
+
 
   const isSubscriber = useAuthorizationStore(
     (state: { isSubscriber: boolean }) => state.isSubscriber
