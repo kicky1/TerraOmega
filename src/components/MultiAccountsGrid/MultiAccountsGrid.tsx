@@ -668,7 +668,6 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         <Button
           onClick={()=>{claimAllScrap(tableData)}}
           // onClick={()=>{claimTokensForEnabledUsers()}}
-          
           disabled={!isSubscriber}
           fullWidth
           styles={(theme: any) => ({
