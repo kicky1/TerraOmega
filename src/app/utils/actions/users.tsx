@@ -295,7 +295,7 @@ export function upgradeAccount(player: string, upgrade: string, value: number) {
     window.hive_keychain.requestCustomJson(
       player,
       "ssc-mainnet-hive",
-      "Posting",
+      "Active",
       data,
       `Upgrade ${upgrade}`,
       (response: any) => {
