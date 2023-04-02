@@ -35,6 +35,7 @@ import {
   IconArrowUp,
   IconBrandTelegram,
   IconCheck,
+  IconInfoCircle,
   IconShieldCheckeredFilled,
 } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
@@ -50,6 +51,7 @@ import BattleGrid from "../BattleGrid/BattleGrid";
 import AccountsPanel from "./AccountsPanel/AccountsPanel";
 import MainAccountPanel from "./MainAccountPanel/MainAccountPanel";
 import { claimTokensForEnabledUsers } from "../../../scripts/scripts";
+import BattlelogsModal from "./BattlelogsModal/BattlelogsModal";
 
 interface UserData {
   username: string;
@@ -70,7 +72,6 @@ interface UserData {
   dodge: number;
   crit: number;
 }
-
 interface Props {
   accounts: any;
   isLoadingAccounts: boolean;
@@ -103,7 +104,11 @@ export default function MultiAccountsGrid({ ...props }: Props) {
   const [battleUsername, setBattleUsername] = useState("");
 
   const [showPopup, setShowPopup] = useState(false);
+  const [showBattlelogPopup, setShowBattlelogPopup] = useState(false);
+
   const [selectedRow, setSelectedRow] = useState<UserData | null>(null);
+  const [selectedBattlelogRow, setSelectedBattlelogRow] = useState<UserData | null>(null);
+  
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
   const [selectedUpgradeRow, setSelectedUpgradeRow] = useState<UserData | null>(
@@ -141,8 +146,18 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     setShowPopup(true);
   };
 
+  const handleInfoClick = (row: { original: UserData }) => {
+    setSelectedBattlelogRow(row.original);
+    setBattleUsername(row.original.username);
+    setShowBattlelogPopup(true);
+  };
+
   const handlePopupClose = () => {
     setShowPopup(false);
+  };
+
+  const handleShowBattlelogPopupClose = () => {
+    setShowBattlelogPopup(false);
   };
 
   const handleUpgradePopup = (row: { original: UserData }, stake: string) => {
@@ -151,7 +166,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     setShowUpgradePopup(true);
   };
 
-  const { data: userBattlesData, refetch: refetchBattles } = useQuery(
+  const { data: userBattlesData, isLoading: isLoadingBattleData, refetch: refetchBattles } = useQuery(
     ["userBattle", battleUsername],
     () => getUserBattlesData(battleUsername),
     {
@@ -490,6 +505,25 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Group>
+            <Tooltip
+                label="Battle log"
+                color="dark"
+                withArrow
+                arrowPosition="center"
+                offset={10}
+              >
+                <ActionIcon
+                  variant="outline"
+                  onClick={() => (
+                    refetchBattles({ queryKey: ["userBattle", battleUsername] }),
+                    handleInfoClick(row)
+                  )   
+                  }
+                >
+                  <IconInfoCircle size="1.125rem" />
+                </ActionIcon>
+              </Tooltip>
+
               <Tooltip
                 label="Claim $SCRAP"
                 color="dark"
@@ -759,6 +793,19 @@ export default function MultiAccountsGrid({ ...props }: Props) {
             userBattlesData={userBattlesData}
             battleUsername={battleUsername}
             setSelectedValue={setSelectedValue}
+            selectedValue={selectedValue}
+          />
+        )}
+
+      {selectedBattlelogRow && (
+          <BattlelogsModal
+            showBattlelogPopup={showBattlelogPopup}
+            handlePopupClose={handleShowBattlelogPopupClose}
+            selectedRow={selectedBattlelogRow}
+            userBattlesData={userBattlesData}
+            isLoadingBattleData={isLoadingBattleData}
+            battleUsername={battleUsername}
+            setSelectedValue={setSelectedBattlelogRow}
             selectedValue={selectedValue}
           />
         )}

@@ -64,20 +64,20 @@ export default function LeaderboardGrid() {
           userData={leaderBoardData[0]}
           place={1}
           title={"Galactic Conqueror"}
-          gradientColors={[backgorund.src]}
+          gradientColors={['#031418']}
         />
         <PodiumCard
           userData={leaderBoardData[1]}
           place={2}
           title={"Cosmic Legend"}
-          gradientColors={[backgorund.src]}
+          gradientColors={['#031418']}
         />
 
         <PodiumCard
           userData={leaderBoardData[2]}
           place={3}
           title={"Intergalactic Hero"}
-          gradientColors={[backgorund.src]}
+          gradientColors={['#031418']}
         />
       </SimpleGrid>
       <SimpleGrid cols={2} pb={15} breakpoints={[{ maxWidth: "md", cols: 1 }]}>
@@ -87,7 +87,7 @@ export default function LeaderboardGrid() {
             userData={card}
             place={index + 4 + (currentPage - 1) * pageSize}
             title={"Starship Captain"}
-            gradientColors={[backgorund2.src]}
+            gradientColors={['#00313a']}
           />
         ))}
       </SimpleGrid>
