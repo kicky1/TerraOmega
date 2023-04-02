@@ -517,9 +517,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                   onClick={() => (
                     refetchBattles({ queryKey: ["userBattle", battleUsername] }),
                     handleInfoClick(row)
-                  )
-                    
-                    
+                  )   
                   }
                 >
                   <IconInfoCircle size="1.125rem" />
