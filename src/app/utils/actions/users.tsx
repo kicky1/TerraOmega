@@ -120,7 +120,6 @@ export async function claimScrap(amount: number, username: string) {
           JSON.stringify(claimData),
           "Claim tokens",
           (response: any) => {
-            console.log(response)
             if(response.success == true){
               setClaimSuccess(true)
             }
@@ -169,7 +168,7 @@ export async function claimAllScrap(usernames: UserData[]) {
 
       if (isKeychain()) {
         usernames.map(async (user: UserData) => { 
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, 2500));
 
           claimData = {
             amount: user.hiveEngineScrap.toFixed(8),
@@ -183,14 +182,14 @@ export async function claimAllScrap(usernames: UserData[]) {
             JSON.stringify(claimData),
             "Claim tokens",
             async (response: any) => {
-              
+
               if(response.success == true){
                 setClaimSuccess(true)
               }
-                
+
             }
           );
-          setClaimSuccess(true)
+          
         })
 
       } else {
@@ -242,18 +241,10 @@ export async function attackOponent(target: string) {
           JSON.stringify(battleData),
           `Attack ${target}`,
           async (response: any) => {
-            await new Promise((resolve) => setTimeout(resolve, 5000));
-            await getUserData(response.data.username);
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            const battlesData = await getUserBattlesData(
-              response.data.username
-            );
-
-            if (battlesData[0].attacked === target) {
-              setScrapEarned(battlesData[0].scrap);
+            if(response.success == true){
               setBattleSuccess(true);
-            } else {
-              setBattleError(true);
+              await new Promise((resolve) => setTimeout(resolve, 5000));
+              await getUserData(response.data.username);
             }
           }
         );

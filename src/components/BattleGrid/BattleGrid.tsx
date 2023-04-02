@@ -596,34 +596,11 @@ export default function BattleGrid({ ...props }: Props) {
               <div style={transitionStyles}>
                 <div className={classes.notificationContainer}>
                   <Notification
-                    title="Scrap robbed"
+                    title="Battle"
                     color="teal"
                     onClose={() => setBattleSuccess(false)}
                   >
-                    You got {scrapEarned.toFixed(2)} $SCRAP from last fight.
-                  </Notification>
-                </div>
-              </div>
-            )}
-          </Transition>
-        </div>
-        <div>
-          <Transition
-            mounted={battleError}
-            transition="fade"
-            duration={300}
-            timingFunction="ease"
-            onExited={() => setBattleError(false)}
-          >
-            {(transitionStyles) => (
-              <div style={transitionStyles}>
-                <div className={classes.notificationContainer}>
-                  <Notification
-                    title="Warning"
-                    color="red"
-                    onClose={() => setBattleError(false)}
-                  >
-                    Failed to steal opponent's scrap!
+                    The transaction has been broadcasted successfully.
                   </Notification>
                 </div>
               </div>

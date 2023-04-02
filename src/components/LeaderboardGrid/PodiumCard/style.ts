@@ -17,7 +17,7 @@ const useStyles = createStyles((theme, gradientColors: string[]) => ({
       bottom: 0,
       left: 0,
       width: rem(91),
-      backgroundImage: `url(${gradientColors[0]})`,
+      backgroundColor: `${gradientColors[0]}`,
       backgroundSize: "200% 200%",
     },
   },
