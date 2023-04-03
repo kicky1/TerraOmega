@@ -15,13 +15,17 @@ import {
   Box,
   Table,
   Pagination,
+  Tabs,
 } from "@mantine/core";
 import React, { useEffect, useMemo, useState } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { getUserDataProfile } from "@/app/utils/actions/hiveUsers";
 import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
-import { Column, Row, useTable } from "react-table";
+import { Column, Row, TableState, useTable } from "react-table";
 import useStyles from "./style";
+import { IconHome, IconSwords, IconTank } from "@tabler/icons-react";
+import BattlesTab from "./BattlesTab/BattlesTab";
+import AbusersTab from "./BattlesTab/BattlesTab";
 
 
 interface UserData {
@@ -50,6 +54,7 @@ interface UserBattleData {
   attacked: string;
   scrap: number;
   timestamp: number;
+  numberOfAttacks: number
 }
 
 interface Props {
@@ -92,7 +97,7 @@ export default function BattlelogsModal({ ...props }: Props) {
 
   const isMobile = useMediaQuery("(max-width: 767px)");
 
-  const columns: readonly Column<UserBattleData>[] = useMemo(
+  const tabColumns: readonly Column<UserBattleData>[] = useMemo(
     () => [
       {
         Header: "Username",
@@ -154,6 +159,36 @@ export default function BattlelogsModal({ ...props }: Props) {
     [props.battleUsername]
   );
 
+  const abuseColumns: readonly Column<any>[] = useMemo(
+    () => [
+      {
+        Header: "#",
+        Cell: ({ row }: { row: { index: number } }) => {
+          return <span>{row.index + 1}.</span>;
+        },
+      },
+      {
+        Header: "Username",
+        accessor: "username",
+      },
+      {
+        Header: "Attacks",
+        accessor: "numberOfAttacks",
+      },
+      {
+        Header: "Scrap",
+        accessor: "scrap",
+        Cell: ({ row }: { row: { original: UserBattleData } }) => {
+            return(
+              <>
+              <span style={{color: "#ff5f5f"}}>{row.original.scrap.toFixed(4)}</span>
+              </>       
+    )},
+  }
+
+    ],
+    [props.battleUsername]
+  );
 
   const userBattlesData = useMemo(() => {
     if (!props.userBattlesData) {
@@ -170,7 +205,7 @@ export default function BattlelogsModal({ ...props }: Props) {
 
   const { getTableProps, headerGroups, rows, prepareRow } = useTable(
     {
-      columns,
+      columns: tabColumns,
       data: tableData,
     }
   );
@@ -181,6 +216,65 @@ export default function BattlelogsModal({ ...props }: Props) {
   const pageCount = Math.ceil(rows.length / pageSize);
   const pageData = rows.slice((page - 1) * pageSize, page * pageSize);
 
+
+  const userAbusersData = useMemo(() => {
+    if (!props.userBattlesData) {
+      return [];
+    }
+
+    let filtereduserBattlesData = props.userBattlesData.filter((user: UserData) =>
+    !user.username.toLowerCase().includes(props.battleUsername)
+  );
+  
+    // Count the number of attacks and scrap gained for each user
+    const userStats = filtereduserBattlesData.reduce((acc:any, battle:any) => {
+      const { username, attacked, scrap } = battle;
+      if (username in acc) {
+        acc[username].numberOfAttacks++;
+        acc[username].scrap += scrap;
+      } else {
+        acc[username] = {
+          numberOfAttacks: 1,
+          scrap,
+        };
+      }
+      return acc;
+    }, {});
+  
+    // Convert the user stats object to an array of UserBattleData objects
+    const userStatsArray = Object.entries(userStats).map(([username, stats]) => ({
+      username,
+      numberOfAttacks: (stats as { numberOfAttacks: number }).numberOfAttacks,
+      scrap: (stats as { scrap: number }).scrap,
+    }));
+
+
+    userStatsArray.sort((a, b) => {
+      if (b.numberOfAttacks === a.numberOfAttacks) {
+        return b.scrap - a.scrap;
+      } else {
+        return b.numberOfAttacks - a.numberOfAttacks;
+      }
+    });
+  
+    return userStatsArray;
+  }, [props.userBattlesData, props.battleUsername]);
+
+  const { getTableProps: getTableAbuserProps, headerGroups: headerAbuserGroups, rows: abuserRows, prepareRow: prepareAbuserRow } = useTable(
+    {
+      columns: abuseColumns,
+      data: userAbusersData,
+      initialState: { sortBy: [{ id: "numberOfAttacks", desc: true }] } as Partial<
+      TableState<UserBattleData>
+    >,
+    }
+  );
+
+  const [pageAbuser, setPageAbuser] = useState(1);
+  const [pageAbuserSize, setPageAbuserSize] = useState(10);
+  
+  const pageAbuserCount = Math.ceil(abuserRows.length / pageAbuserSize);
+  const pageAbuserData = abuserRows.slice((pageAbuser - 1) * pageAbuserSize, pageAbuser * pageAbuserSize);
 
 
   if (props.isLoadingBattleData ||  !tableData) {
@@ -214,29 +308,47 @@ export default function BattlelogsModal({ ...props }: Props) {
           <Text size="md" weight={500} tt="uppercase">
             {props.battleUsername}'s battle log
           </Text>
+          <Container size={'xl'}>
+          <Tabs color="dark" defaultValue="battles" mt={15}>
+            <Tabs.List>
+              <Tabs.Tab value="battles" icon={<IconSwords size="1rem" />}>
+                Battles
+              </Tabs.Tab>
+              <Tabs.Tab value="abusers" icon={<IconTank size="1rem" />}>
+                Abusers
+              </Tabs.Tab>
+            </Tabs.List>
+            <Tabs.Panel value="battles" pt="xs">
+            <BattlesTab
+              getTableProps = {getTableProps}
+              pageData = {pageData}
+              prepareRow = {prepareRow}
+              page = {page}
+              setPage ={setPage}
+              pageCount = {pageCount}
+               />
+            </Tabs.Panel>
+            <Tabs.Panel value="abusers" pt="xs">
+
+            <AbusersTab
+              getTableProps = {getTableAbuserProps}
+              pageData = {pageAbuserData}
+              prepareRow = {prepareAbuserRow}
+              page = {pageAbuser}
+              setPage ={setPageAbuser}
+              pageCount = {pageAbuserCount}
+               />
+            </Tabs.Panel>
+          </Tabs>
+          </Container>
           
-        <Box
+        {/* <Box
           sx={{
             overflowX: "auto",
             "-webkit-overflow-scrolling": "touch",
           }}
         >
           <Table highlightOnHover {...getTableProps()} mt={35}>
-            {/* <thead>
-              {headerGroups.map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((column: any) => (
-                    <th
-                      key={column.id}
-                      {...column.getHeaderProps()}
-                      className={classes.header}
-                    >
-                      {column.render("Header")}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead> */}
             <tbody>
               {pageData.map((row) => {
                 prepareRow(row);
@@ -262,7 +374,7 @@ export default function BattlelogsModal({ ...props }: Props) {
           pt={25}
           pb={5}
           color={"dark"}
-        />
+        /> */}
         
         </Container>
       </Modal>
