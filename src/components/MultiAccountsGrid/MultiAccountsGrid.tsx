@@ -52,6 +52,7 @@ import AccountsPanel from "./AccountsPanel/AccountsPanel";
 import MainAccountPanel from "./MainAccountPanel/MainAccountPanel";
 import { claimTokensForEnabledUsers } from "../../../scripts/scripts";
 import BattlelogsModal from "./BattlelogsModal/BattlelogsModal";
+import { useNotificationStore } from "@/zustand/stores/useNotificationStore";
 
 interface UserData {
   username: string;
@@ -81,6 +82,12 @@ interface Props {
 export default function MultiAccountsGrid({ ...props }: Props) {
   const { classes, theme } = useStyles();
   const [page, setPage] = useState(1);
+
+
+  const battleSuccess = useNotificationStore(
+    (state: { battleSuccess: boolean }) => state.battleSuccess
+  );
+
   const isSubscriber = useAuthorizationStore(
     (state: { isSubscriber: boolean }) => state.isSubscriber
   );
@@ -434,6 +441,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
             <span
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
+              
             >
               {row.original.claims}
             </span>
@@ -533,6 +541,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               >
                 <ActionIcon
                   variant="outline"
+                  disabled={battleSuccess}
                   onClick={() =>
                     claimScrap(row.original.scrap, row.original.username)
                   }
@@ -571,7 +580,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         ),
       },
     ],
-    []
+    [battleSuccess]
   );
 
   const filteredUsernameData = useMemo(() => {
