@@ -83,6 +83,9 @@ export default function MultiAccountsGrid({ ...props }: Props) {
   const { classes, theme } = useStyles();
   const [page, setPage] = useState(1);
 
+  const claimSuccess = useNotificationStore(
+    (state: { claimSuccess: boolean }) => state.claimSuccess
+  );
 
   const battleSuccess = useNotificationStore(
     (state: { battleSuccess: boolean }) => state.battleSuccess
@@ -98,7 +101,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
       refetchInterval: 300000,
     }
   );
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState<string | null>('10');
   const [username, setUsername] = useState("");
 
   const { mutate } = useMutation(addUser, {
@@ -659,8 +662,8 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     );
   }
 
-  const pageCount = Math.ceil(rows.length / pageSize);
-  const pageData = rows.slice((page - 1) * pageSize, page * pageSize);
+  const pageCount = Math.ceil(rows.length / (pageSize ? parseInt(pageSize) : 10));
+  const pageData = rows.slice((page - 1) * (pageSize ? parseInt(pageSize) : 10), page * (pageSize ? parseInt(pageSize) : 10));
 
   return (
     <>
@@ -720,7 +723,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
             )
           }}
           // onClick={()=>{claimTokensForEnabledUsers()}}
-          disabled={!isSubscriber}
+          disabled={!isSubscriber || claimSuccess}
           fullWidth
           styles={(theme: any) => ({
             root: {
@@ -733,11 +736,15 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         >
           Claim entire $SCRAP
         </Button>
+
+
+
         </Box>
         </Grid.Col>
       </Grid>
       
  
+
 
       <SimpleGrid
         cols={1}
@@ -830,6 +837,24 @@ export default function MultiAccountsGrid({ ...props }: Props) {
             inputAmount={inputAmount}
           />
         )}
+        <Group position="right">
+        <Box w={70}>
+        <Select
+        
+        pt={15}
+        data={[
+          { value: "5", label: "5" },
+          { value: "10", label: "10" },
+          { value: "15", label: "15" },
+          { value: "20", label: "20" },
+        ]}
+        defaultValue={'10'}
+        placeholder="Size"
+        onChange={setPageSize}
+      />
+        </Box>
+        </Group>
+     
 
         <Pagination
           value={page}
