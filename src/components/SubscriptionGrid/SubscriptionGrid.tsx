@@ -1,6 +1,4 @@
-import {
-  Space,
-} from "@mantine/core";
+import { Space } from "@mantine/core";
 import React from "react";
 
 import { Subscription } from "./Subscription/Subscription";

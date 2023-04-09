@@ -48,10 +48,12 @@ interface UserData {
   attacks: number;
   claims: number;
   battle: string;
+  dodge: number;
+  crit: number;
   stats: {
     dodge: number;
     crit: number;
-  }
+  };
 }
 
 interface Props {

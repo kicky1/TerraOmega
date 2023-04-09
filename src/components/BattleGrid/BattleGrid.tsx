@@ -59,10 +59,12 @@ interface UserData {
   attacks: number;
   claims: number;
   battle: string;
+  dodge: number;
+  crit: number;
   stats: {
     dodge: number;
     crit: number;
-  }
+  };
 }
 
 interface Props {
@@ -126,7 +128,6 @@ export default function BattleGrid({ ...props }: Props) {
     };
   }, [claimSuccess]);
 
-
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
     if (battleError) {
@@ -175,8 +176,6 @@ export default function BattleGrid({ ...props }: Props) {
       refetchBattles({ queryKey: ["userBattle", battleUsername] });
     }
   }, [battleUsername, refetchBattles]);
-
-
 
   const columns: readonly Column<UserData>[] = useMemo(
     () => [
@@ -335,7 +334,9 @@ export default function BattleGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.stats.dodge ? (row.original.stats.dodge).toFixed(3) : 0}
+              {row.original.stats.dodge
+                ? row.original.stats.dodge.toFixed(3)
+                : 0}
             </span>
           </>
         ),
@@ -359,9 +360,6 @@ export default function BattleGrid({ ...props }: Props) {
     []
   );
 
-
-  
-
   const filteredUsernameData = useMemo(() => {
     if (!props.data) {
       return [];
@@ -373,15 +371,12 @@ export default function BattleGrid({ ...props }: Props) {
 
     if (userData) {
       filteredData = filteredData.filter(
-        (user: UserData) =>
-          user.defense < userData?.damage
+        (user: UserData) => user.defense < userData?.damage
       );
 
       filteredData = filteredData.sort(
         (a: { scrap: number }, b: { scrap: number }) => b.scrap - a.scrap
       );
-
-      
     }
 
     return filteredData;

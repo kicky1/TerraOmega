@@ -37,7 +37,6 @@ export async function getAccounts() {
 
   let accounts = accountsData[0].accounts;
 
-
   return accounts;
 }
 

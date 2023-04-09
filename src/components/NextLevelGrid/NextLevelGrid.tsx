@@ -1,10 +1,20 @@
 import { useQuery } from "react-query";
-import { Text, Group, RingProgress, Card, Center, ThemeIcon, Image, Avatar, Tooltip } from "@mantine/core";
+import {
+  Text,
+  Group,
+  RingProgress,
+  Card,
+  Center,
+  ThemeIcon,
+  Image,
+  Avatar,
+  Tooltip,
+} from "@mantine/core";
 import React from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { getStatsData } from "@/app/utils/actions/stats";
 import useStyles from "./style";
-import ocanea from "../../assets/oceana.png"
+import ocanea from "../../assets/oceana.png";
 
 export default function NextLevelGrid() {
   const { classes, theme } = useStyles();
@@ -57,22 +67,24 @@ export default function NextLevelGrid() {
               //   %
               // </Text>
               <Center>
-                            <Tooltip
-              label={'Accumulated: ' + ((statsScrapData.currentFavor / statsScrapData.totalFavor) * 100).toFixed(2) + ' %' }
-              color="dark"
-              withArrow
-              arrowPosition="center"
-              offset={10}
-              
-            >
-                  <Avatar
-                    radius={200}
-                    size={217}
-                    src={ocanea.src}
-                    
-                  /> 
-                  </Tooltip>
-            </Center>
+                <Tooltip
+                  label={
+                    "Accumulated: " +
+                    (
+                      (statsScrapData.currentFavor /
+                        statsScrapData.totalFavor) *
+                      100
+                    ).toFixed(2) +
+                    " %"
+                  }
+                  color="dark"
+                  withArrow
+                  arrowPosition="center"
+                  offset={10}
+                >
+                  <Avatar radius={200} size={217} src={ocanea.src} />
+                </Tooltip>
+              </Center>
             }
           />
         </Group>

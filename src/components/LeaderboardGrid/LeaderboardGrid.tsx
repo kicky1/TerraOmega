@@ -8,7 +8,7 @@ import {
   getUserData,
 } from "@/app/utils/actions/users";
 import backgorund from "../../assets/backgorund.jpg";
-import backgorund2 from "../../assets/backgorund2.jpg"
+import backgorund2 from "../../assets/backgorund2.jpg";
 
 interface UserData {
   attacks: number;
@@ -64,20 +64,20 @@ export default function LeaderboardGrid() {
           userData={leaderBoardData[0]}
           place={1}
           title={"Galactic Conqueror"}
-          gradientColors={['#031418']}
+          gradientColors={["#031418"]}
         />
         <PodiumCard
           userData={leaderBoardData[1]}
           place={2}
           title={"Cosmic Legend"}
-          gradientColors={['#031418']}
+          gradientColors={["#031418"]}
         />
 
         <PodiumCard
           userData={leaderBoardData[2]}
           place={3}
           title={"Intergalactic Hero"}
-          gradientColors={['#031418']}
+          gradientColors={["#031418"]}
         />
       </SimpleGrid>
       <SimpleGrid cols={2} pb={15} breakpoints={[{ maxWidth: "md", cols: 1 }]}>
@@ -87,7 +87,7 @@ export default function LeaderboardGrid() {
             userData={card}
             place={index + 4 + (currentPage - 1) * pageSize}
             title={"Starship Captain"}
-            gradientColors={['#00313a']}
+            gradientColors={["#00313a"]}
           />
         ))}
       </SimpleGrid>

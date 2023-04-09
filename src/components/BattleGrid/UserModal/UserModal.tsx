@@ -31,10 +31,12 @@ interface UserData {
   minerate: number;
   attacks: number;
   claims: number;
+  dodge: number;
+  crit: number;
   stats: {
     dodge: number;
     crit: number;
-  }
+  };
 }
 
 interface UserBattleData {

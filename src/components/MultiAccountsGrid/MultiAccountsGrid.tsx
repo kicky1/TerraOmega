@@ -70,12 +70,12 @@ interface UserData {
   actions: string;
   claims: number;
   battle: string;
-  dodge: number;
   crit: number;
+  dodge: number;
   stats: {
     dodge: number;
     crit: number;
-  }
+  };
 }
 interface Props {
   accounts: any;
@@ -105,7 +105,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
       refetchInterval: 300000,
     }
   );
-  const [pageSize, setPageSize] = useState<string | null>('10');
+  const [pageSize, setPageSize] = useState<string | null>("10");
   const [username, setUsername] = useState("");
 
   const { mutate } = useMutation(addUser, {
@@ -121,8 +121,9 @@ export default function MultiAccountsGrid({ ...props }: Props) {
   const [showBattlelogPopup, setShowBattlelogPopup] = useState(false);
 
   const [selectedRow, setSelectedRow] = useState<UserData | null>(null);
-  const [selectedBattlelogRow, setSelectedBattlelogRow] = useState<UserData | null>(null);
-  
+  const [selectedBattlelogRow, setSelectedBattlelogRow] =
+    useState<UserData | null>(null);
+
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
   const [selectedUpgradeRow, setSelectedUpgradeRow] = useState<UserData | null>(
@@ -180,7 +181,11 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     setShowUpgradePopup(true);
   };
 
-  const { data: userBattlesData, isLoading: isLoadingBattleData, refetch: refetchBattles } = useQuery(
+  const {
+    data: userBattlesData,
+    isLoading: isLoadingBattleData,
+    refetch: refetchBattles,
+  } = useQuery(
     ["userBattle", battleUsername],
     () => getUserBattlesData(battleUsername),
     {
@@ -244,9 +249,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Tooltip
-              label={`Upgrade for ${
-                (row.original.damage / 10) ** 2
-              } $SCRAP`}
+              label={`Upgrade for ${(row.original.damage / 10) ** 2} $SCRAP`}
               color="dark"
               withArrow
               arrowPosition="center"
@@ -275,9 +278,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Tooltip
-              label={`Upgrade for ${
-                (row.original.defense / 10) ** 2
-              } $SCRAP`}
+              label={`Upgrade for ${(row.original.defense / 10) ** 2} $SCRAP`}
               color="dark"
               withArrow
               arrowPosition="center"
@@ -306,9 +307,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Tooltip
-              label={`Upgrade for ${
-                row.original.engineering ** 2
-              } $SCRAP`}
+              label={`Upgrade for ${row.original.engineering ** 2} $SCRAP`}
               color="dark"
               withArrow
               arrowPosition="center"
@@ -383,7 +382,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
       },
       {
         Header: "Dodge",
-        accessor: "dodge" as const,
+        accessor: "dodge",
         defaultCanSort: false,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
@@ -391,7 +390,9 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.stats.dodge ? (row.original.stats.dodge).toFixed(3) : 0}
+              {row.original.stats.dodge
+                ? row.original.stats.dodge.toFixed(3)
+                : 0}
             </span>
           </>
         ),
@@ -406,7 +407,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.stats.crit ? (row.original.stats.crit).toFixed(3) : 0}
+              {row.original.stats.crit ? row.original.stats.crit.toFixed(3) : 0}
             </span>
           </>
         ),
@@ -463,7 +464,6 @@ export default function MultiAccountsGrid({ ...props }: Props) {
             <span
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
-              
             >
               {row.original.claims}
             </span>
@@ -535,7 +535,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
             <Group>
-            <Tooltip
+              <Tooltip
                 label="Battle log"
                 color="dark"
                 withArrow
@@ -545,10 +545,11 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                 <ActionIcon
                   variant="outline"
                   onClick={() => (
-                    refetchBattles({ queryKey: ["userBattle", battleUsername] }),
+                    refetchBattles({
+                      queryKey: ["userBattle", battleUsername],
+                    }),
                     handleInfoClick(row)
-                  )   
-                  }
+                  )}
                 >
                   <IconInfoCircle size="1.125rem" />
                 </ActionIcon>
@@ -621,7 +622,6 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     [filteredUsernameData]
   );
 
-
   const filteredMain = tableData.find(
     (obj: { username: string }) => obj.username === mainUsername
   );
@@ -681,8 +681,13 @@ export default function MultiAccountsGrid({ ...props }: Props) {
     );
   }
 
-  const pageCount = Math.ceil(rows.length / (pageSize ? parseInt(pageSize) : 10));
-  const pageData = rows.slice((page - 1) * (pageSize ? parseInt(pageSize) : 10), page * (pageSize ? parseInt(pageSize) : 10));
+  const pageCount = Math.ceil(
+    rows.length / (pageSize ? parseInt(pageSize) : 10)
+  );
+  const pageData = rows.slice(
+    (page - 1) * (pageSize ? parseInt(pageSize) : 10),
+    page * (pageSize ? parseInt(pageSize) : 10)
+  );
 
   return (
     <>
@@ -729,41 +734,33 @@ export default function MultiAccountsGrid({ ...props }: Props) {
           </Group>
         </Grid.Col>
         <Grid.Col span={isMobile ? 12 : 6}>
-        <Box w={180}>
-        <Button
-          onClick={()=>{
-            claimAllScrap(tableData).then(
-              async () => {
-                await new Promise((resolve) => setTimeout(resolve, 7500));
-                tableData.map(async (user: UserData) => { 
-                  getUserData(user.username)
-                })
-              }
-            )
-          }}
-          // onClick={()=>{claimTokensForEnabledUsers()}}
-          disabled={!isSubscriber || claimSuccess}
-          fullWidth
-          styles={(theme: any) => ({
-            root: {
-              backgroundColor: "#0a3d47",
-              "&:not([data-disabled])": theme.fn.hover({
-                backgroundColor: theme.fn.darken("#072f37", 0.05),
-              }),
-            },
-          })}
-        >
-          Claim entire $SCRAP
-        </Button>
-
-
-
-        </Box>
+          <Box w={180}>
+            <Button
+              onClick={() => {
+                claimAllScrap(tableData).then(async () => {
+                  await new Promise((resolve) => setTimeout(resolve, 7500));
+                  tableData.map(async (user: UserData) => {
+                    getUserData(user.username);
+                  });
+                });
+              }}
+              // onClick={()=>{claimTokensForEnabledUsers()}}
+              disabled={!isSubscriber || claimSuccess}
+              fullWidth
+              styles={(theme: any) => ({
+                root: {
+                  backgroundColor: "#0a3d47",
+                  "&:not([data-disabled])": theme.fn.hover({
+                    backgroundColor: theme.fn.darken("#072f37", 0.05),
+                  }),
+                },
+              })}
+            >
+              Claim entire $SCRAP
+            </Button>
+          </Box>
         </Grid.Col>
       </Grid>
-      
- 
-
 
       <SimpleGrid
         cols={1}
@@ -832,7 +829,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
           />
         )}
 
-      {selectedBattlelogRow && (
+        {selectedBattlelogRow && (
           <BattlelogsModal
             showBattlelogPopup={showBattlelogPopup}
             handlePopupClose={handleShowBattlelogPopupClose}
@@ -857,23 +854,21 @@ export default function MultiAccountsGrid({ ...props }: Props) {
           />
         )}
         <Group position="right">
-        <Box w={70}>
-        <Select
-        
-        pt={15}
-        data={[
-          { value: "5", label: "5" },
-          { value: "10", label: "10" },
-          { value: "15", label: "15" },
-          { value: "20", label: "20" },
-        ]}
-        defaultValue={'10'}
-        placeholder="Size"
-        onChange={setPageSize}
-      />
-        </Box>
+          <Box w={70}>
+            <Select
+              pt={15}
+              data={[
+                { value: "5", label: "5" },
+                { value: "10", label: "10" },
+                { value: "15", label: "15" },
+                { value: "20", label: "20" },
+              ]}
+              defaultValue={"10"}
+              placeholder="Size"
+              onChange={setPageSize}
+            />
+          </Box>
         </Group>
-     
 
         <Pagination
           value={page}

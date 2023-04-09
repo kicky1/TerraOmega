@@ -2,16 +2,14 @@
 import { Client } from "@hiveio/dhive";
 import supabase from "@/supabase/supabase";
 
-const client = new Client('https://api.hive.blog');
+const client = new Client("https://api.hive.blog");
 
 export async function claimTokensForEnabledUsers() {
   // Fetch users with bot_enable set to true
   const { data: users, error } = await supabase
-    .from('subscribers')
-    .select('*')
-    .eq('bot_enable', true);
-
-   
+    .from("subscribers")
+    .select("*")
+    .eq("bot_enable", true);
 
   if (error) {
     console.error(error);
@@ -30,7 +28,9 @@ export async function claimTokensForEnabledUsers() {
       if (success) {
         console.log(`Tokens claimed for user ${user.username}`);
       } else {
-        console.error(`Error claiming tokens for user ${user.username}: ${error}`);
+        console.error(
+          `Error claiming tokens for user ${user.username}: ${error}`
+        );
       }
     }
 
@@ -44,21 +44,24 @@ async function sendClaimRequest(user: any) {
   var hash =
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15);
-  
-    const claimData = {
+
+  const claimData = {
     amount: 25,
-    "tx-hash": hash
+    "tx-hash": hash,
   };
 
   // Broadcast custom JSON request using hive.broadcast.customJson
   return new Promise(async (resolve, reject) => {
     try {
-      const result = await client.broadcast.json({
-        id: "terracore_claim",
-        required_auths: [],
-        required_posting_auths: [username],
-        json: JSON.stringify(claimData)
-      }, postingKey);
+      const result = await client.broadcast.json(
+        {
+          id: "terracore_claim",
+          required_auths: [],
+          required_posting_auths: [username],
+          json: JSON.stringify(claimData),
+        },
+        postingKey
+      );
 
       if (result) {
         resolve({ success: true });

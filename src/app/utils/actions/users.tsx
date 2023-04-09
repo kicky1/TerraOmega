@@ -50,8 +50,8 @@ const isKeychain = () => {
 
 export async function getUsersData() {
   const { data } = await api.get("players", {});
-  const filteredData = data.filter((obj: any) =>
-    obj.hasOwnProperty("username") && obj.defense >= 10
+  const filteredData = data.filter(
+    (obj: any) => obj.hasOwnProperty("username") && obj.defense >= 10
   );
   return filteredData;
 }
@@ -120,8 +120,8 @@ export async function claimScrap(amount: number, username: string) {
           JSON.stringify(claimData),
           "Claim tokens",
           (response: any) => {
-            if(response.success == true){
-              setClaimSuccess(true)
+            if (response.success == true) {
+              setClaimSuccess(true);
             }
             setTimeout(() => {
               getUserData(username).then((r) => {});
@@ -164,10 +164,8 @@ export async function claimAllScrap(usernames: UserData[]) {
         })
         .join("");
 
-
-
       if (isKeychain()) {
-        usernames.map(async (user: UserData) => { 
+        usernames.map(async (user: UserData) => {
           await new Promise((resolve) => setTimeout(resolve, 2500));
 
           claimData = {
@@ -182,16 +180,12 @@ export async function claimAllScrap(usernames: UserData[]) {
             JSON.stringify(claimData),
             "Claim tokens",
             async (response: any) => {
-
-              if(response.success == true){
-                setClaimSuccess(true)
+              if (response.success == true) {
+                setClaimSuccess(true);
               }
-
             }
           );
-          
-        })
-
+        });
       } else {
         alert("You have to install keychain!");
       }
@@ -241,7 +235,7 @@ export async function attackOponent(target: string) {
           JSON.stringify(battleData),
           `Attack ${target}`,
           async (response: any) => {
-            if(response.success == true){
+            if (response.success == true) {
               setBattleSuccess(true);
               await new Promise((resolve) => setTimeout(resolve, 5000));
               await getUserData(response.data.username);

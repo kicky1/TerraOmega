@@ -41,5 +41,9 @@ export const useNotificationStore = create<NotificationStoreState>()(
   }))
 );
 
-export const { setBattleError, setBattleSuccess, setScrapEarned, setClaimSuccess } =
-  useNotificationStore.getState();
+export const {
+  setBattleError,
+  setBattleSuccess,
+  setScrapEarned,
+  setClaimSuccess,
+} = useNotificationStore.getState();

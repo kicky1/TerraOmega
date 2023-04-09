@@ -34,9 +34,6 @@ export default function Home() {
     refetchInterval: 300000,
   });
 
-  
-
-
   const isSubscriber = useAuthorizationStore(
     (state: { isSubscriber: boolean }) => state.isSubscriber
   );

@@ -22,8 +22,8 @@ const useStyles = createStyles((theme) => ({
 
   header: {
     whiteSpace: "nowrap",
- 
-    textAlign: "left"
+
+    textAlign: "left",
   },
 
   notificationContainer: {

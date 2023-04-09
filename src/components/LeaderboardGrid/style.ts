@@ -1,6 +1,6 @@
 import { rem } from "@mantine/core";
 import { createStyles } from "@mantine/styles";
-import backgorund from "../../assets/backgorund.jpg"
+import backgorund from "../../assets/backgorund.jpg";
 
 const useStyles = createStyles((theme) => ({
   card: {

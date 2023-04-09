@@ -51,8 +51,6 @@ export default function PodiumCard({ ...props }: Props) {
   const { classes, theme } = useStyles(props.gradientColors);
   const isMobile = useMediaQuery("(max-width: 960px)");
 
-  
-
   const points =
     Math.pow(props.userData.damage / 10, 2) +
     Math.pow(props.userData.defense / 10, 2) +
