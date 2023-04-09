@@ -59,7 +59,10 @@ interface UserData {
   attacks: number;
   claims: number;
   battle: string;
-  dodge: number;
+  stats: {
+    dodge: number;
+    crit: number;
+  }
 }
 
 interface Props {
@@ -324,7 +327,7 @@ export default function BattleGrid({ ...props }: Props) {
       },
       {
         Header: "Dodge",
-        accessor: "dodge" as const,
+        accessor: "dodge",
         defaultCanSort: false,
         Cell: ({ row }: { row: { original: UserData } }) => (
           <>
@@ -332,7 +335,7 @@ export default function BattleGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.hiveEngineStake ? (row.original.hiveEngineStake*0.025).toFixed(3) : 0}
+              {row.original.stats.dodge ? (row.original.stats.dodge).toFixed(3) : 0}
             </span>
           </>
         ),
@@ -371,11 +374,8 @@ export default function BattleGrid({ ...props }: Props) {
     if (userData) {
       filteredData = filteredData.filter(
         (user: UserData) =>
-          user.defense < userData?.damage && user.favor < userData.favor
+          user.defense < userData?.damage
       );
-
- 
-
 
       filteredData = filteredData.sort(
         (a: { scrap: number }, b: { scrap: number }) => b.scrap - a.scrap

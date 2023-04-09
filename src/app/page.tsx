@@ -30,7 +30,7 @@ import { useQuery } from "react-query";
 export const runtime = "experimental-edge";
 
 export default function Home() {
-  const { data, isLoading } = useQuery("usersData", getUsersData, {
+  const { data, isLoading } = useQuery("playersData", getUsersData, {
     refetchInterval: 300000,
   });
 

@@ -72,6 +72,10 @@ interface UserData {
   battle: string;
   dodge: number;
   crit: number;
+  stats: {
+    dodge: number;
+    crit: number;
+  }
 }
 interface Props {
   accounts: any;
@@ -387,7 +391,22 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.hiveEngineStake ? (row.original.hiveEngineStake*0.025).toFixed(3) : 0}
+              {row.original.stats.dodge ? (row.original.stats.dodge).toFixed(3) : 0}
+            </span>
+          </>
+        ),
+      },
+      {
+        Header: "Crit",
+        accessor: "crit" as const,
+        defaultCanSort: false,
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.stats.crit ? (row.original.stats.crit).toFixed(3) : 0}
             </span>
           </>
         ),

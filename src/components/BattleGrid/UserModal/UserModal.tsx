@@ -31,6 +31,10 @@ interface UserData {
   minerate: number;
   attacks: number;
   claims: number;
+  stats: {
+    dodge: number;
+    crit: number;
+  }
 }
 
 interface UserBattleData {
@@ -210,6 +214,23 @@ export default function UserModal({ ...props }: Props) {
                   mah={45}
                   fit="contain"
                   src={
+                    "https://cdn-icons-png.flaticon.com/512/7445/7445281.png"
+                  }
+                />
+                <Text fz={"lg"}>
+                  <Text span fw={500} inherit>
+                    Crit{" "}
+                  </Text>
+                  : {props.selectedRow.stats.crit.toFixed(3)}
+                </Text>
+              </Group>
+              <Space h="sm" />
+              <Group>
+                <Image
+                  maw={45}
+                  mah={45}
+                  fit="contain"
+                  src={
                     "https://cdn-icons-png.flaticon.com/512/9219/9219138.png"
                   }
                 />
@@ -281,6 +302,23 @@ export default function UserModal({ ...props }: Props) {
                   {props.selectedRow.favor
                     ? props.selectedRow.favor.toFixed(2)
                     : 0}
+                </Text>
+              </Group>
+              <Space h="sm" />
+              <Group>
+                <Image
+                  maw={45}
+                  mah={45}
+                  fit="contain"
+                  src={
+                    "https://cdn-icons-png.flaticon.com/512/2676/2676053.png"
+                  }
+                />
+                <Text fz={"lg"}>
+                  <Text span fw={500} inherit>
+                    Dodge{" "}
+                  </Text>
+                  : {props.selectedRow.stats.dodge.toFixed(3)}
                 </Text>
               </Group>
               <Space h="sm" />
