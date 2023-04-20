@@ -16,7 +16,7 @@ import {
 import { useMediaQuery } from "@mantine/hooks";
 import useStyles from "./style";
 import logo from "../../assets/logo.png";
-import { IconLogout, IconMoonStars, IconSun } from "@tabler/icons-react";
+import { IconCalendarDue, IconLogout, IconMoonStars, IconSun } from "@tabler/icons-react";
 import { Suspense, useState } from "react";
 import LoginButton from "../LoginButton/LoginButton";
 import { UserButton } from "../UserButton/UserButton";
@@ -24,6 +24,8 @@ import {
   logoutUser,
   useAuthorizationStore,
 } from "@/zustand/stores/useAuthorizationStore";
+
+
 
 export default function HeaderApp() {
   const { classes, theme } = useStyles();
@@ -47,6 +49,10 @@ export default function HeaderApp() {
 
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
+
+  const subDays = useAuthorizationStore(
+    (state) => state.subDays
+  );
 
   return (
     <Container fluid className={classes.header} p={5} pb={15}>
@@ -84,6 +90,20 @@ export default function HeaderApp() {
                       />
                     </Menu.Target>
                     <Menu.Dropdown>
+                    <Menu.Item
+                        
+                        icon={
+                          <IconCalendarDue
+                            color={
+                              theme.colorScheme === "dark" ? "#ffff" : "black"
+                            }
+                            size={20}
+                            stroke={1.5}
+                          />
+                        }
+                      >
+                        {subDays <= 0 ? "Sub expired" : `Sub days: ${subDays}` }
+                      </Menu.Item>
                       <Menu.Item
                         className={classes.subLink}
                         onClick={() => logoutUser()}

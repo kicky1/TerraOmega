@@ -1,3 +1,4 @@
+import supabase from "@/supabase/supabase";
 import { getUserData } from "./users";
 
 interface PaymentData {
@@ -25,15 +26,61 @@ export async function payForSubscription({ ...props }: PaymentData) {
     window.hive_keychain.requestSendToken(
       props.username,
       "terraomega",
-      props.amount.toFixed(3),
+      // props.amount.toFixed(3),
+      '0.001',
       `Request of subscription for: ${props.username}`,
       "SWAP.HBD",
-      (response: any) => {}
+      async (response: any) => {
+        if (response.success) {
+          let { data, error } = await supabase
+            .from("subscribers")
+            .select("*")
+            .eq("username", props.username);
+
+          if (error) {
+            console.log(error.message);
+            return;
+          }
+
+          if (data && data.length > 0) {
+            await supabase
+              .from("subscribers")
+              .update({ created_at: new Date().toISOString() })
+              .eq("id", data[0].id).then(
+                () => location.reload()
+              );
+
+          } else {
+            let subMonths = 0
+            if(props.amount == 3){
+              subMonths = 1
+            }else if (props.amount == 16.2){
+              subMonths = 6
+            }else{
+              subMonths = 12
+            }
+
+            await supabase
+              .from("subscribers")
+              .insert({ 
+                username: props.username, 
+                created_at: new Date().toISOString(),
+                amount: subMonths,
+                accounts: [props.username]
+              }).then(
+                () => location.reload()
+              );
+
+
+          }
+        }
+      }
     );
   } else {
     alert("You have to install keychain!");
   }
 }
+
 
 export async function transferTokens(username: string, amount: number) {
   if (!localStorage.getItem("username")) {

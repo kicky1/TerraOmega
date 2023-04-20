@@ -5,10 +5,12 @@ type AuthorizationStoreState = {
   authorized: boolean;
   username: string;
   isSubscriber: boolean;
+  subDays: number;
   setAuthorized: (flag: boolean) => void;
   setUsername: (name: string) => void;
   setIsSubscriber: (flag: boolean) => void;
   logoutUser: () => void;
+  setSubDays: (days: number) => void
 };
 
 export const useAuthorizationStore = create<AuthorizationStoreState>()(
@@ -16,6 +18,8 @@ export const useAuthorizationStore = create<AuthorizationStoreState>()(
     authorized: false,
     isSubscriber: false,
     username: "",
+    subDays: 0,
+
     logoutUser: () => {
       set((state) => {
         state.authorized = false;
@@ -39,8 +43,13 @@ export const useAuthorizationStore = create<AuthorizationStoreState>()(
         state.isSubscriber = flag;
       });
     },
+    setSubDays: (days) => {
+      set((state) => {
+        state.subDays = days;
+      });
+    }
   }))
 );
 
-export const { logoutUser, setAuthorized, setUsername, setIsSubscriber } =
+export const { logoutUser, setAuthorized, setUsername, setIsSubscriber, setSubDays } =
   useAuthorizationStore.getState();

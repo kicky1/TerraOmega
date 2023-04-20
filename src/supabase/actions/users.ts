@@ -1,18 +1,43 @@
+import { setSubDays } from "@/zustand/stores/useAuthorizationStore";
 import supabase from "../supabase";
 
 export async function isSubscriber(username: string) {
   let { data, error } = await supabase
     .from("subscribers")
     .select("*")
-    .eq("username", username);
+    .eq("username", username)
 
   if (error) {
     console.log(error.message);
-    return;
+    return false;
   }
 
-  const isExist = data && data.length > 0 ? true : false;
-  return isExist;
+  if (data && data.length > 0) {
+    const subscription = data[0];
+    const purchaseDate = new Date(subscription.created_at);
+    const today = new Date();
+    const maxDurationInDays = subscription.amount * 30;
+    const diffInDays = Math.ceil((today.getTime() - purchaseDate.getTime()) / (1000 * 60 * 60 * 24));
+    const remainingDays = maxDurationInDays - diffInDays;
+
+    setSubDays(remainingDays)
+
+    if (diffInDays >= maxDurationInDays) {
+      const { error: updateError } = await supabase
+        .from("subscribers")
+        .update({ active: false })
+        .eq("id", subscription.id);
+
+      if (updateError) {
+        console.log(updateError.message);
+      }
+      return false;
+    } else {
+      return true;
+    }
+  } else {
+    return false;
+  }
 }
 
 export async function getAccounts() {
