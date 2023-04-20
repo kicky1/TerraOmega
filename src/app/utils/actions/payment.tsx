@@ -26,8 +26,8 @@ export async function payForSubscription({ ...props }: PaymentData) {
     window.hive_keychain.requestSendToken(
       props.username,
       "terraomega",
-      // props.amount.toFixed(3),
-      '0.001',
+      props.amount.toFixed(3),
+      // '0.001',
       `Request of subscription for: ${props.username}`,
       "SWAP.HBD",
       async (response: any) => {
