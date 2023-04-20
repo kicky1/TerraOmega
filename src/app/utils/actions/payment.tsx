@@ -27,7 +27,6 @@ export async function payForSubscription({ ...props }: PaymentData) {
       props.username,
       "terraomega",
       props.amount.toFixed(3),
-      // '0.001',
       `Request of subscription for: ${props.username}`,
       "SWAP.HBD",
       async (response: any) => {

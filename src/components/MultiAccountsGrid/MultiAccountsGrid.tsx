@@ -72,9 +72,11 @@ interface UserData {
   battle: string;
   crit: number;
   dodge: number;
+  luck: number;
   stats: {
     dodge: number;
     crit: number;
+    luck: number;
   };
 }
 interface Props {
@@ -408,6 +410,21 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               onClick={() => handleRowClick(row)}
             >
               {row.original.stats.crit ? row.original.stats.crit.toFixed(3) : 0}
+            </span>
+          </>
+        ),
+      },
+      {
+        Header: "Luck",
+        accessor: "luck" as const,
+        defaultCanSort: false,
+        Cell: ({ row }: { row: { original: UserData } }) => (
+          <>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(row)}
+            >
+              {row.original.stats.luck ? row.original.stats.luck.toFixed(3) : 0}
             </span>
           </>
         ),
