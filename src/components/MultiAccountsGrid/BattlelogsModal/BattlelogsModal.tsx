@@ -108,7 +108,9 @@ export default function BattlelogsModal({ ...props }: Props) {
         Header: "Attacked",
         accessor: "attacked",
         Cell: ({ row }: { row: { original: UserBattleData } }) => (
-          <>{row.original.attacked}</>
+          <> {props.battleUsername == row.original.username
+            ? row.original.attacked
+            : row.original.username}</>
         ),
       },
       {

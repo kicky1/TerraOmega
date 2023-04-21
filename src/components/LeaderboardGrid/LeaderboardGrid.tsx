@@ -3,12 +3,8 @@ import { Space, SimpleGrid, Pagination, Center, Title } from "@mantine/core";
 import PodiumCard from "./PodiumCard/PodiumCard";
 import { useQuery } from "react-query";
 import {
-  getLeaderboard,
-  getUserBattlesData,
-  getUserData,
+  getLeaderboard
 } from "@/app/utils/actions/users";
-import backgorund from "../../assets/backgorund.jpg";
-import backgorund2 from "../../assets/backgorund2.jpg";
 
 interface UserData {
   attacks: number;

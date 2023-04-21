@@ -562,9 +562,10 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                 <ActionIcon
                   variant="outline"
                   onClick={() => (
-                    refetchBattles({
-                      queryKey: ["userBattle", battleUsername],
-                    }),
+                    // refetchBattles({
+                    //   queryKey: ["userBattle", battleUsername],
+                    // }),
+                    setBattleUsername(row.original.username),
                     handleInfoClick(row)
                   )}
                 >
