@@ -43,6 +43,7 @@ import {
   setClaimSuccess,
   useNotificationStore,
 } from "@/zustand/stores/useNotificationStore";
+import { getStatValue } from "@/app/utils/actions/tableOperations";
 
 interface UserData {
   id: string;
@@ -289,7 +290,7 @@ export default function BattleGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.damage}
+              {getStatValue(row.original, 'damage')}
             </span>
           </>
         ),
@@ -304,7 +305,7 @@ export default function BattleGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.defense}
+              {getStatValue(row.original, 'defense')}
             </span>
           </>
         ),
@@ -334,9 +335,7 @@ export default function BattleGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.stats.dodge
-                ? row.original.stats.dodge.toFixed(3)
-                : 0}
+              {getStatValue(row.original, 'dodge').toFixed(3)}
             </span>
           </>
         ),

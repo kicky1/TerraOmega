@@ -53,6 +53,7 @@ import MainAccountPanel from "./MainAccountPanel/MainAccountPanel";
 import { claimTokensForEnabledUsers } from "../../../scripts/scripts";
 import BattlelogsModal from "./BattlelogsModal/BattlelogsModal";
 import { useNotificationStore } from "@/zustand/stores/useNotificationStore";
+import { getStatValue } from "@/app/utils/actions/tableOperations";
 
 interface UserData {
   username: string;
@@ -267,7 +268,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                   )
                 }
               >
-                {row.original.damage}
+                {getStatValue(row.original, 'damage')}
                 <IconArrowUp size={"0.9rem"} fontWeight={100} />{" "}
               </span>
             </Tooltip>
@@ -296,7 +297,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                   )
                 }
               >
-                {row.original.defense}
+                {getStatValue(row.original, 'defense')}
                 <IconArrowUp size={"0.9rem"} fontWeight={100} />{" "}
               </span>
             </Tooltip>
@@ -325,7 +326,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
                   )
                 }
               >
-                {row.original.engineering}
+                {getStatValue(row.original, 'engineering')}
                 <IconArrowUp size={"0.9rem"} fontWeight={100} />
               </span>
             </Tooltip>
@@ -392,9 +393,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.stats.dodge
-                ? row.original.stats.dodge.toFixed(3)
-                : 0}
+              {getStatValue(row.original, 'dodge').toFixed(3)}
             </span>
           </>
         ),
@@ -409,7 +408,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.stats.crit ? row.original.stats.crit.toFixed(3) : 0}
+              {getStatValue(row.original, 'crit').toFixed(3)}
             </span>
           </>
         ),
@@ -424,7 +423,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.stats.luck ? row.original.stats.luck.toFixed(3) : 0}
+              {getStatValue(row.original, 'luck').toFixed(3)}
             </span>
           </>
         ),

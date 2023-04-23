@@ -32,6 +32,7 @@ import {
 import { useMediaQuery } from "@mantine/hooks";
 import { getUserBattlesData } from "@/app/utils/actions/users";
 import UserModal from "./UserModal/UserModal";
+import { getStatValue } from "@/app/utils/actions/tableOperations";
 
 interface UserData {
   id: string;
@@ -216,7 +217,7 @@ export default function FreeBattleGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.damage}
+              {getStatValue(row.original, 'damage')}
             </span>
           </>
         ),
@@ -230,7 +231,7 @@ export default function FreeBattleGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.defense}
+              {getStatValue(row.original, 'defense')}
             </span>
           </>
         ),
@@ -244,7 +245,7 @@ export default function FreeBattleGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {row.original.engineering}
+              {getStatValue(row.original, 'engineering')}
             </span>
           </>
         ),
