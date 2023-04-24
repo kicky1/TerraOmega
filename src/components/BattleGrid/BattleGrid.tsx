@@ -335,7 +335,7 @@ export default function BattleGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {getStatValue(row.original, 'dodge').toFixed(3)}
+              {getStatValue(row.original, 'dodge')}
             </span>
           </>
         ),

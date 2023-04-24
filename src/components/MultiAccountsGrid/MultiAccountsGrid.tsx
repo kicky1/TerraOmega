@@ -393,7 +393,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {getStatValue(row.original, 'dodge').toFixed(3)}
+              {getStatValue(row.original, 'dodge')}
             </span>
           </>
         ),
@@ -408,7 +408,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {getStatValue(row.original, 'crit').toFixed(3)}
+              {getStatValue(row.original, 'crit')}
             </span>
           </>
         ),
@@ -423,7 +423,7 @@ export default function MultiAccountsGrid({ ...props }: Props) {
               style={{ cursor: "pointer" }}
               onClick={() => handleRowClick(row)}
             >
-              {getStatValue(row.original, 'luck').toFixed(3)}
+              {getStatValue(row.original, 'luck')}
             </span>
           </>
         ),

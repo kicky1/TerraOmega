@@ -7,7 +7,7 @@ export function getStatValue(item: any, stat: string) {
       const specialStat = item.items.special?.atributes?.[stat] || 0;
       const weaponStat = item.items.weapon?.atributes?.[stat] || 0;
     
-      return itemStat + armorStat + avatarStat + shipStat + specialStat + weaponStat;
+      return (itemStat + armorStat + avatarStat + shipStat + specialStat + weaponStat).toFixed(2);
     }else{
       return 0
     }
