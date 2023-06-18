@@ -1,20 +1,17 @@
 "use client";
 
 import { getUsersData } from "@/app/utils/actions/users";
-import BattleGrid from "@/components/BattleGrid/BattleGrid";
 import FreeBattleGrid from "@/components/BattleGrid/FreeBattleGrid";
 import { InfoGrid } from "@/components/InfoGrid/InfoGrid";
-import LeaderboardGrid from "@/components/LeaderboardGrid/LeaderboardGrid";
 import MultiAccountsGrid from "@/components/MultiAccountsGrid/MultiAccountsGrid";
 import PaymentGrid from "@/components/PaymentGrid/PaymentGrid";
 import StatisticGrid from "@/components/StatisticGrid/StatistisGrid";
 import SubscriptionGrid from "@/components/SubscriptionGrid/SubscriptionGrid";
 import { getAccounts } from "@/supabase/actions/users";
 import {
-  setIsSubscriber,
   useAuthorizationStore,
 } from "@/zustand/stores/useAuthorizationStore";
-import { Container, Space, Skeleton, Tabs, Button } from "@mantine/core";
+import { Container, Space, Tabs } from "@mantine/core";
 import {
   IconChartHistogram,
   IconCoinBitcoin,
@@ -44,7 +41,6 @@ export default function Home() {
     refetch: refetchAccounts,
   } = useQuery("accountsData", getAccounts);
 
-  // Call refetchAccounts when the isSubscriber value changes
   useEffect(() => {
     refetchAccounts();
   }, [isSubscriber, refetchAccounts]);
@@ -59,9 +55,6 @@ export default function Home() {
             <Tabs.List>
               <Tabs.Tab value="home" icon={<IconHome size="1rem" />}>
                 Home
-              </Tabs.Tab>
-              <Tabs.Tab value="leader" icon={<IconPlanet size="1rem" />}>
-                Ladder
               </Tabs.Tab>
               <Tabs.Tab value="tab" icon={<IconTableOptions size="1rem" />}>
                 Table
@@ -81,9 +74,6 @@ export default function Home() {
             </Tabs.List>
             <Tabs.Panel value="home" pt="xs">
               <SubscriptionGrid />
-            </Tabs.Panel>
-            <Tabs.Panel value="leader" pt="xs">
-              <LeaderboardGrid />
             </Tabs.Panel>
             <Tabs.Panel value="tab" pt="xs">
               <FreeBattleGrid data={data} isLoading={isLoading} />

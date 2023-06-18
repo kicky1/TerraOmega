@@ -17,8 +17,27 @@ import React, { useEffect, useMemo } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { getUserDataProfile } from "@/app/utils/actions/hiveUsers";
 import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
-import UserData from "@/types";
 
+interface UserData {
+  username: string;
+  damage: number;
+  defense: number;
+  engineering: number;
+  scrap: number;
+  registrationTime: number;
+  favor: number;
+  hiveEngineScrap: number;
+  hiveEngineStake: number;
+  minerate: number;
+  attacks: number;
+  claims: number;
+  dodge: number;
+  crit: number;
+  stats: {
+    dodge: number;
+    crit: number;
+  };
+}
 
 interface UserBattleData {
   id: string;
@@ -153,7 +172,7 @@ export default function UserModal({ ...props }: Props) {
                   <Text span fw={500} inherit>
                     Damage{" "}
                   </Text>
-                  : {props.selectedRow.stats.damage.toFixed(2)}
+                  : {props.selectedRow.damage}
                 </Text>
               </Group>
               <Space h="sm" />
@@ -170,7 +189,7 @@ export default function UserModal({ ...props }: Props) {
                   <Text span fw={500} inherit>
                     Defense{" "}
                   </Text>
-                  : {props.selectedRow.stats.defense.toFixed(2)}
+                  : {props.selectedRow.defense}
                 </Text>
               </Group>
               <Space h="sm" />
@@ -187,7 +206,7 @@ export default function UserModal({ ...props }: Props) {
                   <Text span fw={500} inherit>
                     Engineering{" "}
                   </Text>
-                  : {props.selectedRow.stats.engineering.toFixed(2)}
+                  : {props.selectedRow.engineering}
                 </Text>
               </Group>
               <Space h="sm" />

@@ -4,7 +4,7 @@ import loginKeychain from "@/app/utils/actions/login";
 import { useAuthorizationStore } from "@/zustand/stores/useAuthorizationStore";
 import { Button, Dialog, Group, rem, Text, TextInput } from "@mantine/core";
 import { IconBrandTwitter } from "@tabler/icons-react";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import useStyles from "./style";
 
 declare global {
@@ -25,10 +25,12 @@ function LoginButton() {
   const [opened, setOpened] = useState(false);
   const [value, setValue] = useState("");
 
-  if (isKeychain() && localStorage.getItem("username") && !authorized) {
-    const username = localStorage.getItem("username");
-    loginKeychain(username);
-  }
+  useEffect(() => {
+    if (isKeychain() && localStorage.getItem("username") && !authorized) {
+      const username = localStorage.getItem("username");
+      loginKeychain(username);
+    }
+  }, []);
 
   const loginUser = async () => {
     if (isKeychain()) {

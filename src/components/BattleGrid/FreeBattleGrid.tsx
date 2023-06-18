@@ -5,19 +5,12 @@ import {
   SimpleGrid,
   Box,
   Table,
-  Notification,
   Pagination,
   Input,
   Grid,
-  Button,
   Group,
   Skeleton,
-  Tooltip,
-  TextInput,
-  Transition,
   Avatar,
-  ActionIcon,
-  Center,
   Title,
 } from "@mantine/core";
 import React, { useState, useMemo, useEffect } from "react";
@@ -25,37 +18,11 @@ import {
   IconArrowDown,
   IconArrowUp,
   IconShieldCheckeredFilled,
-  IconSword,
-  IconSwordOff,
-  IconX,
 } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
 import { getUserBattlesData } from "@/app/utils/actions/users";
 import UserModal from "./UserModal/UserModal";
-import { getStatValue } from "@/app/utils/actions/tableOperations";
-
-interface UserData {
-  id: string;
-  username: string;
-  damage: number;
-  defense: number;
-  engineering: number;
-  scrap: number;
-  registrationTime: number;
-  favor: number;
-  hiveEngineScrap: number;
-  hiveEngineStake: number;
-  minerate: number;
-  attacks: number;
-  claims: number;
-  battle: string;
-  dodge: number;
-  crit: number;
-  stats: {
-    dodge: number;
-    crit: number;
-  };
-}
+import UserData from "@/types";
 
 interface Props {
   data: any;
@@ -63,11 +30,12 @@ interface Props {
 }
 
 export default function FreeBattleGrid({ ...props }: Props) {
+
+  const isMobile = useMediaQuery("(max-width: 960px)");
+
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
-  const isMobile = useMediaQuery("(max-width: 960px)");
-
   const [showPopup, setShowPopup] = useState(false);
   const [selectedRow, setSelectedRow] = useState<UserData | null>(null);
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
@@ -210,44 +178,38 @@ export default function FreeBattleGrid({ ...props }: Props) {
       },
       {
         Header: "Damage",
-        accessor: "damage",
+        accessor: "stats.damage" as keyof UserData,
         Cell: ({ row }: { row: { original: UserData } }) => (
-          <>
-            <span
-              style={{ cursor: "pointer" }}
-              onClick={() => handleRowClick(row)}
-            >
-              {getStatValue(row.original, 'damage')}
-            </span>
-          </>
+          <span
+            style={{ cursor: "pointer" }}
+            onClick={() => handleRowClick(row)}
+          >
+            {row.original.stats.damage.toFixed(2)}
+          </span>
         ),
       },
       {
         Header: "Defense",
-        accessor: "defense",
+        accessor: "stats.defense" as keyof UserData,
         Cell: ({ row }: { row: { original: UserData } }) => (
-          <>
-            <span
-              style={{ cursor: "pointer" }}
-              onClick={() => handleRowClick(row)}
-            >
-              {getStatValue(row.original, 'defense')}
-            </span>
-          </>
+          <span
+            style={{ cursor: "pointer" }}
+            onClick={() => handleRowClick(row)}
+          >
+            {row.original.stats.defense.toFixed(2)}
+          </span>
         ),
       },
       {
         Header: "Engineering",
-        accessor: "engineering",
+        accessor: "stats.engineering" as keyof UserData,
         Cell: ({ row }: { row: { original: UserData } }) => (
-          <>
-            <span
-              style={{ cursor: "pointer" }}
-              onClick={() => handleRowClick(row)}
-            >
-              {getStatValue(row.original, 'engineering')}
-            </span>
-          </>
+          <span
+            style={{ cursor: "pointer" }}
+            onClick={() => handleRowClick(row)}
+          >
+            {row.original.stats.engineering.toFixed(2)}
+          </span>
         ),
       },
       {
@@ -356,7 +318,7 @@ export default function FreeBattleGrid({ ...props }: Props) {
     {
       columns,
       data: tableData,
-      initialState: { sortBy: [{ id: "damage", desc: true }] } as Partial<
+      initialState: { sortBy: [{ id: "stats.damage", desc: true }] } as Partial<
         TableState<UserData>
       >,
     },
